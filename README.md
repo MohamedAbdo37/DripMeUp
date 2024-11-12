@@ -6,7 +6,13 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
 - **Course**: Software Engineering (CSE 322)
 - **Instructor**: Prof. Dr. Noha Adly
 - **Teaching Assistant**: Eng. Ahmed El Naggar
-- **Team**: [List of Team Members]
+- **Team**:
+   * **Ibrahim Mohamed Elsayed** ([GitHub Profile](https://github.com/zoaa3054))
+   * **Andrew Achraf Lamei** ([GitHub Profile](https://github.com/andrew-achraf-lamei))
+   * **Pierre Jack Fouad** ([GitHub Profile](https://github.com/Pierre-Jack))
+   * **Ali Hassan Ali** ([GitHub Profile](https://github.com/alihassann191))
+   * **Mohamed Mohamed Abd-Elmoneim** ([GitHub Profile](https://github.com/MohamedAbdo37))
+   * **Nira Ibrahem Ahmed** ([GitHub Profile](https://github.com/NiraIbrahem))
 
 ## Tech Stack
 - **Backend**: Spring Boot
@@ -39,7 +45,11 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
    - [Instructions for setting up Spring Boot backend]
 
 3. **Frontend Setup (React)**
-   - [Instructions for setting up React frontend]
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
 4. **Database Configuration**
    - [Database setup and configuration details]
@@ -48,7 +58,7 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
 - [Instructions for running the project locally and accessing the application]
 
 ## Contributing
-- Contributions are welcome! Please see our [CONTRIBUTING.md](link to file) for guidelines.
+- Contributions are welcome! Please see our [CONTRIBUTING.md](https://github.com/MohamedAbdo37/DripMeUp/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## License
 - Licensed under the MIT License.
