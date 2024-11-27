@@ -8,7 +8,7 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
 - **Teaching Assistant**: Eng. Ahmed El Naggar
 - **Team**:
    * **Ibrahim Mohamed Elsayed** ([GitHub Profile](https://github.com/zoaa3054))
-   * **Andrew Achraf Lamei** ([GitHub Profile](https://github.com/andrew-achraf-lamei))
+   * **Andrew Achraf Lamei** ([GitHub Profile](https://github.com/AndrewAchraf))
    * **Pierre Jack Fouad** ([GitHub Profile](https://github.com/Pierre-Jack))
    * **Ali Hassan Ali** ([GitHub Profile](https://github.com/alihassann191))
    * **Mohamed Mohamed Abd-Elmoneim** ([GitHub Profile](https://github.com/MohamedAbdo37))
