@@ -110,7 +110,7 @@ const SignupBox = () =>{
                 .send(
                     'service_j4cifp3', // Replace with your EmailJS Service ID
                     'template_zlx3hfj', // Replace with your EmailJS Template ID
-                    {email: email, to_name: u, code: c},
+                    {email: email, to_name: username, code: c},
                     '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
                 )
                 .then(
@@ -139,8 +139,7 @@ const SignupBox = () =>{
             setErrorMessage("Wrong Code, Try again or click resend");
     }
 
-    const signup = async (e)=>{
-        e.preventDefault();
+    const signup = async ()=>{
         // const checkEmail = await fetch(`http://localhost:8081/admins/check/${email}`)
         // .then((Response) => Response.json())
         // .then(async (data)=>{
