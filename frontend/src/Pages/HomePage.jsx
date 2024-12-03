@@ -9,11 +9,11 @@ const HomePage = () =>{
             <center>User</center>
             <img src={user.picture} alt='' style={{borderRadius:'50%',  width: '10rem', height: '10rem'}}></img>
             <p>Email: {user.email}</p>
-            <p>Username: {user.username}</p>
-            <p>Phone: {user.phone}</p>
+            <p>Username: {user.userName}</p>
+            {/* <p>Phone: {user.phone}</p>
             <p>Country: {user.country}</p>
             <p>City: {user.city}</p>
-            <p>Address: {user.address}</p>
+            <p>Address: {user.address}</p> */}
             <p>Gender: {user.gender}</p>
         </>);
     }
@@ -30,7 +30,7 @@ const HomePage = () =>{
             <center>Admin</center>
             <img src={user.picture} alt='' style={{borderRadius:'50%',  width: '10rem', height: '10rem'}}></img>
             <p>Email: {user.email}</p>
-            <p>Username: {user.username}</p>
+            <p>Username: {user.userName}</p>
             <p>Phone: {user.phone}</p>
             <p>Country: {user.country}</p>
             <p>City: {user.city}</p>

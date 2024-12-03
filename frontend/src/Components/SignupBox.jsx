@@ -33,7 +33,7 @@ const SignupBox = () =>{
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        username: user.name,
+                        userName: user.name,
                         email: user.email,
                         password: '',
                         phone: '',
@@ -46,7 +46,7 @@ const SignupBox = () =>{
                 })
                 .then(Response=>Response.status==201 ? navigate('/homepage', 
                     {state: {user: {
-                                        username: user.name,
+                                        userName: user.name,
                                         email: user.email,
                                         password: '',
                                         phone: '',
@@ -87,14 +87,14 @@ const SignupBox = () =>{
 
     const signup = async (e)=>{
         e.preventDefault();
-        const checkEmail = await fetch(`http://localhost:8081/admins/check/${email}`)
-        .then((Response) => Response.json())
-        .then(async (data)=>{
-            if (data == 'found'){
-                setErrorMessage("Email already exists");
-                setErrorTrigger("emailError");
-            }
-            else{
+        // const checkEmail = await fetch(`http://localhost:8081/admins/check/${email}`)
+        // .then((Response) => Response.json())
+        // .then(async (data)=>{
+        //     if (data == 'found'){
+        //         setErrorMessage("Email already exists");
+        //         setErrorTrigger("emailError");
+        //     }
+        //     else{
                 if (!phone || !isValidPhoneNumber(phone)){
                     setErrorMessage("Phone number is not correct");
                     setErrorTrigger("phoneError");
@@ -106,7 +106,7 @@ const SignupBox = () =>{
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            username: username,
+                            userName: username,
                             email: email,
                             password: password,
                             phone: phone,
@@ -117,9 +117,9 @@ const SignupBox = () =>{
                             picture: ''
                         })
                     })
-                    .then(Response=>Response.status==201 ? navigate('/homepage', 
+                    .then(Response=>Response.status==200 || Response.status==201? navigate('/homepage', 
                         {state: {user: {
-                                            username: username,
+                                            userName: username,
                                             email: email,
                                             password: password,
                                             phone: phone,
@@ -130,15 +130,15 @@ const SignupBox = () =>{
                                             picture: ''
                                         },
                                 userType: "user"}
-                        }):alert("Something went wrong"))
+                        }):(() => { throw new Error('Something went wrong'); })())
                     .catch(error=>{
                         setErrorMessage("Email already exists");
                         setErrorTrigger("emailError");
                     });
                 }
-            }
-        })
-        .catch(error=>console.log(error));
+        //     }
+        // })
+        // .catch(error=>console.log(error));
     }
     
     return(

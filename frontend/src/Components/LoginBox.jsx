@@ -52,7 +52,7 @@ const LoginBox = () =>{
     const login = async (e)=>{
         e.preventDefault()
         const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
-        .then(response=>response.json())
+        .then(response=>{console.log(response.status);return response.json();})
         .then(async(userData)=>{
             setErrorMessage('');
             navigate('/homepage', {state: {user: userData, userType: "user"}})
