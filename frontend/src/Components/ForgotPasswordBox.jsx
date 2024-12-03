@@ -16,7 +16,7 @@ const ForgotPasswordBox = () =>{
     const navigate = useNavigate();
 
     const changePassword = async ()=>{
-        const changePw = await fetch(`http://localhost:8081/changePassword/users/${userId}`,{
+        const changePw = await fetch(`http://localhost:8081/users/changePassword/${userId}`,{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,20 +27,18 @@ const ForgotPasswordBox = () =>{
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
-        const userFetched = await fetch(`http://localhost:8081/getUserNameAndID/users/${email}`)
+        const userFetched = await fetch(`http://localhost:8081/users/getUserNameAndID/${email}`)
         .then(response=>response.json())
         .then((data)=>{
-            if (data.hasOwnProperty('error') && data.error == 'email not found'){
-                setErrorMessage("This email isn't regesterd in the system");
-                return false;
-            }
-            else{
-                setUserId(data.id);
-                setUsername(data.username);
-                setErrorMessage('');
-                return true;
-        }})
-        .catch(error=>console.log(error));
+            setUserId(data.id);
+            setUsername(data.username);
+            setErrorMessage('');
+            return true;
+        })
+        .catch(error=>{
+            setErrorMessage("This email isn't regesterd in the system");
+            return false;
+        });
     }
 
     const generateCode = ()=>{
