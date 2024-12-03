@@ -27,11 +27,43 @@ public class UserSessionController {
     @GetMapping("/login/{email}_{password}")
     
     public ResponseEntity<?> login(@PathVariable String email, @PathVariable String password) {
-        System.out.println("Login request received");
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
 
         boolean isAuthenticated = userService.login(email, password);
+        if (isAuthenticated) {
+            UserEntity user = userRepository.findByEmail(email);
+            UserEntity response = new UserEntity();
+            response.setUserName(user.getUserName());
+            response.setGender(user.getGender());
+            response.setEmail(user.getEmail());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
+    }
+
+
+    @GetMapping("/login/{email}")
+    
+    public ResponseEntity<?> loginwithgoogle(@PathVariable String email) {
+
+        boolean isAuthenticated = userService.google_login(email);
+        if (isAuthenticated) {
+            UserEntity user = userRepository.findByEmail(email);
+            UserEntity response = new UserEntity();
+            response.setUserName(user.getUserName());
+            response.setGender(user.getGender());
+            response.setEmail(user.getEmail());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
+    }
+
+    @GetMapping("getUserNameAndID")
+    
+    public ResponseEntity<?> getusername(@PathVariable String email) {
+
+        boolean isAuthenticated = userService.getUser(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             UserEntity response = new UserEntity();
