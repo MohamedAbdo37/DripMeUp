@@ -13,40 +13,26 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/check/users/${user.email}`)
+        const loginUser = await fetch(`http://localhost:8081/users/login/${user.email}`)
         .then(response=>response.json())
-        .then(async (data)=>{
-            console.log(data, user.email);
-            if (data == 'not found'){
-                const checkAdminEmail = await fetch(`http://localhost:8081/check/admins/${user.email}`)
-                .then(response=>response.json())
-                .then(async(data)=>{
-                    if (data == 'not found'){
-                        setErrorMessage('Email does not exist in the system');
-                        setErrorTrigger('googleEmailError');
-                    }
-                    else{
-                        const loginAdmin = await fetch(`http://localhost:8081/login/admins/${user.email}`)
-                        .then(response=>response.json())
-                        .then((data)=>{
-                            setErrorMessage('');
-                            navigate('/homepage', {state: {user: data, userType: "admin"}})
-                        })
-                        .catch(error=>console.log(error));
-                    }
-                })
-                .catch(error=>consol.log(error));
-            }
-            else{
-                const loginUser = await fetch(`http://localhost:8081/login/users/${user.email}`)
-                .then(response=>response.json())
-                .then((data)=>{
-                             setErrorMessage('');
-                            navigate('/homepage', {state: {user: data, userType: "user"}});
-                })
-                .catch(error=>console.log(error));
-            }
+        .then((data)=>{
+            setErrorMessage('');
+            navigate('/homepage', {state: {user: data, userType: "user"}});
         })
+        .catch(async (error)=>{
+            // const loginAdmin = await fetch(`http://localhost:8081/admins/login/${user.email}`)
+            // .then(response=>response.json())
+            // .then((data)=>{
+            //     setErrorMessage('');
+            //     navigate('/homepage', {state: {user: data, userType: "admin"}})
+            // })
+            // .catch(error=>{
+            //     setErrorMessage('Email does not exist in the system');
+            //     setErrorTrigger('googleEmailError');
+            // });
+            setErrorMessage('Email does not exist in the system');
+            setErrorTrigger('googleEmailError');
+        });
       } 
       useEffect(()=>{
     
@@ -68,33 +54,23 @@ const LoginBox = () =>{
         const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
         .then(response=>response.json())
         .then(async(userData)=>{
-            if (userData.hasOwnProperty('error') && userData.error == 'email not found'){
-                const adminFetched = await fetch(`http://localhost:8081/admins/login/${email}_${password}`)
-                .then(response=>response.json())
-                .then((adminData)=>{
-                    if (adminData.hasOwnProperty('error') && adminData.error == 'email not found'){
-                        setErrorMessage('Email is not correct');
-                        setErrorTrigger('emailError');
-                    }
-                    else if (adminData.hasOwnProperty('error') && adminData.error == 'wrong password'){
-                        setErrorMessage('Password is not correct');
-                        setErrorTrigger('passwordError');
-                    }else{
-                        setErrorMessage('');
-                        navigate('/homepage', {state: {user: adminData, userType: "admin"}})
-                    }
-                })
-                .catch(error=>console.log(error));
-            }
-            else if (userData.hasOwnProperty('error') && userData.error == 'wrong password'){
-                setErrorMessage('Password is not correct');
-                setErrorTrigger('passwordError');
-            }else{
-                setErrorMessage('');
-                navigate('/homepage', {state: {user: userData, userType: "user"}})
-            }
+            setErrorMessage('');
+            navigate('/homepage', {state: {user: userData, userType: "user"}})
         })  
-        .catch(error=>console.log(error, 'error')); 
+        .catch(async(error)=>{
+            // const adminFetched = await fetch(`http://localhost:8081/admins/login/${email}_${password}`)
+            // .then(response=>response.json())
+            // .then((adminData)=>{
+            //     setErrorMessage('');
+            //     navigate('/homepage', {state: {user: adminData, userType: "admin"}})
+            // })
+            // .catch(error=>{
+            //     setErrorMessage('Wrong email or password');
+            //     setErrorTrigger('emailError');
+            // });
+            setErrorMessage('Wrong email or password');
+            setErrorTrigger('emailError');
+        }); 
     }
     return(
         <div className="formBox">
@@ -102,10 +78,9 @@ const LoginBox = () =>{
                 <header>Login</header>
                 <label htmlFor='email'><b>Email</b></label>
                 <input type="email" name='email' placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required></input>
-                {errorTrigger == "emailError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
                 <label htmlFor="password"><b>Password</b></label>
                 <input type="password" name='password' placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required></input>
-                {errorTrigger == "passwordError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
+                {errorTrigger == "emailError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
                 <Link className="forgotPasswordLink" to="/forgotpassword">Forgot Password?</Link>
                 <button className="loginButton" form="loginForm" type="submit">Login</button>
             </form>

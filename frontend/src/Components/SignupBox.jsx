@@ -22,60 +22,53 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/check/users/${user.email}`)
-        .then(response=>response.json())
-        .then(async (data)=>{
-            console.log(data, user.email);
-            if (data == 'not found'){
-                const checkAdminEmail = await fetch(`http://localhost:8081/check/admins/${user.email}`)
-                .then(response=>response.json())
-                .then(async (data)=>{
-                    if (data.length == 'not found'){
-                        console.log(user);
-                        const register = await fetch(`http://localhost:8081/signup/users`,{
-                            method: 'POST',
-                            headers:{
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                username: user.name,
-                                email: user.email,
-                                password: '',
-                                phone: '',
-                                country: '',
-                                city: '',
-                                address: '',
-                                gender: '',
-                                picture: ''
-                            })
-                        })
-                        .then(Response=>Response.status==201 ? navigate('/homepage', 
-                            {state: {user: {
-                                                username: user.name,
-                                                email: user.email,
-                                                password: '',
-                                                phone: '',
-                                                country: '',
-                                                city: '',
-                                                address: '',
-                                                gender: '',
-                                                picture: ''
-                                            },
-                                    userType: "user"}
-                            }):alert("Something went wrong"))
-                        .catch(error=>console.log(error));
-                    }
-                    else{
-                        setErrorMessage('Email already exists in the system');
-                        setErrorTrigger('googleEmailError');
-                    }
+        // const checkAdminEmail = await fetch(`http://localhost:8081/admins/check/${user.email}`)
+        // .then(response=>response.json())
+        // .then(async (data)=>{
+        //     if (data == 'not found'){
+                console.log(user);
+                const register = await fetch(`http://localhost:8081/users/signup`,{
+                    method: 'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: user.name,
+                        email: user.email,
+                        password: '',
+                        phone: '',
+                        country: '',
+                        city: '',
+                        address: '',
+                        gender: '',
+                        picture: ''
+                    })
                 })
-            }
-            else{
-                setErrorMessage('Email already exists in the system');
-                setErrorTrigger('googleEmailError');
-            }
-        })
+                .then(Response=>Response.status==201 ? navigate('/homepage', 
+                    {state: {user: {
+                                        username: user.name,
+                                        email: user.email,
+                                        password: '',
+                                        phone: '',
+                                        country: '',
+                                        city: '',
+                                        address: '',
+                                        gender: '',
+                                        picture: ''
+                                    },
+                            userType: "user"}
+                    }):alert("Something went wrong"))
+                .catch(error=>{
+                    setErrorMessage('Email already exists in the system');
+                    setErrorTrigger('googleEmailError');
+                });
+            // }
+            // else{
+            //     setErrorMessage('Email already exists in the system');
+            //     setErrorTrigger('googleEmailError');
+            // }
+        // })
+        // .catch(error=>console.log(error));
       } 
       useEffect(()=>{
     
@@ -94,7 +87,7 @@ const SignupBox = () =>{
 
     const signup = async (e)=>{
         e.preventDefault();
-        const checkEmail = await fetch(`http://localhost:8081/check/users/${email}`)
+        const checkEmail = await fetch(`http://localhost:8081/admins/check/${email}`)
         .then((Response) => Response.json())
         .then(async (data)=>{
             if (data == 'found'){
@@ -107,7 +100,7 @@ const SignupBox = () =>{
                     setErrorTrigger("phoneError");
                 }
                 else{
-                    const register = await fetch(`http://localhost:8081/signup/users`,{
+                    const register = await fetch(`http://localhost:8081/users/signup`,{
                         method: 'POST',
                         headers:{
                             'Content-Type': 'application/json'
@@ -138,7 +131,10 @@ const SignupBox = () =>{
                                         },
                                 userType: "user"}
                         }):alert("Something went wrong"))
-                    .catch(error=>console.log(error));
+                    .catch(error=>{
+                        setErrorMessage("Email already exists");
+                        setErrorTrigger("emailError");
+                    });
                 }
             }
         })
