@@ -22,12 +22,12 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/signup/users/check/{user.email}`)
+        const checkUserEmail = await fetch(`http://localhost:8081/check/users/${user.email}`)
         .then(response=>response.json())
         .then(async (data)=>{
             console.log(data, user.email);
             if (data == 'not found'){
-                const checkAdminEmail = await fetch(`http://localhost:8081/signup/admins/check/{user.email}`)
+                const checkAdminEmail = await fetch(`http://localhost:8081/check/admins/${user.email}`)
                 .then(response=>response.json())
                 .then(async (data)=>{
                     if (data.length == 'not found'){
@@ -94,7 +94,7 @@ const SignupBox = () =>{
 
     const signup = async (e)=>{
         e.preventDefault();
-        const checkEmail = await fetch(`http://localhost:8081/signup/users/check/{email}`)
+        const checkEmail = await fetch(`http://localhost:8081/check/users/${email}`)
         .then((Response) => Response.json())
         .then(async (data)=>{
             if (data == 'found'){
