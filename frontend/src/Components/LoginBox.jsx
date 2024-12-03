@@ -13,37 +13,37 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/check/users/${user.email}`)
+        const checkUserEmail = await fetch(`http://localhost:8081/users/check/${user.email}`)
         .then(response=>response.json())
         .then(async (data)=>{
             console.log(data, user.email);
             if (data == 'not found'){
-                const checkAdminEmail = await fetch(`http://localhost:8081/check/admins/${user.email}`)
+                const checkAdminEmail = await fetch(`http://localhost:8081/admins/check/${user.email}`)
                 .then(response=>response.json())
-                .then((data)=>{
+                .then(async(data)=>{
                     if (data == 'not found'){
                         setErrorMessage('Email does not exist in the system');
                         setErrorTrigger('googleEmailError');
                     }
                     else{
-                        const loginAdmin = await fetch(`http://localhost:8081/login/admins/${user.email}`)
+                        const loginAdmin = await fetch(`http://localhost:8081/admins/login/${user.email}`)
                         .then(response=>response.json())
                         .then((data)=>{
                             setErrorMessage('');
                             navigate('/homepage', {state: {user: data, userType: "admin"}})
-                        }
+                        })
                         .catch(error=>console.log(error));
                     }
                 })
                 .catch(error=>consol.log(error));
             }
             else{
-                const loginUser = await fetch(`http://localhost:8081/login/users/${user.email}`)
+                const loginUser = await fetch(`http://localhost:8081/users/login/${user.email}`)
                 .then(response=>response.json())
                 .then((data)=>{
                              setErrorMessage('');
                             navigate('/homepage', {state: {user: data, userType: "user"}});
-                }
+                })
                 .catch(error=>console.log(error));
             }
         })
@@ -65,11 +65,11 @@ const LoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const userFetched = await fetch(`http://localhost:8081/login/users/${email}_${password}`)
+        const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
         .then(response=>response.json())
-        .then((userData)=>{
+        .then(async(userData)=>{
             if (userData.hasOwnProperty('error') && userData.error == 'email not found'){
-                const adminFetched = await fetch(`http://localhost:8081/login/admins/${email}_${password}`)
+                const adminFetched = await fetch(`http://localhost:8081/admins/login/${email}_${password}`)
                 .then(response=>response.json())
                 .then((adminData)=>{
                     if (adminData.hasOwnProperty('error') && adminData.error == 'email not found'){
