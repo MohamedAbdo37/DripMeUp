@@ -14,14 +14,14 @@ const LoginBox = () =>{
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
         const loginUser = await fetch(`http://localhost:8081/users/login/${user.email}`)
-        .then(response=>response.json())
+        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((data)=>{
             setErrorMessage('');
             navigate('/homepage', {state: {user: data, userType: "user"}});
         })
         .catch(async (error)=>{
             // const loginAdmin = await fetch(`http://localhost:8081/admins/login/${user.email}`)
-            // .then(response=>response.json())
+            // .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
             // .then((data)=>{
             //     setErrorMessage('');
             //     navigate('/homepage', {state: {user: data, userType: "admin"}})
@@ -52,14 +52,14 @@ const LoginBox = () =>{
     const login = async (e)=>{
         e.preventDefault()
         const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
-        .then(response=>response.json())
-        .then(async(userData)=>{
+        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then((userData)=>{
             setErrorMessage('');
             navigate('/homepage', {state: {user: userData, userType: "user"}})
         })  
         .catch(async(error)=>{
             // const adminFetched = await fetch(`http://localhost:8081/admins/login/${email}_${password}`)
-            // .then(response=>response.json())
+            // .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
             // .then((adminData)=>{
             //     setErrorMessage('');
             //     navigate('/homepage', {state: {user: adminData, userType: "admin"}})
