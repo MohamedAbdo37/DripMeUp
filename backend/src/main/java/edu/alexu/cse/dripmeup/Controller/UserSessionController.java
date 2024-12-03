@@ -40,6 +40,9 @@ public class UserSessionController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody UserEntity newUser) {
         System.out.println("Signup request received");
+        System.out.println("Email: " + newUser.getEmail());
+        System.out.println("Password: " + newUser.getPassword());
+        
         String result = userService.signup(newUser);
         if (result.equals("User registered successfully")) {
             return ResponseEntity.ok(result);
