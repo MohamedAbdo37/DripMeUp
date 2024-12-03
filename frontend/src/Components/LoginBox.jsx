@@ -13,27 +13,38 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/users?email=${user.email}`)
+        const checkUserEmail = await fetch(`http://localhost:8081/check/users/${user.email}`)
         .then(response=>response.json())
         .then(async (data)=>{
             console.log(data, user.email);
-            if (data.length == 0){
-                const checkAdminEmail = await fetch(`http://localhost:8081/admins?email=${user.email}`)
+            if (data == 'not found'){
+                const checkAdminEmail = await fetch(`http://localhost:8081/check/admins/${user.email}`)
                 .then(response=>response.json())
                 .then((data)=>{
-                    if (data.length == 0){
+                    if (data == 'not found'){
                         setErrorMessage('Email does not exist in the system');
                         setErrorTrigger('googleEmailError');
                     }
                     else{
-                        setErrorMessage('');
-                        navigate('/homepage', {state: {user: data[0], userType: "admin"}});
+                        const loginAdmin = await fetch(`http://localhost:8081/login/admins/${user.email}`)
+                        .then(response=>response.json())
+                        .then((data)=>{
+                            setErrorMessage('');
+                            navigate('/homepage', {state: {user: data, userType: "admin"}})
+                        }
+                        .catch(error=>console.log(error));
                     }
                 })
+                .catch(error=>consol.log(error));
             }
             else{
-                setErrorMessage('');
-                navigate('/homepage', {state: {user: data[0], userType: "user"}});
+                const loginUser = await fetch(`http://localhost:8081/login/users/${user.email}`)
+                .then(response=>response.json())
+                .then((data)=>{
+                             setErrorMessage('');
+                            navigate('/homepage', {state: {user: data, userType: "user"}});
+                }
+                .catch(error=>console.log(error));
             }
         })
       } 
@@ -54,37 +65,36 @@ const LoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        try{
-            const userFetched = await fetch(`http://localhost:8081/users?email=${email}`);
-            const user = await userFetched.json();
-            if (user[0].password == password){
-                setErrorMessage('');
-                navigate('/homepage', {state: {user: user[0], userType: "user"}})
-            }else{
+        const userFetched = await fetch(`http://localhost:8081/login/users/${email}_${password}`)
+        .then(response=>response.json())
+        .then((userData)=>{
+            if (userData.hasOwnProperty('error') && userData.error == 'email not found'){
+                const adminFetched = await fetch(`http://localhost:8081/login/admins/${email}_${password}`)
+                .then(response=>response.json())
+                .then((adminData)=>{
+                    if (adminData.hasOwnProperty('error') && adminData.error == 'email not found'){
+                        setErrorMessage('Email is not correct');
+                        setErrorTrigger('emailError');
+                    }
+                    else if (adminData.hasOwnProperty('error') && adminData.error == 'wrong password'){
+                        setErrorMessage('Password is not correct');
+                        setErrorTrigger('passwordError');
+                    }else{
+                        setErrorMessage('');
+                        navigate('/homepage', {state: {user: adminData, userType: "admin"}})
+                    }
+                })
+                .catch(error=>console.log(error));
+            }
+            else if (userData.hasOwnProperty('error') && userData.error == 'wrong password'){
                 setErrorMessage('Password is not correct');
                 setErrorTrigger('passwordError');
+            }else{
+                setErrorMessage('');
+                navigate('/homepage', {state: {user: userData, userType: "user"}})
             }
-        }catch(e){
-            try{
-                const userFetched = await fetch(`http://localhost:8081/admins?email=${email}`);
-                const user = await userFetched.json();
-                if (user[0].password == password){
-                    setErrorMessage('');
-                    navigate('/homepage', {state: {user: user[0], userType: "admin"}})
-                }else{
-                    setErrorMessage('Password is not correct');
-                    setErrorTrigger('passwordError');
-                }
-            }catch(error){
-                console.log("Error: fetching user: ", error);
-                setErrorMessage('Email is not correct');
-                setErrorTrigger('emailError');
-            }
-        }
-
-    }
-    const loginWithGoogle = ()=>{
-
+        })  
+        .catch(error=>console.log(error));
     }
     return(
         <div className="formBox">
