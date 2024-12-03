@@ -16,7 +16,7 @@ const ForgotPasswordBox = () =>{
     const navigate = useNavigate();
 
     const changePassword = async ()=>{
-        const changePw = await fetch(`http://localhost:8081/users/${userId}`,{
+        const changePw = await fetch(`http://localhost:8081/changePassword/users/${userId}`,{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,15 +27,20 @@ const ForgotPasswordBox = () =>{
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
-        try{
-            const userFetched = await fetch(`http://localhost:8081/users?email=${email}`);
-            const user = await userFetched.json();
-            setUserId(user[0].id);
-            setErrorMessage('');
-            return (user[0].username);
-        }catch(error){
-            setErrorMessage("This email isn't regesterd in the system");
-        }
+        const userFetched = await fetch(`http://localhost:8081/getUserNameAndID/users/${email}`)
+        .then(response=>response.json())
+        .then((data)=>{
+            if (data.hasOwnProperty('error') && data.error == 'email not found'){
+                setErrorMessage("This email isn't regesterd in the system");
+                return false;
+            }
+            else{
+                setUserId(data.id);
+                setUsername(data.username);
+                setErrorMessage('');
+                return true;
+        })
+        .catch(error=>console.log(error));
     }
 
     const generateCode = ()=>{
@@ -53,7 +58,6 @@ const ForgotPasswordBox = () =>{
         let c = generateCode();
         console.log(c)
         setTrueCode(c);
-        setUsername(u);
         if (u){
             setPhase(2);
             emailjs
