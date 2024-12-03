@@ -17,7 +17,8 @@ public class Person {
     private int personID;
     private String username;
     private String name;
-    private String photo;
+    //   private String photo;
+    private boolean hasPhoto;
 //    private List<> favorites;
     private String description;
     private String email;
