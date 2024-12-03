@@ -22,17 +22,17 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const checkUserEmail = await fetch(`http://localhost:8081/users?email=${user.email}`)
+        const checkUserEmail = await fetch(`http://localhost:8081/signup/users/check/{user.email}`)
         .then(response=>response.json())
         .then(async (data)=>{
             console.log(data, user.email);
-            if (data.length == 0){
-                const checkAdminEmail = await fetch(`http://localhost:8081/admins?email=${user.email}`)
+            if (data == 'not found'){
+                const checkAdminEmail = await fetch(`http://localhost:8081/signup/admins/check/{user.email}`)
                 .then(response=>response.json())
                 .then(async (data)=>{
-                    if (data.length == 0){
+                    if (data.length == 'not found'){
                         console.log(user);
-                        const register = await fetch(`http://localhost:8081/users/`,{
+                        const register = await fetch(`http://localhost:8081/signup/users`,{
                             method: 'POST',
                             headers:{
                                 'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ const SignupBox = () =>{
                                 city: '',
                                 address: '',
                                 gender: '',
-                                picture: user.picture
+                                picture: ''
                             })
                         })
                         .then(Response=>Response.status==201 ? navigate('/homepage', 
@@ -59,7 +59,7 @@ const SignupBox = () =>{
                                                 city: '',
                                                 address: '',
                                                 gender: '',
-                                                picture: user.picture
+                                                picture: ''
                                             },
                                     userType: "user"}
                             }):alert("Something went wrong"))
@@ -94,10 +94,10 @@ const SignupBox = () =>{
 
     const signup = async (e)=>{
         e.preventDefault();
-        const checkEmail = await fetch(`http://localhost:8081/users?email=${email}`)
+        const checkEmail = await fetch(`http://localhost:8081/signup/users/check/{email}`)
         .then((Response) => Response.json())
         .then(async (data)=>{
-            if (data.length != 0){
+            if (data == 'found'){
                 setErrorMessage("Email already exists");
                 setErrorTrigger("emailError");
             }
@@ -107,7 +107,7 @@ const SignupBox = () =>{
                     setErrorTrigger("phoneError");
                 }
                 else{
-                    const register = await fetch(`http://localhost:8081/users/`,{
+                    const register = await fetch(`http://localhost:8081/signup/users`,{
                         method: 'POST',
                         headers:{
                             'Content-Type': 'application/json'
@@ -121,7 +121,7 @@ const SignupBox = () =>{
                             city: city,
                             address: address,
                             gender: gender,
-                            picture: 'C:/Users/KimoStore/Desktop/DripMeUp/frontend/src/assets/guest.png'
+                            picture: ''
                         })
                     })
                     .then(Response=>Response.status==201 ? navigate('/homepage', 
@@ -134,7 +134,7 @@ const SignupBox = () =>{
                                             city: city,
                                             address: address,
                                             gender: gender,
-                                            picture: 'C:/Users/KimoStore/Desktop/DripMeUp/frontend/src/assets/guest.png'
+                                            picture: ''
                                         },
                                 userType: "user"}
                         }):alert("Something went wrong"))
