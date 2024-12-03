@@ -23,4 +23,13 @@ public class UserService {
         userRepository.save(user);
         return "User created successfully";
     }
+
+    public boolean google_login(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+        return user != null;
+    }
+
+    public UserEntity getUser(String email) {
+        return userRepository.findByEmail(email);
+    }
 }

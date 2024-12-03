@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
 
 @RestController
@@ -21,17 +22,55 @@ public class UserSessionController {
     
     @Autowired
     private UserService userService;
-    
+    @Autowired
+    private UserRepository userRepository;
     @GetMapping("/login/{email}_{password}")
     
-    public ResponseEntity<String> login(@PathVariable String email, @PathVariable String password) {
-        System.out.println("Login request received");
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
+    public ResponseEntity<?> login(@PathVariable String email, @PathVariable String password) {
 
         boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
+            UserEntity user = userRepository.findByEmail(email);
+            UserEntity response = new UserEntity();
+            response.setUserName(user.getUserName());
+            response.setGender(user.getGender());
+            response.setEmail(user.getEmail());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
+    }
+
+
+    @GetMapping("/login/{email}")
+    
+    public ResponseEntity<?> loginwithgoogle(@PathVariable String email) {
+
+        boolean isAuthenticated = userService.google_login(email);
+        if (isAuthenticated) {
+            UserEntity user = userRepository.findByEmail(email);
+            UserEntity response = new UserEntity();
+            response.setUserName(user.getUserName());
+            response.setGender(user.getGender());
+            response.setEmail(user.getEmail());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
+    }
+
+    @GetMapping("getUserNameAndID")
+    
+    public ResponseEntity<?> getusername(@PathVariable String email) {
+
+        boolean isAuthenticated = userService.getUser(email);
+        if (isAuthenticated) {
+            UserEntity user = userRepository.findByEmail(email);
+            UserEntity response = new UserEntity();
+            response.setUserName(user.getUserName());
+            response.setGender(user.getGender());
+            response.setEmail(user.getEmail());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
@@ -39,12 +78,12 @@ public class UserSessionController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody UserEntity newUser) {
-        System.out.println("Signup request received");
+        
         String result = userService.signup(newUser);
-        if (result.equals("User registered successfully")) {
+        if (result.equals("User created successfully")) {
             return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.status(400).body(result);
+            return ResponseEntity.status(400).body(result); 
         }
     }
 

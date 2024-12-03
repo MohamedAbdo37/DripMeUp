@@ -38,7 +38,7 @@ const SignupBox = () =>{
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        username: user.name,
+                        userName: user.name,
                         email: user.email,
                         password: '',
                         phone: '',
@@ -51,7 +51,7 @@ const SignupBox = () =>{
                 })
                 .then(Response=>Response=>Response.status==200 || Response.status==201? navigate('/homepage', 
                     {state: {user: {
-                                        username: user.name,
+                                        userName: user.name,
                                         email: user.email,
                                         password: '',
                                         phone: '',
