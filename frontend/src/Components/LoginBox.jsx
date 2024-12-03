@@ -94,7 +94,7 @@ const LoginBox = () =>{
                 navigate('/homepage', {state: {user: userData, userType: "user"}})
             }
         })  
-        .catch(error=>console.log(error));
+        .catch(error=>console.log(error, 'error')); 
     }
     return(
         <div className="formBox">

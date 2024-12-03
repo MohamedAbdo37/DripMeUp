@@ -39,7 +39,7 @@ const ForgotPasswordBox = () =>{
                 setUsername(data.username);
                 setErrorMessage('');
                 return true;
-        })
+        }})
         .catch(error=>console.log(error));
     }
 
