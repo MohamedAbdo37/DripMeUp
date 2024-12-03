@@ -1,16 +1,22 @@
 package edu.alexu.cse.dripmeup.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name = "User")
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
     @Column(name = "user_name")
     private String userName;
     @Column(name = "password")
     private String password;
+    @Id
     @Column(name = "email")
     private String email;
     @Column(name = "gender")
