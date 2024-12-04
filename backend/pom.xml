@@ -30,10 +30,10 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -78,6 +78,13 @@
 			<version>5.3.1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!--adding email dependency-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -89,7 +96,8 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
+				<version>0.8.10</version> <!-- Replace with the latest version -->
+
 				<executions>
 					<execution>
 						<goals>
@@ -98,6 +106,7 @@
 					</execution>
 					<execution>
 						<id>report</id>
+						<phase>prepare-package</phase>
 						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
@@ -107,6 +116,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<repositories>
 		<repository>
 			<id>maven_central</id>
@@ -114,5 +124,4 @@
 			<url>https://repo.maven.apache.org/maven2/</url>
 		</repository>
 	</repositories>
-
 </project>

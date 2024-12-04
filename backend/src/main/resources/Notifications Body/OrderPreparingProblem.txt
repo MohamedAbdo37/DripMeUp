@@ -1,0 +1,24 @@
+Hey [User's Name],
+
+We’re reaching out regarding an issue with your recent order.
+
+Order Details:
+
+Order Number: [Order Number]
+
+Items Ordered: [Item Names]
+
+Total Amount: [Order Total]
+
+Unfortunately, there was an error while processing your order, and it wasn’t served correctly.
+
+We sincerely apologize for any inconvenience this has caused. We are already working to resolve the issue. Unfortunately , You will need to make the order again.
+
+If there are any specific preferences you have or if you’d like us to take a different approach to resolve this, please don’t hesitate to contact us at DripMeUp2026@gmail.com.
+
+We value your business and appreciate your understanding as we work to correct this mistake.
+
+Thank you for your patience, and we’ll ensure this is resolved quickly.
+
+Best regards,
+The DripMeUp Store Team

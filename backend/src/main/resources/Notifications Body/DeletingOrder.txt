@@ -1,0 +1,20 @@
+Dear [User's Name],
+
+We have received your request to cancel an order , and we confirm that the cancellation has been successfully processed.
+
+Order Details:
+
+Order Number: [Order Number]
+
+Items Ordered: [Item Names]
+
+Total Amount: [Order Total]
+
+We’re sorry to see your order canceled, but we understand that plans can change.
+
+If there’s anything we can assist you with, or if you’d like to place a new order in the future, please don’t hesitate to reach out to us at DripMeUp2026@gmail.com.
+
+Thank you for considering DripMeUp Store. We hope to serve you again soon.
+
+Best regards,
+The DripMeUp Store Team
