@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DripMeUpApplication<dripmeup>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "edu.alexu.cse.dripmeup.DripMeUpApplication",
+            "projectName": "dripmeup",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
