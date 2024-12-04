@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
+import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
+import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -34,9 +35,8 @@ public class UserSessionController {
 
         boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
-            Person person = new Person();
-            person.setRole(Role.USER);
-            person.setEmail(email);
+            UserEntity user = userRepository.findByEmail(email);
+            Person person = new PersonDirector().construct(new UserPersonBuilder(user));
             return ResponseEntity.ok(person.getTuble());
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -89,14 +89,15 @@ public class UserSessionController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserEntity newUser) {
-
-        String result = userService.signup(newUser);
-        if (result.equals("User created successfully")) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.status(400).body(result);
+    public ResponseEntity<Person> signUp(@RequestBody UserEntity newUser) {
+        Person person = null;
+        try {
+            person = userService.signup(newUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
         }
+        return ResponseEntity.ok(person);
+        
     }
 
 }

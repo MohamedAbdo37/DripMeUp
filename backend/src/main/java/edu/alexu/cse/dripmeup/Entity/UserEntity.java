@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup.Entity;
 
+import edu.alexu.cse.dripmeup.Enumeration.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,10 +21,10 @@ public class UserEntity implements EntityIF{
     @Column(name = "email")
     private String email;
     @Column(name = "gender")
-    private String gender;
+    private Gender gender;
     @Column(name = "photo")
     @Lob
-    private byte[] photo;
+    private String photo;
     public String getUserName() {
         return this.userName;
     }
@@ -42,16 +43,16 @@ public class UserEntity implements EntityIF{
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getGender() {
+    public Gender getGender() {
         return this.gender;
     }
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
-    public byte[] getPhoto() {
+    public String getPhoto() {
         return this.photo;
     }
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 

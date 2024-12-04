@@ -1,7 +1,10 @@
 package edu.alexu.cse.dripmeup.Service;
 
+import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
+import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +19,11 @@ public class UserService {
         return user != null && user.getPassword().equals(password);
     }
 
-    public String signup(UserEntity user) {
+    public Person signup(UserEntity user) throws Exception {
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            return "Email already exists";
+            throw new Exception("Email already exists") ;
         }
-        userRepository.save(user);
-        return "User created successfully";
+        return new PersonDirector().construct(new UserPersonBuilder(user));
     }
 
     public boolean logInWithoutPassword(String email) {
