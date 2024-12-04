@@ -28,6 +28,7 @@ const SignupBox = () =>{
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
 
+
         const register = await fetch(`http://localhost:8081/users/signup`,{
             method: 'POST',
             headers:{
@@ -64,6 +65,7 @@ const SignupBox = () =>{
             setErrorTrigger('googleEmailError');
         });
       }
+
       useEffect(()=>{
     
         google.accounts.id.initialize({
@@ -99,7 +101,7 @@ const SignupBox = () =>{
                 .send(
                     'service_j4cifp3', // Replace with your EmailJS Service ID
                     'template_zlx3hfj', // Replace with your EmailJS Template ID
-                    {email: email, to_name: u, code: c},
+                    {email: email, to_name: username, code: c},
                     '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
                 )
                 .then(
@@ -165,6 +167,7 @@ const SignupBox = () =>{
             setErrorMessage("Email already exists");
             setErrorTrigger("emailError");
         });
+
     }
     
     return(

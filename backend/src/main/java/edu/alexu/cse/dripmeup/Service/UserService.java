@@ -23,4 +23,15 @@ public class UserService {
         userRepository.save(user);
         return "User created successfully";
     }
+
+    public boolean logInWithoutPassword(String email) {
+        UserEntity user = userRepository.findByEmail(email);
+        return user != null;
+    }
+
+    public boolean changePassword(String email, UserEntity newPassword) {
+        UserEntity user = userRepository.findByEmail(email);
+        // changing password goes here
+        return true;
+    }
 }

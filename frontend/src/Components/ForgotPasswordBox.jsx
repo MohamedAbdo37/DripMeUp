@@ -12,25 +12,23 @@ const ForgotPasswordBox = () =>{
     const [trueCode, setTrueCode] = useState('');
     const [phase,setPhase] = useState(1);
     const [errorMessage, setErrorMessage] = useState('');
-    const [userId, setUserId] = useState(NaN);
     const navigate = useNavigate();
 
     const changePassword = async ()=>{
-        const changePw = await fetch(`http://localhost:8081/users/changePassword/${userId}`,{
+        const changePw = await fetch(`http://localhost:8081/users/changePassword/${email}`,{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({password: password})
         })
-        .then(()=>console.log("Password updated successfully"))
+        .then((response)=>{response.status!=200 ? (()=>{throw new Error("Error updating password");})() : console.log("Password Changed Successfully");})
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
-        const userFetched = await fetch(`http://localhost:8081/users/getUserNameAndID/${email}`)
+        const userFetched = await fetch(`http://localhost:8081/users/getUsername/${email}`)
         .then(response=>response.json())
         .then((data)=>{
-            setUserId(data.id);
             setUsername(data.username);
             setErrorMessage('');
             return true;
