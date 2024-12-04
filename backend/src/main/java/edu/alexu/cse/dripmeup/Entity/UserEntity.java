@@ -1,9 +1,7 @@
 package edu.alexu.cse.dripmeup.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Entity
@@ -17,6 +15,7 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
     @Id
+
     @Column(name = "email")
     private String email;
     @Column(name = "gender")
@@ -54,6 +53,7 @@ public class UserEntity {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
 
 
 }
