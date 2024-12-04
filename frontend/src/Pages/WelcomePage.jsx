@@ -71,6 +71,7 @@ const WelcomePage = () =>{
                 <div className="buttons">
                     <button className="shopButton" onClick={handleShopping}>Shop Now</button>
                     <Link className="signupButton" to="/signup">Signup</Link>
+                    <Link className="signupButton" to="/admin/login">Login as Admin</Link>
                 </div>
             </div>
             <LoginBox/>

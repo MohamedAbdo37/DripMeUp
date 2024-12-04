@@ -1,6 +1,6 @@
 import UserProfileBox from "../Components/UserProfileBox";
 
-const ProfilePage = () => {
+const UserProfilePage = () => {
     return (
         <div className="profilePage">
             <UserProfileBox />
@@ -8,4 +8,4 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+export default UserProfilePage;

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {useLocation} from 'react-router-dom';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
 
-const UserProfileBox = () => {
-  const { passedUser } = location.state || {};
+const AdminProfileBox = () => {
+  const { passedAdmin } = location.state || {};
   const [user, setUser] = useState({
-    name: passedUser.userName,
-    email: passedUser.email,
-    photo: passedUser.picture == '' ? null : passedUser.picture,
+    name: passedAdmin.userName,
+    email: passedAdmin.email,
+    photo: passedAdmin.picture == '' ? null : passedAdmin.picture,
   });
   const [isEditingName, setIsEditingName] = useState(false);
 
@@ -152,4 +152,4 @@ const styles = {
   },
 };
 
-export default UserProfileBox;
+export default AdminProfileBox;
