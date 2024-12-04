@@ -18,10 +18,10 @@ public class EmailTestingController {
     @GetMapping("/sending-email")
     public void send_email_test(){
 
-//        accountManagement.setEmail("ni254828@gmail.com");
-//        accountManagement.setUsername("Nira Ibrahim");
-//        accountManagement.setCode(123456);
-//        System.out.println(accountManagement.VerifyAccount());
+        accountManagement.setEmail("ni254828@gmail.com");
+        accountManagement.setUsername("Nira Ibrahim");
+        accountManagement.setCode(123456);
+        System.out.println(accountManagement.VerifyAccount());
 //        System.out.println(accountManagement.ChangeEmail());
 //        System.out.println(accountManagement.ForgetPassword());
 
@@ -32,17 +32,17 @@ public class EmailTestingController {
 //        System.out.println(welcomeandGoodbyeManagement.GoodbyeMessage());
 
 
-        orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setUsername("Nira Ibrahim");
-        orderManagement.setOrderId(1000);
-        System.out.println(orderManagement.SendOrder());
-        System.out.println(orderManagement.CancelOrder());
-        System.out.println(orderManagement.ConfirmOrder());
-        System.out.println(orderManagement.InformOrderError());
-        System.out.println(orderManagement.ShipOrder());
-        System.out.println(orderManagement.InformShippingProblem());
-        System.out.println(orderManagement.ReceiveOrder());
-        System.out.println(orderManagement.InformReceivingProblem());
+//        orderManagement.setEmail("ni254828@gmail.com");
+//        orderManagement.setUsername("Nira Ibrahim");
+//        orderManagement.setOrderId(1000);
+//        System.out.println(orderManagement.SendOrder());
+//        System.out.println(orderManagement.CancelOrder());
+//        System.out.println(orderManagement.ConfirmOrder());
+//        System.out.println(orderManagement.InformOrderError());
+//        System.out.println(orderManagement.ShipOrder());
+//        System.out.println(orderManagement.InformShippingProblem());
+//        System.out.println(orderManagement.ReceiveOrder());
+//        System.out.println(orderManagement.InformReceivingProblem());
 
     }
 }

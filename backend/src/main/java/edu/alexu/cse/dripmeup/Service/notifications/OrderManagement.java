@@ -38,7 +38,6 @@ public class OrderManagement extends NotificationService{
             body = this.readFileFromResources(this.getFilePath()) ;
         }
         catch(IOException e) {
-            e.printStackTrace();
             return "Error occurred while reading file.";
         }
 
@@ -48,8 +47,10 @@ public class OrderManagement extends NotificationService{
         /*
         make queries to get order data
          */
-        this.sendMessage(body , this.getSubject()) ;
-        return "email was sent" ;
+
+        if (this.sendMessage(body , this.getSubject()))
+            return "email was sent" ;
+        return "error in sending email" ;
     }
 
 

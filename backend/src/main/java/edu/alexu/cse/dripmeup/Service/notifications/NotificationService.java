@@ -53,12 +53,19 @@ public abstract class NotificationService {
     }
 
     // sending message
-    public void sendMessage(String body , String subject) {
-        SimpleMailMessage message = new SimpleMailMessage() ;
-        message.setTo(this.getEmail()) ;
-        message.setSubject(subject);
-        message.setText(body);
-        mailsender.send(message);
+    public boolean sendMessage(String body , String subject) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(this.getEmail());
+            message.setSubject(subject);
+            message.setText(body);
+            mailsender.send(message);
+            return true ;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return false ;
+        }
     }
 
 }

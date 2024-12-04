@@ -31,14 +31,14 @@ public class WelcomeandGoodbyeManagement extends NotificationService{
             body = this.readFileFromResources(this.getFilePath()) ;
         }
         catch(IOException e) {
-            e.printStackTrace();
             return "Error occurred while reading file.";
         }
 
         // making message body
         body = body.replace("[User\'s Name]" , this.getUsername()) ;
-        this.sendMessage(body , this.getSubject()) ;
-        return "email was sent" ;
+        if (this.sendMessage(body , this.getSubject()))
+            return "email was sent" ;
+        return "error in sending email" ;
     }
 
     public String WelcomeMessage() {
