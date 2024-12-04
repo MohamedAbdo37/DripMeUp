@@ -96,7 +96,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.10</version> <!-- Replace with the latest version -->
+				<version>0.8.12</version> <!-- Replace with the latest version -->
 
 				<executions>
 					<execution>
@@ -107,7 +107,7 @@
 					<execution>
 						<id>report</id>
 						<phase>prepare-package</phase>
-						<phase>test</phase>
+<!--						<phase>test</phase>-->
 						<goals>
 							<goal>report</goal>
 						</goals>
