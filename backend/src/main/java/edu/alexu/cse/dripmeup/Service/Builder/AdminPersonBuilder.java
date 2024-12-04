@@ -1,7 +1,6 @@
 package edu.alexu.cse.dripmeup.Service.Builder;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
-import edu.alexu.cse.dripmeup.Enumeration.Gender;
 import edu.alexu.cse.dripmeup.Service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,12 +11,12 @@ public class AdminPersonBuilder extends Builder {
 
     private final AdminEntity admin;
 
-    public AdminPersonBuilder(String userName, String password, Gender gender) {
+    public AdminPersonBuilder(AdminEntity admin) {
         super();
-        super.buildUserName(userName);
-        super.buildGender(gender);
+        super.buildUserName(admin.getUserName());
+        super.buildGender(admin.getGender());
         this.admin= (AdminEntity) super.toEntity();
-        admin.setPassword(password);
+        admin.setPassword(admin.getPassword());
         this.build();
     }
 

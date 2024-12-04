@@ -1,17 +1,20 @@
 package edu.alexu.cse.dripmeup.Service.Handler;
 
+import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class ValidAdminUserNameHandler extends Handler{
 
     private final String useName;
 
-    @Autowired
-    private AdminRepository adminRepository;
 
-    public ValidAdminUserNameHandler(String userName) {
+    private final AdminRepository adminRepository;
+
+    public ValidAdminUserNameHandler(String userName, AdminRepository adminRepository) {
         this.useName = userName;
+        this.adminRepository = adminRepository;
         this.handle();
     }
 
@@ -20,8 +23,7 @@ public class ValidAdminUserNameHandler extends Handler{
         if (useName == null || useName.isEmpty()) {
             throw new HandlerException("Invalid admin user name.");
         }
-        assert adminRepository != null;
-        if (!adminRepository.findByUserName(this.useName).isEmpty()) {
+        if (adminRepository.findByUserName(this.useName).isEmpty()) {
             throw new HandlerException("User name already exist.");
         }
     }
