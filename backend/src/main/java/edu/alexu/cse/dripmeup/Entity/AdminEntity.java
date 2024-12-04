@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup.Entity;
 
+import edu.alexu.cse.dripmeup.Enumeration.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminEntity{
+public class AdminEntity implements EntityIF{
 
 
     @Id
@@ -27,5 +28,5 @@ public class AdminEntity{
     private String password;
 
     @Column(name = "gender")
-    private int gender;
+    private Gender gender;
 }
