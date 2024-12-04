@@ -24,12 +24,14 @@ public class UserService {
         return "User created successfully";
     }
 
-    public boolean google_login(String email) {
+    public boolean logInWithoutPassword(String email) {
         UserEntity user = userRepository.findByEmail(email);
         return user != null;
     }
 
-    public UserEntity getUser(String email) {
-        return userRepository.findByEmail(email);
+    public boolean changePassword(String email, UserEntity newPassword) {
+        UserEntity user = userRepository.findByEmail(email);
+        // changing password goes here
+        return true;
     }
 }
