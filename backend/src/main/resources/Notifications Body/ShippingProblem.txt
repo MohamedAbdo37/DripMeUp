@@ -1,0 +1,22 @@
+Hey [User's Name],
+
+We’re reaching out regarding your recent order with us. 
+
+Order Details:
+
+Order Number: [Order Number]
+
+Items Ordered: [Item Names]
+
+Total Amount: [Order Total]
+
+Unfortunately, we encountered an issue during the shipping process, and it appears that your order has been [lost/delayed/damaged].
+
+We sincerely apologize for this inconvenience and are already working to resolve the situation as quickly as possible.
+
+If you prefer solution, such as a replacement or a refund, please let us know by replying to this email or contacting us directly at DripMeUp2026@gmail.com.
+
+We value your trust and are committed to making this right for you. Thank you for your patience and understanding as we resolve this issue.
+
+Best regards,
+The DripMeUp Store Team

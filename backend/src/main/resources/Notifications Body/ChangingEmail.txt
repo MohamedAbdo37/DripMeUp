@@ -1,0 +1,12 @@
+Hey [User's Name],
+
+You recently requested to change the email address linked to your account. To confirm this change, please enter the verification code below:
+
+Verification Code: [Code]
+
+This code will expire in 1 minute. If you didn’t make this request, no action is required, and your email address will remain unchanged. 
+
+If you need assistance, feel free to reach out to us at DripMeUp2026@gmail.com.
+
+Best regards,
+The DripMeUp Store Team

@@ -1,0 +1,18 @@
+Hey [User's Name],
+
+Great news! Your order has been shipped and is on its way to you.
+
+Order Details:
+
+Order Number: [Order Number]
+
+Items Ordered: [Item Names]
+
+Total Amount: [Order Total]
+
+If you need assistance, feel free to reach out to us at DripMeUp2026@gmail.com.
+
+Thank you for choosing DripMeUp Store! We hope you love your purchase.
+
+Best regards,
+The DripMeUp Store Team
