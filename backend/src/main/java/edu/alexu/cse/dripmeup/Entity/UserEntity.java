@@ -16,9 +16,6 @@ public class UserEntity {
     private String userName;
     @Column(name = "password")
     private String password;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(name = "email")
     private String email;

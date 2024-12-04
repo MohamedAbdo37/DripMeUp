@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface AdminRepository extends JpaRepository<AdminEntity, String> {
 
-    List<AdminEntity> findByUserName(String userName);
+    AdminEntity findByUserName(String userName);
 
 }
