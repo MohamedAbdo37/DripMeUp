@@ -7,18 +7,18 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "User")
+@Table(name = "USER")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
+    @Id
+    @Column(name = "email")
+    private String email;
     @Column(name = "user_name")
     private String userName;
     @Column(name = "password")
     private String password;
-    @Id
-    @Column(name = "email")
-    private String email;
     @Column(name = "gender")
     private String gender;
     @Column(name = "photo")
@@ -54,6 +54,5 @@ public class UserEntity {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
-
 
 }

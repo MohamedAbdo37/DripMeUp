@@ -99,5 +99,4 @@ public class UserSessionController {
             return ResponseEntity.status(400).body(result);
         }
     }
-
 }

@@ -27,54 +27,45 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        // const checkAdminEmail = await fetch(`http://localhost:8081/admins/check/${user.email}`)
-        // .then(response=>response.json())
-        // .then(async (data)=>{
-        //     if (data == 'not found'){
-                console.log(user);
-                const register = await fetch(`http://localhost:8081/users/signup`,{
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userName: user.name,
-                        email: user.email,
-                        password: '',
-                        phone: '',
-                        country: '',
-                        city: '',
-                        address: '',
-                        gender: '',
-                        picture: ''
-                    })
-                })
-                .then(Response=>Response=>Response.status==200 || Response.status==201? navigate('/homepage', 
-                    {state: {user: {
-                                        userName: user.name,
-                                        email: user.email,
-                                        password: '',
-                                        phone: '',
-                                        country: '',
-                                        city: '',
-                                        address: '',
-                                        gender: '',
-                                        picture: ''
-                                    },
-                            userType: "user"}
-                    }):(() => { throw new Error('Something went wrong'); })())
-                .catch(error=>{
-                    setErrorMessage('Email already exists in the system');
-                    setErrorTrigger('googleEmailError');
-                });
-            // }
-            // else{
-            //     setErrorMessage('Email already exists in the system');
-            //     setErrorTrigger('googleEmailError');
-            // }
-        // })
-        // .catch(error=>console.log(error));
-      } 
+
+
+        const register = await fetch(`http://localhost:8081/users/signup`,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: user.name,
+                email: user.email,
+                password: '',
+                phone: '',
+                country: '',
+                city: '',
+                address: '',
+                gender: '',
+                picture: ''
+            })
+         })
+        .then(Response=>Response=>Response.status==200 || Response.status==201? navigate('/profile', 
+            {state: {user: {
+                                userName: user.name,
+                                email: user.email,
+                                password: '',
+                                phone: '',
+                                country: '',
+                                city: '',
+                                address: '',
+                                gender: '',
+                                picture: ''
+                            }
+                    }
+            }):(() => { throw new Error('Something went wrong'); })())
+        .catch(error=>{
+            setErrorMessage('Email already exists in the system');
+            setErrorTrigger('googleEmailError');
+        });
+      }
+
       useEffect(()=>{
     
         google.accounts.id.initialize({
@@ -139,53 +130,44 @@ const SignupBox = () =>{
             setErrorMessage("Wrong Code, Try again or click resend");
     }
 
+
     const signup = async ()=>{
-        // const checkEmail = await fetch(`http://localhost:8081/admins/check/${email}`)
-        // .then((Response) => Response.json())
-        // .then(async (data)=>{
-        //     if (data == 'found'){
-        //         setErrorMessage("Email already exists");
-        //         setErrorTrigger("emailError");
-        //     }
-        //     else{
-                const register = await fetch(`http://localhost:8081/users/signup`,{
-                    method: 'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userName: username,
-                        email: email,
-                        password: password,
-                        phone: phone,
-                        country: countryNames[country],
-                        city: city,
-                        address: address,
-                        gender: gender,
-                        picture: ''
-                    })
-                 })
-                .then(Response=>Response.status==200 || Response.status==201?navigate('/homepage', 
-                    {state: {user: {
-                                        userName: username,
-                                        email: email,
-                                        password: password,
-                                        phone: phone,
-                                        country: countryNames[country],
-                                        city: city,
-                                        address: address,
-                                        gender: gender,
-                                        picture: ''
-                                    },
-                            userType: "user"}
-                    }):(() => { throw new Error('Something went wrong'); })())
-                .catch(error=>{
-                    setErrorMessage("Email already exists");
-                    setErrorTrigger("emailError");
-                });
-        //     }
-        // })
-        // .catch(error=>console.log(error));
+        const register = await fetch(`http://localhost:8081/users/signup`,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: username,
+                email: email,
+                password: password,
+                phone: phone,
+                country: countryNames[country],
+                city: city,
+                address: address,
+                gender: gender,
+                picture: ''
+            })
+         })
+        .then(Response=>Response.status==200 || Response.status==201?navigate('/profile', 
+            {state: {user: {
+                                userName: username,
+                                email: email,
+                                password: password,
+                                phone: phone,
+                                country: countryNames[country],
+                                city: city,
+                                address: address,
+                                gender: gender,
+                                picture: ''
+                            }
+                    }
+            }):(() => { throw new Error('Something went wrong'); })())
+        .catch(error=>{
+            setErrorMessage("Email already exists");
+            setErrorTrigger("emailError");
+        });
+
     }
     
     return(
