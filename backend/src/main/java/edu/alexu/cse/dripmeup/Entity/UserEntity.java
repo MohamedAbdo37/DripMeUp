@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity implements EntityIF{
     @Column(name = "user_name")
     private String userName;
     @Column(name = "password")

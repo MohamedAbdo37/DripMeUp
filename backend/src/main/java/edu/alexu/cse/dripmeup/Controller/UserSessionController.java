@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Enumeration.Role;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -33,12 +34,10 @@ public class UserSessionController {
 
         boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
-            UserEntity response = new UserEntity();
-            response.setUserName(user.getUserName());
-            response.setGender(user.getGender());
-            response.setEmail(user.getEmail());
-            return ResponseEntity.ok(response);
+            Person person = new Person();
+            person.setRole(Role.USER);
+            person.setEmail(email);
+            return ResponseEntity.ok(person.getTuble());
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
