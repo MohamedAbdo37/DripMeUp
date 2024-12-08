@@ -20,16 +20,6 @@ const LoginBox = () =>{
             navigate('/homepage', {state: {user: data, userType: "user"}});
         })
         .catch(async (error)=>{
-            // const loginAdmin = await fetch(`http://localhost:8081/admins/login/${user.email}`)
-            // .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
-            // .then((data)=>{
-            //     setErrorMessage('');
-            //     navigate('/homepage', {state: {user: data, userType: "admin"}})
-            // })
-            // .catch(error=>{
-            //     setErrorMessage('Email does not exist in the system');
-            //     setErrorTrigger('googleEmailError');
-            // });
             setErrorMessage('Email does not exist in the system');
             setErrorTrigger('googleEmailError');
         });
@@ -55,19 +45,9 @@ const LoginBox = () =>{
         .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((userData)=>{
             setErrorMessage('');
-            navigate('/homepage', {state: {user: userData, userType: "user"}})
+            navigate('/profile', {state: {user: userData}})
         })  
         .catch(async(error)=>{
-            // const adminFetched = await fetch(`http://localhost:8081/admins/login/${email}_${password}`)
-            // .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
-            // .then((adminData)=>{
-            //     setErrorMessage('');
-            //     navigate('/homepage', {state: {user: adminData, userType: "admin"}})
-            // })
-            // .catch(error=>{
-            //     setErrorMessage('Wrong email or password');
-            //     setErrorTrigger('emailError');
-            // });
             setErrorMessage('Wrong email or password');
             setErrorTrigger('emailError');
         }); 

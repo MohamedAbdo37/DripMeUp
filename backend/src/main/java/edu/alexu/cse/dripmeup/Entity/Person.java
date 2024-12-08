@@ -12,13 +12,12 @@ import lombok.Setter;
 @Getter
 public class Person {
 
-
     private Role role;
     private int personID;
     private String username;
     private String name;
     private String photo;
-//    private List<> favorites;
+    // private List<> favorites;
     private String description;
     private String email;
     private String phone;

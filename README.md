@@ -52,7 +52,7 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
    ```
 
 4. **Database Configuration**
-   - [Database setup and configuration details]
+- [Database setup and configuration details]
 
 ## Usage
 - [Instructions for running the project locally and accessing the application]
