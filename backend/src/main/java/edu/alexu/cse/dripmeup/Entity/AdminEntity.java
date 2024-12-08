@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.Entity;
 
 import edu.alexu.cse.dripmeup.Enumeration.Gender;
+import edu.alexu.cse.dripmeup.Enumeration.Theme;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,4 +30,7 @@ public class AdminEntity implements EntityIF{
 
     @Column(name = "gender")
     private Gender gender;
+
+    @Column(name = "theme")
+    private Theme theme;
 }

@@ -1,21 +1,17 @@
 package edu.alexu.cse.dripmeup.Service.Handler;
 
-import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class ValidAdminUserNameHandler extends Handler{
 
     private final String useName;
 
-
     private final AdminRepository adminRepository;
 
     public ValidAdminUserNameHandler(String userName, AdminRepository adminRepository) {
         this.useName = userName;
         this.adminRepository = adminRepository;
-        this.handle();
     }
 
     @Override
@@ -30,7 +26,7 @@ public class ValidAdminUserNameHandler extends Handler{
 
     @Override
     public void handleNext() {
-
+        // there is no more inputs need to be validated
     }
 
 }

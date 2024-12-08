@@ -1,8 +1,9 @@
 package edu.alexu.cse.dripmeup.Service;
 
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityManager;
 
 @Service
 public class DatabaseService {
@@ -14,6 +15,5 @@ public class DatabaseService {
         entityManager.merge(entity);
         return entity;
     }
-
 
 }

@@ -1,15 +1,22 @@
 package edu.alexu.cse.dripmeup.Service.Builder;
 
-import edu.alexu.cse.dripmeup.Entity.EntityIF;
+import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Enumeration.Gender;
 import edu.alexu.cse.dripmeup.Enumeration.Role;
+import edu.alexu.cse.dripmeup.Enumeration.Theme;
+import edu.alexu.cse.dripmeup.Service.DatabaseService;
 
 public abstract class Builder {
     private final Person person;
 
-    public Builder(){
+    protected Builder(){
         this.person = new Person();
+        this.person.setPhoto(null);
+        this.person.setDescription(null);
+        this.person.setBdate(null);
+        this.person.setTheme(Theme.LIGHT);
     }
 
     public abstract void build();
@@ -46,8 +53,49 @@ public abstract class Builder {
         return this.person;
     }
 
-    public EntityIF toEntity(){
-        return person.toEntity();
+    public void buildDescription(String description) {
+        this.person.setDescription(description);
+    }
+
+    public void buildTheme(Theme theme) {
+        this.person.setTheme(theme);
+    }
+
+
+    public void updateAdmin(DatabaseService databaseService) {
+        
+        if (this.person.getRole() != Role.ADMIN) 
+            throw new PersonException("this Person is not an admin.");
+        AdminEntity admin = new AdminEntity();
+        admin.setUserName(this.person.getUsername());
+        admin.setGender(this.person.getGender());
+        admin.setPhoto(this.person.getPhoto());
+        admin.setTheme(this.person.getTheme());
+        databaseService.saveOrUpdate(admin);
+
+    }
+
+    public void updateUser(DatabaseService databaseService) {
+        if (this.person.getRole() != Role.USER) 
+            throw new PersonException("this Person is not a user.");
+            
+        UserEntity user = new UserEntity();
+        user.setUserName(this.person.getUsername());
+        user.setGender(this.person.getGender());
+        user.setEmail(this.person.getEmail());
+        user.setPhoto(this.person.getPhoto());
+        user.setDescription(this.person.getDescription());
+        user.setTheme(this.person.getTheme());
+        databaseService.saveOrUpdate(user);
+    
+    }
+
+}
+
+class PersonException extends RuntimeException {
+
+    public PersonException(String message) {
+        super(message);
     }
 
 }

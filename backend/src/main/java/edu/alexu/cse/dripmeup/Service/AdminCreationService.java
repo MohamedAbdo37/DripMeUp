@@ -1,23 +1,26 @@
 package edu.alexu.cse.dripmeup.Service;
 
+import org.springframework.stereotype.Service;
+
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Service.Builder.AdminPersonBuilder;
 import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
 import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
-import org.jetbrains.annotations.Contract;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AdminCreationService {
 
-    @Autowired
-    private static AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
-    @Contract(pure = true)
-    public static Person createAdmin(Person admin, AdminEntity newAdmin){
+    AdminCreationService(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
+
+
+    // @Contract(pure = true)
+    public Person createAdmin(Person admin, AdminEntity newAdmin){
 
         try {
             new CreatorIsAdminHandler(admin, newAdmin, adminRepository).handle();
@@ -26,6 +29,6 @@ public class AdminCreationService {
         }
 
         // create new person
-        return new PersonDirector().construct(new AdminPersonBuilder(newAdmin));
+        return new PersonDirector().construct(new AdminPersonBuilder(newAdmin,this.adminRepository));
     }
 }

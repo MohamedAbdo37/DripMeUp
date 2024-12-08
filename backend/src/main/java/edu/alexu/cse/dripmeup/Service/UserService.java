@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
+
 @Service
 public class UserService {
 
@@ -21,11 +23,11 @@ public class UserService {
         return user != null && user.getPassword().equals(password);
     }
 
-    public Person signup( UserEntity user) throws Exception {
+    public Person signup(UserEntity user) throws HandlerException{
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new Exception("Email already exists") ;
+            throw new HandlerException("Email already exists") ;
         }
-        return new PersonDirector().construct(new UserPersonBuilder(user));
+        return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
     }
 
     public boolean logInWithoutPassword(String email) {
@@ -33,9 +35,9 @@ public class UserService {
         return user != null;
     }
 
-    public boolean changePassword(String email, UserEntity newPassword) {
-        UserEntity user = userRepository.findByEmail(email);
-        // changing password goes here
-        return true;
-    }
+    // public boolean changePassword(String email, UserEntity newPassword) {
+    //     UserEntity user = userRepository.findByEmail(email);
+    //     // changing password goes here
+    //     return true;
+    // }
 }

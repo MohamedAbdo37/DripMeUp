@@ -1,7 +1,13 @@
 package edu.alexu.cse.dripmeup.Entity;
 
 import edu.alexu.cse.dripmeup.Enumeration.Gender;
-import jakarta.persistence.*;
+import edu.alexu.cse.dripmeup.Enumeration.Theme;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,18 +19,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity implements EntityIF{
+    @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @Column(name = "userID")
+    private long userID;
+
     @Column(name = "user_name")
     private String userName;
+
     @Column(name = "password")
     private String password;
-    @Id
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "gender")
     private Gender gender;
+
     @Column(name = "photo")
-    @Lob
     private String photo;
+
+    @Column(name = "description")
+    private String description;
+    
+    @Column(name = "theme")
+    private Theme theme;
+
+    
     public String getUserName() {
         return this.userName;
     }
