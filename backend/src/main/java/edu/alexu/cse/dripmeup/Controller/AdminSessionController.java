@@ -22,11 +22,10 @@ public class AdminSessionController {
     @Autowired
     private AdminRepository adminRepository;
 
-    
-    private SessionManager sessionManager = new SessionManager(adminRepository);
+    private final SessionManager sessionManager = new SessionManager(adminRepository);
 
     @GetMapping("signUp")
-    public ResponseEntity<Person> getMethodName(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
+    public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
         Person person = sessionManager.adminSignUP(userName, password);
         return ResponseEntity.ok(person);
     }
