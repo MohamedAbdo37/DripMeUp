@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Enumeration;
+package edu.alexu.cse.dripmeup.enumeration;
 
 public enum Theme{
     LIGHT,

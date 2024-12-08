@@ -1,7 +1,6 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import edu.alexu.cse.dripmeup.Enumeration.Gender;
-import edu.alexu.cse.dripmeup.Enumeration.Theme;
+import edu.alexu.cse.dripmeup.enumeration.Theme;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,13 +16,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminEntity implements EntityIF{
 
-
     @Id
-    @Column(name = "user_name")
+    @Column(name = "admin_id")
+    private long userID;
+    
+    @Column(name = "userName")
     private String userName;
-
-    @Column(name = "photo")
-    private String photo;
 
     @Column(name = "password")
     private String password;
