@@ -54,7 +54,7 @@ const LoginBox = () =>{
                 Password: password
             }
         })
-        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>{response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((userData)=>{
             setErrorMessage('');
             navigate('/profile', {state: {user: userData}})
