@@ -19,7 +19,7 @@ public class ValidAdminUserNameHandler extends Handler{
         if (useName == null || useName.isEmpty()) {
             throw new HandlerException("Invalid admin user name.");
         }
-        if (adminRepository.findByUserName(this.useName).isEmpty()) {
+        if (adminRepository.findByUserName(this.useName) != null) {
             throw new HandlerException("User name already exist.");
         }
     }

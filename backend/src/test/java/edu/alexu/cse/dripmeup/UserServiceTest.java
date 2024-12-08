@@ -1,11 +1,8 @@
 package edu.alexu.cse.dripmeup;
-import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Service.Builder;
+package edu.alexu.cse.dripmeup.Service.builder;
 
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Enumeration.Role;

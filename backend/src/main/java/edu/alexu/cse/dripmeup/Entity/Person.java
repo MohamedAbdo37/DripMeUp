@@ -24,6 +24,5 @@ public class Person {
     private String phone;
     private Gender gender;
     private Theme theme;
-    private Date Bdate;
 
 }

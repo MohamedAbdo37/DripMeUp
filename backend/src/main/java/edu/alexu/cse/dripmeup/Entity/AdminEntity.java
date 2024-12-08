@@ -28,9 +28,6 @@ public class AdminEntity implements EntityIF{
     @Column(name = "password")
     private String password;
 
-    @Column(name = "gender")
-    private Gender gender;
-
     @Column(name = "theme")
     private Theme theme;
 }

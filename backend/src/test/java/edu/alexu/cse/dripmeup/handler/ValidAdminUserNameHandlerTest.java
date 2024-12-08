@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup;
+package edu.alexu.cse.dripmeup.handler;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
@@ -8,10 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,22 +16,22 @@ import static org.mockito.Mockito.*;
 class ValidAdminUserNameHandlerTest {
 
     @Mock
-    private AdminRepository adminRepository;
+    private AdminRepository mockAdminRepository;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        mockAdminRepository = mock(AdminRepository.class);
     }
 
     @Test
     void testValidUserName() {
         // Arrange
         String validUserName = "new_admin";
-        when(adminRepository.findByUserName(validUserName)).thenReturn(List.of());
+        when(mockAdminRepository.findByUserName(validUserName)).thenReturn(null);
 
         // Act & Assert
-        assertDoesNotThrow(() -> new ValidAdminUserNameHandler(validUserName, adminRepository) {
-        });
+        assertDoesNotThrow(() -> new ValidAdminUserNameHandler(validUserName, mockAdminRepository).handle()); 
+        verify(mockAdminRepository, times(1)).findByUserName(validUserName);
     }
 
     @Test
@@ -43,8 +40,7 @@ class ValidAdminUserNameHandlerTest {
 
         // Act & Assert
         HandlerException exception = assertThrows(HandlerException.class, () ->
-                new ValidAdminUserNameHandler(null,adminRepository) {
-                }
+                new ValidAdminUserNameHandler(null,mockAdminRepository).handle()
         );
         assertEquals("Invalid admin user name.", exception.getMessage());
     }
@@ -56,7 +52,7 @@ class ValidAdminUserNameHandlerTest {
 
         // Act & Assert
         HandlerException exception = assertThrows(HandlerException.class, () ->
-                new ValidAdminUserNameHandler(emptyUserName, adminRepository)
+                new ValidAdminUserNameHandler(emptyUserName, mockAdminRepository).handle()
         );
         assertEquals("Invalid admin user name.", exception.getMessage());
     }
@@ -65,11 +61,11 @@ class ValidAdminUserNameHandlerTest {
     void testExistingUserName() {
         // Arrange
         String existingUserName = "existing_admin";
-        when(adminRepository.findByUserName(existingUserName)).thenReturn(List.of(new AdminEntity()));
+        when(mockAdminRepository.findByUserName(existingUserName)).thenReturn(new AdminEntity());
 
         // Act & Assert
         HandlerException exception = assertThrows(HandlerException.class, () ->
-                new ValidAdminUserNameHandler(existingUserName,adminRepository)
+                new ValidAdminUserNameHandler(existingUserName, mockAdminRepository).handle()
         );
         assertEquals("User name already exist.", exception.getMessage());
     }

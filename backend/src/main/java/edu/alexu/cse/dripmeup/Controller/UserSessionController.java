@@ -16,7 +16,7 @@ import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
+import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -36,8 +36,8 @@ public class UserSessionController {
         boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
-            Person person = new PersonDirector().construct(new UserPersonBuilder(user));
-            return ResponseEntity.ok(person.getTuble());
+            Person person = new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
+            return ResponseEntity.ok(person);
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
         }

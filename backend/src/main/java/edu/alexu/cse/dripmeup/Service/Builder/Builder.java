@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Service.Builder;
+package edu.alexu.cse.dripmeup.Service.builder;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
@@ -15,7 +15,6 @@ public abstract class Builder {
         this.person = new Person();
         this.person.setPhoto(null);
         this.person.setDescription(null);
-        this.person.setBdate(null);
         this.person.setTheme(Theme.LIGHT);
     }
 
@@ -68,7 +67,6 @@ public abstract class Builder {
             throw new PersonException("this Person is not an admin.");
         AdminEntity admin = new AdminEntity();
         admin.setUserName(this.person.getUsername());
-        admin.setGender(this.person.getGender());
         admin.setPhoto(this.person.getPhoto());
         admin.setTheme(this.person.getTheme());
         databaseService.saveOrUpdate(admin);
