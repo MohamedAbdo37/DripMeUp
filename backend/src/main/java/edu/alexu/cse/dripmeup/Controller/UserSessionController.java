@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,9 @@ public class UserSessionController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/login/{email}_{password}")
+    @GetMapping("/login")
 
-    public ResponseEntity<?> login(@PathVariable String email, @PathVariable String password) {
+    public ResponseEntity<?> login(@RequestHeader("Email") String email, @RequestHeader("Password") String password) {
 
         boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
@@ -43,9 +44,9 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/login/{email}")
+    @GetMapping("/login")
 
-    public ResponseEntity<?> loginWithGoogle(@PathVariable String email) {
+    public ResponseEntity<?> loginWithGoogle(@RequestHeader("Email") String email) {
 
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
@@ -60,8 +61,8 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("getUsername/{email}")
-    public ResponseEntity<?> getUsername(@PathVariable String email) {
+    @GetMapping("getUsername")
+    public ResponseEntity<?> getUsername(@RequestHeader("Email") String email) {
 
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
@@ -74,8 +75,9 @@ public class UserSessionController {
         }
     }
 
-    @PatchMapping("/changePassword/{email}")
-    public ResponseEntity<String> signUp(@RequestBody UserEntity newPassword, @PathVariable String email) {
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> signUp(@RequestHeader("NewPassword") UserEntity newPassword,
+            @RequestHeader("Email") String email) {
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
             if (userService.changePassword(email, newPassword)) {
@@ -97,7 +99,7 @@ public class UserSessionController {
             return ResponseEntity.status(400).body(null);
         }
         return ResponseEntity.ok(person);
-        
+
     }
 
 }

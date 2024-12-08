@@ -27,7 +27,7 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const register = await fetch(`http://localhost:8081/users/signup`,{
+        const register = await fetch(`http://localhost:8081/user/signUp`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ const SignupBox = () =>{
     }
 
     const signup = async ()=>{
-        const register = await fetch(`http://localhost:8081/users/signup`,{
+        const register = await fetch(`http://localhost:8081/user/signUp`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'

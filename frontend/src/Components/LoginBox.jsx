@@ -13,7 +13,13 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const loginUser = await fetch(`http://localhost:8081/users/login/${user.email}`)
+        const loginUser = await fetch(`http://localhost:8081/user/logIn`, {
+                method: "GET",
+                headers:{
+                    Email: email
+                }
+            }
+        )
         .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((data)=>{
             setErrorMessage('');
@@ -41,7 +47,13 @@ const LoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
+        const userFetched = await fetch(`http://localhost:8081/user/logIn`,{
+            method: "GET",
+            headers: {
+                Email: email,
+                Password: password
+            }
+        })
         .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((userData)=>{
             setErrorMessage('');

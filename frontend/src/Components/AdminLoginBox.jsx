@@ -12,7 +12,13 @@ const AdminLoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const adminFetched = await fetch(`http://localhost:8081/admins/login/${username}_${password}`)
+        const adminFetched = await fetch(`http://localhost:8081/admin/logIn`, {
+            method: "GET",
+            headers:{
+                UserName: username,
+                Password: password
+            }
+        })
         .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((adminData)=>{
             setErrorMessage('');
