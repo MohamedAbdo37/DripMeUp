@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import edu.alexu.cse.dripmeup.Enumeration.Gender;
-import edu.alexu.cse.dripmeup.Enumeration.Theme;
+import edu.alexu.cse.dripmeup.enumeration.Gender;
+import edu.alexu.cse.dripmeup.enumeration.Theme;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +23,7 @@ public class UserEntity implements EntityIF {
     @Column(name = "userID")
     private long userID;
 
-    @Column(name = "user_name")
+    @Column(name = "userName")
     private String userName;
 
     @Column(name = "password")

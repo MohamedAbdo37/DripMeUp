@@ -1,11 +1,12 @@
 package edu.alexu.cse.dripmeup;
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Service.AdminCreationService;
+import edu.alexu.cse.dripmeup.Service.AdminService;
 import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
 import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
+import edu.alexu.cse.dripmeup.enumeration.Role;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -37,7 +38,7 @@ class AdminCreationServiceTest {
         when(mockAdmin.getRole()).thenReturn(Role.ADMIN);
 
         // Act
-        Person result = AdminCreationService.createAdmin(mockAdmin, mockNewAdmin);
+        Person result = AdminService.createAdmin(mockAdmin, mockNewAdmin);
 
         // Assert
 //        assertNotNull(result);
@@ -59,7 +60,7 @@ class AdminCreationServiceTest {
     void testCreateAdminWithNullCreator() {
         // Act & Assert
 
-        Person person = AdminCreationService.createAdmin(null, mockNewAdmin);
+        Person person = AdminService.createAdmin(null, mockNewAdmin);
 
         assertNull(person);
     }
@@ -71,7 +72,7 @@ class AdminCreationServiceTest {
                 .when(mockAdmin).getRole();
 
         // Act
-        Person result = AdminCreationService.createAdmin(mockAdmin, mockNewAdmin);
+        Person result = AdminService.createAdmin(mockAdmin, mockNewAdmin);
 
         // Assert
         assertNull(result);

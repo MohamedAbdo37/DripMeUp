@@ -26,8 +26,11 @@ public class AdminSessionController {
 
     @GetMapping("signUp")
     public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
-        Person person = sessionManager.adminSignUP(userName, password);
-        return ResponseEntity.ok(person);
+        Person person = sessionManager.adminSignUP(userName, password); // null - Person
+        if (null != person) 
+            return ResponseEntity.ok(person);
+        else 
+            return ResponseEntity.status(400).body(null);
     }
     
     

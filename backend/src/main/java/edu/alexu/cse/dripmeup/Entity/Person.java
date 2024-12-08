@@ -1,10 +1,8 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import java.util.Date;
-
-import edu.alexu.cse.dripmeup.Enumeration.Gender;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
-import edu.alexu.cse.dripmeup.Enumeration.Theme;
+import edu.alexu.cse.dripmeup.enumeration.Gender;
+import edu.alexu.cse.dripmeup.enumeration.Role;
+import edu.alexu.cse.dripmeup.enumeration.Theme;
 import lombok.Getter;
 import lombok.Setter;
 

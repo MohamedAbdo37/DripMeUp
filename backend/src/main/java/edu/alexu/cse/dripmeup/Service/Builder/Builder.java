@@ -3,10 +3,10 @@ package edu.alexu.cse.dripmeup.Service.builder;
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
-import edu.alexu.cse.dripmeup.Enumeration.Gender;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
-import edu.alexu.cse.dripmeup.Enumeration.Theme;
 import edu.alexu.cse.dripmeup.Service.DatabaseService;
+import edu.alexu.cse.dripmeup.enumeration.Gender;
+import edu.alexu.cse.dripmeup.enumeration.Role;
+import edu.alexu.cse.dripmeup.enumeration.Theme;
 
 public abstract class Builder {
     private final Person person;

@@ -10,11 +10,11 @@ import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
 import edu.alexu.cse.dripmeup.Service.builder.AdminPersonBuilder;
 
 @Service
-public class AdminCreationService {
+public class AdminService {
 
     private final AdminRepository adminRepository;
 
-    AdminCreationService(AdminRepository adminRepository) {
+    public AdminService(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
 
