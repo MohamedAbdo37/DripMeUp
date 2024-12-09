@@ -14,12 +14,43 @@ import java.io.InputStreamReader;
 public abstract class NotificationService {
 
     @Autowired
-    private JavaMailSender mailsender ;
+    private JavaMailSender mailSender;
     @Autowired
     private ResourceLoader resourceLoader;
 
+    // shared attributes between all classes
+
+    // email and user_name of admin that we will send the email to
     private String email ;
     private String username ;
+    private String filePath ;   // file path of email template
+    private String subject ;    // subject of email
+    private String body ;
+
+    public String getBody() {
+        return this.body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    // setters & getters
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getFilePath() {
+        return this.filePath;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSubject() {
+        return this.subject;
+    }
 
     public String getEmail() {
         return this.email;
@@ -37,9 +68,13 @@ public abstract class NotificationService {
         this.username = username;
     }
 
+
+    // shared methods between all classes
+
     // Reading file from resource
-    String readFileFromResources(String filePath) throws IOException {
-        Resource resource = resourceLoader.getResource(filePath);
+    // throws exception if there is an error with file
+    String readFileFromResources() throws IOException {
+        Resource resource = this.resourceLoader.getResource(this.getFilePath());
         InputStream inputStream = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
@@ -52,14 +87,15 @@ public abstract class NotificationService {
         return stringBuilder.toString();
     }
 
-    // sending message
-    public boolean sendMessage(String body , String subject) {
+    // opening connection and sending messages
+    // throws exception if there is an error
+    public boolean sendMessage() {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(this.getEmail());
-            message.setSubject(subject);
-            message.setText(body);
-            mailsender.send(message);
+            message.setSubject(this.getSubject());
+            message.setText(this.getBody());
+            this.mailSender.send(message);
             return true ;
         }
         catch (Exception e){
