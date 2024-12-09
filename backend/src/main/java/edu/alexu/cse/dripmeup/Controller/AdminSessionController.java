@@ -19,13 +19,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RequestMapping("admin")
 public class AdminSessionController {
 
+    private static final long SUPER_ID = 123456789;
+
     @Autowired
     private AdminRepository adminRepository;
 
     private final SessionManager sessionManager = new SessionManager(adminRepository);
 
     @GetMapping("signUp")
-    public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
+    public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName,
+        @RequestHeader("Password") String password, @RequestHeader("SuperID") long superID) {
+        if (superID == SUPER_ID)
+            return ResponseEntity.status(400).body(null);
         Person person = sessionManager.adminSignUP(userName, password); // null - Person
         if (null != person) 
             return ResponseEntity.ok(person);

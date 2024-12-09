@@ -67,7 +67,6 @@ public abstract class Builder {
             throw new PersonException("this Person is not an admin.");
         AdminEntity admin = new AdminEntity();
         admin.setUserName(this.person.getUsername());
-        admin.setPhoto(this.person.getPhoto());
         admin.setTheme(this.person.getTheme());
         databaseService.saveOrUpdate(admin);
 

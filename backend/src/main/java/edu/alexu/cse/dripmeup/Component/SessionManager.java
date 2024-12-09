@@ -20,6 +20,6 @@ public class SessionManager {
         admin.setUserName(userName);
         admin.setPassword(password);
         AdminService service = new AdminService(adminRepository);
-        return service.createAdmin(new Person(), admin);
+        return service.createAdmin(admin);
     }
 }
