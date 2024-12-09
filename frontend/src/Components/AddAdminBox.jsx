@@ -13,15 +13,15 @@ const AddAdminBox = () =>{
 
     const addAdmin = async (e)=>{
         e.preventDefault()
-        const loginUser = await fetch(`http://localhost:8081/admin/signUp`, {
+        const loginUser = await fetch(`http://localhost:8081/api/6/admin/signUp`, {
             method: "GET",
             headers:{
-                UserName: username,
-                Password: password,
-                SuperID: superID
+                'UserName': username,
+                'Password': password,
+                'SuperID': superID
             }
         })
-        .then(response=>{response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>{response.status==200?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((data)=>{
             setErrorMessage('');
         })

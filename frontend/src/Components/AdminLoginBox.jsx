@@ -12,14 +12,14 @@ const AdminLoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const adminFetched = await fetch(`http://localhost:8081/admin/logIn`, {
+        const adminFetched = await fetch(`http://localhost:8081/api/6/admin/logIn`, {
             method: "GET",
             headers:{
-                UserName: username,
-                Password: password
+                'UserName': username,
+                'Password': password
             }
         })
-        .then(response=>{response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>{response.status==200?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
         .then((adminData)=>{
             setErrorMessage('');
             navigate('/admin/profile', {state: {admin: adminData}})

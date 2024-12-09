@@ -13,7 +13,7 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const loginUser = await fetch(`http://localhost:8081/user/logIn`, {
+        const loginUser = await fetch(`http://localhost:8081/api/5/users/logIn`, {
                 method: "GET",
                 headers:{
                     Email: email
@@ -47,7 +47,7 @@ const LoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const userFetched = await fetch(`http://localhost:8081/user/logIn`,{
+        const userFetched = await fetch(`http://localhost:8081/api/5/users/logIn`,{
             method: "GET",
             headers: {
                 Email: email,

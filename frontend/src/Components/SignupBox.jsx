@@ -27,7 +27,7 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const register = await fetch(`http://localhost:8081/user/signUp`,{
+        const register = await fetch(`http://localhost:8081/api/5/users/signUp`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ const SignupBox = () =>{
                 picture: ''
             })
          })
-        .then(Response=>Response=>Response.status==200 || Response.status==201? navigate('/profile', 
+        .then(Response=>Response=>Response.status==200? navigate('/profile', 
             {state: {user: {
                                 userName: user.name,
                                 email: user.email,
@@ -128,7 +128,7 @@ const SignupBox = () =>{
     }
 
     const signup = async ()=>{
-        const register = await fetch(`http://localhost:8081/user/signUp`,{
+        const register = await fetch(`http://localhost:8081/api/5/users/signUp`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json'
@@ -145,7 +145,7 @@ const SignupBox = () =>{
                 picture: ''
             })
          })
-        .then(Response=>Response.status==200 || Response.status==201?navigate('/profile', 
+        .then(Response=>Response.status==200?navigate('/profile', 
             {state: {user: {
                                 userName: username,
                                 email: email,
