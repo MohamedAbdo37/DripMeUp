@@ -22,4 +22,16 @@ public class SessionManager {
         AdminService service = new AdminService(adminRepository);
         return service.createAdmin(admin);
     }
+
+    public Person adminLogin(String userName, String password) {
+        return null;
+    }
+
+    public Person userLogin(String userName, String password) {
+        return null;
+    }
+
+    public Person userSignUp(String userName, String password) {
+        return null;
+    }
 }

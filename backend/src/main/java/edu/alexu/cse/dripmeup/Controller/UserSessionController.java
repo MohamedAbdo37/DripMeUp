@@ -20,7 +20,7 @@ import edu.alexu.cse.dripmeup.Service.UserService;
 import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080/api/5/")
 @RequestMapping("users")
 
 public class UserSessionController {

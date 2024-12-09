@@ -7,25 +7,15 @@ import edu.alexu.cse.dripmeup.enumeration.Role;
 
 public class UserPersonBuilder extends Builder {
 
-    private DatabaseService databaseService = null;
-    private UserRepository userRepository = null;
+    private final UserRepository userRepository;
 
 
     private final UserEntity user;
-    private boolean repo;
-
-    public UserPersonBuilder(UserEntity user, DatabaseService databaseService) {
-        super();
-        this.user = user;
-        this.databaseService = databaseService;
-        this.repo = false;
-    }
 
     public UserPersonBuilder(UserEntity user, UserRepository userRepository) {
         super();
         this.user = user;
         this.userRepository = userRepository;
-        this.repo = true;
     }
 
     @Override
@@ -36,8 +26,7 @@ public class UserPersonBuilder extends Builder {
         super.buildEmail(user.getEmail());
         super.buildPhoto(user.getPhoto());
         super.buildDescription(user.getDescription());
-        if(this.repo) userRepository.save(this.user);
-        else databaseService.saveOrUpdate(this.user);
+        this.userRepository.save(this.user);
     }
 
 }
