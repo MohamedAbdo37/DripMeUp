@@ -13,7 +13,6 @@ public class Person {
     private Role role;
     private int personID;
     private String username;
-    private String name;
     private String photo;
     // private List<> favorites;
     private String description;
@@ -21,5 +20,5 @@ public class Person {
     private String phone;
     private Gender gender;
     private Theme theme;
-
+    private long sessionID;
 }
