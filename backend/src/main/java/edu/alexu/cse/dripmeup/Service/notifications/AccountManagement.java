@@ -1,31 +1,11 @@
 package edu.alexu.cse.dripmeup.Service.notifications;
-
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 
 @Service
 public class AccountManagement extends NotificationService {
 
-    private String filePath ;
-    private String subject ;
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public String getSubject() {
-        return this.subject;
-    }
-
+    // specific attribute for this class
     private int code ;
     public int getCode() {
         return this.code;
@@ -34,24 +14,26 @@ public class AccountManagement extends NotificationService {
         this.code = code;
     }
 
+    // IF there is an error with reading file return error else try to send message if there is an error return error
+    // else return that email has been sent
     private String ManagingAccountMessage() {
 
-        String body = "" ;
         try {
-            body = this.readFileFromResources(this.getFilePath()) ;
+            this.setBody(this.readFileFromResources()) ;
         }
         catch(IOException e) {
             return "Error occurred while reading file.";
         }
 
         // making message body
-        body = body.replace("[User\'s Name]" , this.getUsername()) ;
-        body = body.replace("[Code]" ,  String.valueOf(this.getCode())) ;
-        if (this.sendMessage(body , this.getSubject()))
+        this.setBody(this.getBody().replace("[User's Name]" , this.getUsername()));
+        this.setBody(this.getBody().replace("[Code]" ,  String.valueOf(this.getCode())));
+        if (this.sendMessage())
             return "email was sent" ;
         return "error in sending email" ;
     }
 
+    // set body and subject of each message type
     public String VerifyAccount() {
         this.setSubject("Verify Your DripMeUp Store Account") ;
         this.setFilePath("file:src/main/resources/Notifications Body/AccountVerification.txt") ;
