@@ -11,28 +11,29 @@ public class EmailTestingController {
     AccountManagement accountManagement ;
 
     @Autowired
-    WelcomeandGoodbyeManagement welcomeandGoodbyeManagement ;
+    WelcomeGoodbyeManagement welcomeGoodbyeManagement;
 
     @Autowired
     OrderManagement orderManagement ;
+
     @GetMapping("/sending-email")
     public void send_email_test(){
 
-        accountManagement.setEmail("ni254828@gmail.com");
-        accountManagement.setUsername("Nira Ibrahim");
-        accountManagement.setCode(123456);
-        System.out.println(accountManagement.VerifyAccount());
+//        accountManagement.setEmail("ni254828@gmail.com");
+//        accountManagement.setUsername("Nira Ibrahim");
+//        accountManagement.setCode(123456);
+//        System.out.println(accountManagement.VerifyAccount());
 //        System.out.println(accountManagement.ChangeEmail());
 //        System.out.println(accountManagement.ForgetPassword());
-
-
-//        welcomeandGoodbyeManagement.setEmail("ni254828@gmail.com");
-//        welcomeandGoodbyeManagement.setUsername("Nira Ibrahim");
-//        System.out.println(welcomeandGoodbyeManagement.WelcomeMessage());
-//        System.out.println(welcomeandGoodbyeManagement.GoodbyeMessage());
-
-
-//        orderManagement.setEmail("ni254828@gmail.com");
+//
+//
+//        welcomeGoodbyeManagement.setEmail("ni254828@gmail.com");
+//        welcomeGoodbyeManagement.setUsername("Nira Ibrahim");
+//        System.out.println(welcomeGoodbyeManagement.WelcomeMessage());
+//        System.out.println(welcomeGoodbyeManagement.GoodbyeMessage());
+//
+//
+//        orderManagement.setEmail("niraibrahem99@gmail.com");
 //        orderManagement.setUsername("Nira Ibrahim");
 //        orderManagement.setOrderId(1000);
 //        System.out.println(orderManagement.SendOrder());
