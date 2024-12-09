@@ -3,12 +3,8 @@ import {useLocation} from 'react-router-dom';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
 
 const UserProfileBox = () => {
-  const { passedUser } = location.state || {};
-  const [user, setUser] = useState({
-    name: passedUser.userName,
-    email: passedUser.email,
-    photo: passedUser.picture == '' ? null : passedUser.picture,
-  });
+  const { user } = location.state || {};
+  
   const [isEditingName, setIsEditingName] = useState(false);
 
   const handleInputChange = (e) => {
@@ -36,13 +32,13 @@ const UserProfileBox = () => {
             <input
               type="text"
               name="name"
-              value={user.name}
+              value={user.username}
               onChange={handleInputChange}
               style={styles.input}
             />
           ) : (
             <div style={styles.staticTextContainer}>
-              <p style={styles.staticText}>{user.name}</p>
+              <p style={styles.staticText}>{user.username}</p>
               <button
                 type="button"
                 onClick={() => setIsEditingName(true)}

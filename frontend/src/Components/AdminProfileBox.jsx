@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import {useLocation} from 'react-router-dom';
-import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
+import adminPhoto from '../assets/admin.png'; // Adjust the path as necessary
 
 const AdminProfileBox = () => {
-  const { passedAdmin } = location.state || {};
+  const { admin } = location.state || {};
   const [user, setUser] = useState({
-    name: passedAdmin.userName,
-    email: passedAdmin.email,
-    photo: passedAdmin.picture == '' ? null : passedAdmin.picture,
+    name: admin.userName,
+    photo: null,
   });
   const [isEditingName, setIsEditingName] = useState(false);
 
@@ -67,7 +66,7 @@ const AdminProfileBox = () => {
           />
           <div style={styles.preview}>
             <img
-              src={user.photo ? URL.createObjectURL(user.photo) : unknownPhoto}
+              src={adminPhoto}
               alt="User Photo"
               style={styles.image}
             />

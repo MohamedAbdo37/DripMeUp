@@ -19,11 +19,11 @@ const ForgotPasswordBox = () =>{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'Email': email
-            },
-            body: JSON.stringify({password: password})
+                'Email': email,
+                'NewPassword': password
+            }
         })
-        .then((response)=>{response.status!=200 ? (()=>{throw new Error("Error updating password");})() : console.log("Password Changed Successfully");})
+        .then((response)=>{response.status!=200 || response.status!=201 ? (()=>{throw new Error("Error updating password");})() : console.log("Password Changed Successfully");})
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
@@ -35,7 +35,7 @@ const ForgotPasswordBox = () =>{
         })
         .then(response=>response.json())
         .then((data)=>{
-            setUsername(data.username);
+            setUsername(data.userName);
             setErrorMessage('');
             return true;
         })

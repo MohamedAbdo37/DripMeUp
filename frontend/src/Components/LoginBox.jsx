@@ -13,7 +13,7 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const loginUser = await fetch(`http://localhost:8081/api/5/users/logIn`, {
+        const loginUser = await fetch(`http://localhost:8081/api/5/users/g/logIn`, {
                 method: "GET",
                 headers:{
                     Email: email
@@ -21,9 +21,9 @@ const LoginBox = () =>{
             }
         )
         .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
-        .then((data)=>{
+        .then((userData)=>{
             setErrorMessage('');
-            navigate('/homepage', {state: {user: data, userType: "user"}});
+            navigate('/profile', {state: {user: userData}})
         })
         .catch(async (error)=>{
             setErrorMessage('Email does not exist in the system');

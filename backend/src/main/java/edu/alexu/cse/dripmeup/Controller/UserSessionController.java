@@ -44,7 +44,7 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/login")
+    @GetMapping("/g/login")
 
     public ResponseEntity<?> loginWithGoogle(@RequestHeader("Email") String email) {
 
@@ -76,7 +76,7 @@ public class UserSessionController {
     }
 
     @PatchMapping("/changePassword")
-    public ResponseEntity<String> signUp(@RequestHeader("NewPassword") UserEntity newPassword,
+    public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") UserEntity newPassword,
             @RequestHeader("Email") String email) {
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
