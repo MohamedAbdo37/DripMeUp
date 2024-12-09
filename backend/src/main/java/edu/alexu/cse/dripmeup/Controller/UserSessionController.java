@@ -5,19 +5,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.alexu.cse.dripmeup.Component.SessionManager;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
-import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
+import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
+import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080/api/5/")
@@ -25,39 +25,41 @@ import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
 
 public class UserSessionController {
 
+    private long sessionID = 123456789;
+
     @Autowired
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
 
+    private final SessionManager sessionManager = new SessionManager(userRepository);
+
+
     @GetMapping("/login")
-
-    public ResponseEntity<?> login(@RequestHeader("Email") String email, @RequestHeader("Password") String password) {
-
-        boolean isAuthenticated = userService.login(email, password);
-        if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
-            Person person = new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
+    public ResponseEntity<Person> login(@RequestHeader("Email") String email, @RequestHeader("Password") String password) {
+        Person person = sessionManager.userLogin(email, password);
+        if(null == person)
+            return ResponseEntity.status(401).body(null);
+        else{
+            person.setSessionID(sessionID);
             return ResponseEntity.ok(person);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
 
     @GetMapping("/g/login")
 
-    public ResponseEntity<?> loginWithGoogle(@RequestHeader("Email") String email) {
-
-        boolean isAuthenticated = userService.logInWithoutPassword(email);
-        if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
-            UserEntity response = new UserEntity();
-            response.setUserName(user.getUserName());
-            response.setGender(user.getGender());
-            response.setEmail(user.getEmail());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
+    public ResponseEntity<Person> googleLogIn(@RequestHeader("Email") String email) {
+        Person person;
+        try {
+            person = sessionManager.userLogin(email);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+        if(null == person)
+            return ResponseEntity.status(401).body(null);
+        else{
+            person.setSessionID(sessionID);
+            return ResponseEntity.ok(person);
         }
     }
 
@@ -91,15 +93,29 @@ public class UserSessionController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Person> signUp(@RequestBody UserEntity newUser) {
-        Person person = null;
+    public ResponseEntity<Person> signUp(@RequestBody UserEntity user, @RequestHeader("UserID") long id) {
+        if(id != user.getUserID())
+            return ResponseEntity.status(400).body(null);
+        Person person;
         try {
-            person = userService.signup(newUser);
-        } catch (Exception e) {
+            person = sessionManager.userSignUp(user);
+        } catch (HandlerException e) {
+            return ResponseEntity.status(409).body(null);
+        }
+        return ResponseEntity.ok(person);
+    }
+
+    @GetMapping("/g/signup")
+    public ResponseEntity<Person> googleSignUp(@RequestBody UserEntity user, @RequestHeader("IDToken") String token) {
+        Person person;
+        try {
+            person = sessionManager.userSignUp(user, token);
+        } catch (HandlerException e) {
+            return ResponseEntity.status(409).body(null);
+        } catch (AuthorizationException e) {
             return ResponseEntity.status(400).body(null);
         }
         return ResponseEntity.ok(person);
-
     }
 
 }

@@ -7,8 +7,8 @@ import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
 import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
+import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @Service
 public class UserService {

@@ -43,6 +43,10 @@ public class UserEntity implements EntityIF {
 
     @Column(name = "theme")
     private Theme theme;
+    
+    @Column(name = "phone")
+    private String phone;
+
 
     public String getUserName() {
         return this.userName;

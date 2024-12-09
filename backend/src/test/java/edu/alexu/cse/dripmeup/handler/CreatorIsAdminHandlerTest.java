@@ -4,8 +4,8 @@ import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
-import edu.alexu.cse.dripmeup.Service.Handler.HandlerException;
 import edu.alexu.cse.dripmeup.enumeration.Role;
+import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
