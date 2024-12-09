@@ -13,11 +13,11 @@ const SignupBox = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confermPassword, setConfermPassword] = useState("");
-    const [country, setCountry] = useState("+20");
+    // const [country, setCountry] = useState("+20");
     const [phone, setPhone] = useState("");
-    const [city, setCity] = useState("");
-    const [address, setAddress] = useState("");
-    const [gender, setGender] = useState("");
+    // const [city, setCity] = useState("");
+    // const [address, setAddress] = useState("");
+    const [gender, setGender] = useState("UNKNOWN");
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTrigger, setErrorTrigger] = useState('');
     const [phase, setPhase] = useState(1);
@@ -27,45 +27,22 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-
-
-        const register = await fetch(`http://localhost:8081/users/signup`,{
-            method: 'POST',
+        const register = await fetch(`http://localhost:8081/api/5/users/g/signUp`,{
+            method: 'GET',
             headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userName: user.name,
-                email: user.email,
-                password: '',
-                phone: '',
-                country: '',
-                city: '',
-                address: '',
-                gender: '',
-                picture: ''
-            })
+                'Content-Type': 'application/json',
+                'IDToken': response.credential
+            }
          })
-        .then(Response=>Response=>Response.status==200 || Response.status==201? navigate('/profile', 
-            {state: {user: {
-                                userName: user.name,
-                                email: user.email,
-                                password: '',
-                                phone: '',
-                                country: '',
-                                city: '',
-                                address: '',
-                                gender: '',
-                                picture: ''
-                            }
-                    }
-            }):(() => { throw new Error('Something went wrong'); })())
+        .then(Response=>Response=>Response.status==200 || Response.status==201? (() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
+        .then((userData)=>{
+            navigate('/profile', {state: {user: userData}});
+        })
         .catch(error=>{
             setErrorMessage('Email already exists in the system');
             setErrorTrigger('googleEmailError');
         });
-      }
-
+      } 
       useEffect(()=>{
     
         google.accounts.id.initialize({
@@ -130,44 +107,34 @@ const SignupBox = () =>{
             setErrorMessage("Wrong Code, Try again or click resend");
     }
 
-
     const signup = async ()=>{
-        const register = await fetch(`http://localhost:8081/users/signup`,{
+        userID = generateCode();
+        const register = await fetch(`http://localhost:8081/api/5/users/signUp`,{
             method: 'POST',
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'UserID': userID
             },
             body: JSON.stringify({
+                userID: userID,
                 userName: username,
                 email: email,
                 password: password,
                 phone: phone,
-                country: countryNames[country],
-                city: city,
-                address: address,
                 gender: gender,
-                picture: ''
+                photo: '',
+                description: '',
+                theme: LIGHT
             })
          })
-        .then(Response=>Response.status==200 || Response.status==201?navigate('/profile', 
-            {state: {user: {
-                                userName: username,
-                                email: email,
-                                password: password,
-                                phone: phone,
-                                country: countryNames[country],
-                                city: city,
-                                address: address,
-                                gender: gender,
-                                picture: ''
-                            }
-                    }
-            }):(() => { throw new Error('Something went wrong'); })())
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
+        .then((userData)=>{
+            navigate('/profile', {state: {user: userData}})
+        })
         .catch(error=>{
             setErrorMessage("Email already exists");
             setErrorTrigger("emailError");
         });
-
     }
     
     return(
@@ -209,21 +176,21 @@ const SignupBox = () =>{
                         <p style={{color: 'red', fontSize:'1rem'}}>Conferm password doesn't match the enterd password</p>
                     }
                     <label htmlFor="phone"><b>Phone</b></label>
-                    <PhoneInput className="phoneInput" international placeholder="Enter phone number" onCountryChange={setCountry} value={phone} onChange={setPhone} isValidPhoneNumber required/>
+                    <PhoneInput className="phoneInput" international placeholder="Enter phone number" value={phone} onChange={setPhone} isValidPhoneNumber required/>
                     {errorTrigger == "phoneError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
-                    <label htmlFor="city"><b>City</b></label>
+                    {/* <label htmlFor="city"><b>City</b></label>
                     <input type="text" name='city' placeholder="City" value={city} onChange={(e)=>setCity(e.target.value)} required></input>
                     <label htmlFor="address"><b>Address</b></label>
-                    <input type="text" name='address' placeholder="Address" value={address} onChange={(e)=>setAddress(e.target.value)} required></input>
+                    <input type="text" name='address' placeholder="Address" value={address} onChange={(e)=>setAddress(e.target.value)} required></input> */}
                     <label htmlFor="gender"><b>Gender</b></label>
                     <div className="gender">
                         <div>
                             <label htmlFor="male">Male</label>
-                            <input type="radio" name='gender' onClick={()=>setGender("Male")} required></input>
+                            <input type="radio" name='gender' onClick={()=>setGender("MALE")} required></input>
                         </div>
                         <div>
                             <label htmlFor="female">Female</label>
-                            <input type="radio" name='gender' onClick={()=>setGender("Female")}></input>
+                            <input type="radio" name='gender' onClick={()=>setGender("FEMALE")}></input>
                         </div>
                     </div>
                     <button className="signupButton" type="submit" form="signupForm">Signup</button>

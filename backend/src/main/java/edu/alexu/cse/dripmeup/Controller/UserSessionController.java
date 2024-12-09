@@ -5,78 +5,81 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.alexu.cse.dripmeup.Component.SessionManager;
+import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import org.springframework.web.bind.annotation.RequestParam;
+import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
+import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080/api/5/")
 @RequestMapping("users")
 
 public class UserSessionController {
+
+    private long sessionID = 123456789;
 
     @Autowired
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/login/{email}_{password}")
+    private final SessionManager sessionManager = new SessionManager(userRepository);
 
-    public ResponseEntity<?> login(@PathVariable String email, @PathVariable String password) {
 
-        boolean isAuthenticated = userService.login(email, password);
-        if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
-            UserEntity response = new UserEntity();
-            response.setUserName(user.getUserName());
-            response.setGender(user.getGender());
-            response.setEmail(user.getEmail());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
+    @GetMapping("/login")
+    public ResponseEntity<Person> login(@RequestHeader("Email") String email, @RequestHeader("Password") String password) {
+        Person person = sessionManager.userLogin(email, password);
+        if(null == person)
+            return ResponseEntity.status(401).body(null);
+        else{
+            person.setSessionID(sessionID);
+            return ResponseEntity.ok(person);
         }
     }
 
-    @GetMapping("/login/{email}")
+    @GetMapping("/g/login")
 
-    public ResponseEntity<?> loginWithGoogle(@PathVariable String email) {
+    public ResponseEntity<Person> googleLogIn(@RequestHeader("Email") String email) {
+        Person person;
+        try {
+            person = sessionManager.userLogin(email);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+        if(null == person)
+            return ResponseEntity.status(401).body(null);
+        else{
+            person.setSessionID(sessionID);
+            return ResponseEntity.ok(person);
+        }
+    }
+
+    @GetMapping("getUsername")
+    public ResponseEntity<?> getUsername(@RequestHeader("Email") String email) {
 
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             UserEntity response = new UserEntity();
             response.setUserName(user.getUserName());
-            response.setGender(user.getGender());
-            response.setEmail(user.getEmail());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
 
-    @GetMapping("getUsername/{email}")
-    public ResponseEntity<?> getUsername(@PathVariable String email) {
-
-        boolean isAuthenticated = userService.logInWithoutPassword(email);
-        if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
-            UserEntity response = new UserEntity();
-            response.setUserName(user.getUserName());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
-        }
-    }
-
-    @PatchMapping("/changePassword/{email}")
-    public ResponseEntity<String> signUp(@RequestBody UserEntity newPassword, @PathVariable String email) {
+    @PatchMapping("/changePassword")
+    public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") UserEntity newPassword,
+            @RequestHeader("Email") String email) {
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
             if (userService.changePassword(email, newPassword)) {
@@ -90,13 +93,28 @@ public class UserSessionController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserEntity newUser) {
-
-        String result = userService.signup(newUser);
-        if (result.equals("User created successfully")) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.status(400).body(result);
+    public ResponseEntity<Person> signUp(@RequestBody UserEntity user, @RequestHeader("UserID") long id) {
+        if(id != user.getUserID())
+            return ResponseEntity.status(400).body(null);
+        Person person;
+        try {
+            person = sessionManager.userSignUp(user);
+        } catch (HandlerException e) {
+            return ResponseEntity.status(409).body(null);
         }
+        return ResponseEntity.ok(person);
+    }
+
+    @GetMapping("/g/signup")
+    public ResponseEntity<Person> googleSignUp(@RequestBody UserEntity user, @RequestHeader("IDToken") String token) {
+        Person person;
+        try {
+            person = sessionManager.userSignUp(user, token);
+        } catch (HandlerException e) {
+            return ResponseEntity.status(409).body(null);
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(400).body(null);
+        }
+        return ResponseEntity.ok(person);
     }
 }

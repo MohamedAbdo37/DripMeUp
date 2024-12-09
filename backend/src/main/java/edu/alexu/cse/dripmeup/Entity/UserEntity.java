@@ -1,57 +1,90 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import jakarta.persistence.*;
+import edu.alexu.cse.dripmeup.enumeration.Gender;
+import edu.alexu.cse.dripmeup.enumeration.Theme;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
-@Table(name = "USER")
+@Table(name = "User")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity implements EntityIF {
     @Id
-    @Column(name = "email")
-    private String email;
-    @Column(name = "user_name")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "userID")
+    private long userID;
+
+    @Column(name = "userName")
     private String userName;
+
     @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "gender")
-    private String gender;
+    private Gender gender;
+
     @Column(name = "photo")
-    @Lob
-    private byte[] photo;
+    private String photo;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "theme")
+    private Theme theme;
+    
+    @Column(name = "phone")
+    private String phone;
+
+
     public String getUserName() {
         return this.userName;
     }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
     public String getPassword() {
         return this.password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getEmail() {
         return this.email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getGender() {
+
+    public Gender getGender() {
         return this.gender;
     }
-    public void setGender(String gender) {
+
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
-    public byte[] getPhoto() {
+
+    public String getPhoto() {
         return this.photo;
     }
-    public void setPhoto(byte[] photo) {
+
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
