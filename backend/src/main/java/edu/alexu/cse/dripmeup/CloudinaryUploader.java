@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup;
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
+import edu.alexu.cse.dripmeup.Entity.Image;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.imageio.ImageIO;
@@ -36,7 +37,7 @@ public class CloudinaryUploader implements ImageUploader{
     }
 
     @Override
-    public String uploadImage(byte[] image) throws IOException {
+    public Image uploadImage(byte[] image) throws IOException {
         if (image.length == 0) {
             throw new EmptyImageException("Can't Upload Empty image");
         }
@@ -44,7 +45,25 @@ public class CloudinaryUploader implements ImageUploader{
             throw new IOException("Invalid Image");
         }
         Map resource = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
-        return (String) resource.get("url");
+        return new Image((String)resource.get("url"), (String)resource.get("public_id"));
+    }
+
+    @Override
+    public void deleteImage(String cloudId) throws IOException {
+        cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
+    }
+
+    @Override
+    public Image updateImage(String cloudId, byte[] image) throws IOException {
+        if (image.length == 0) {
+            throw new EmptyImageException("Can't Upload Empty image");
+        }
+        else if (!isValidImage(image)) {
+            throw new IOException("Invalid Image");
+        }
+        cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
+        Map resource = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
+        return new Image((String)resource.get("url"), (String)resource.get("public_id"));
     }
 
 }
