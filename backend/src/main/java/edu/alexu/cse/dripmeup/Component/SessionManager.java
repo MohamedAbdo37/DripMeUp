@@ -2,8 +2,8 @@ package edu.alexu.cse.dripmeup.Component;
 
 import java.util.Base64;
 
-
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
@@ -14,6 +14,7 @@ import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.AdminService;
 import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
+import edu.alexu.cse.dripmeup.Service.builder.AdminPersonBuilder;
 import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
 import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.excpetion.HandlerException;
@@ -41,6 +42,13 @@ public class SessionManager {
     }
 
     public Person adminLogin(String userName, String password) {
+        boolean isAuthenticated = new AdminService(adminRepository).adminLogin(userName, password);
+
+        if (isAuthenticated){
+            AdminEntity admin = adminRepository.findByUserName(userName);
+            return new PersonDirector().construct(new AdminPersonBuilder(admin, adminRepository));
+        }
+        
         return null;
     }
 

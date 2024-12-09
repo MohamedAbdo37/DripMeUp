@@ -19,7 +19,11 @@ public class AdminService {
     }
 
 
-    // @Contract(pure = true)
+    public boolean adminLogin(String userName, String password) {
+        AdminEntity admin = adminRepository.findByUserName(userName);
+        return admin != null && admin.getPassword().equals(password);
+    }
+    
     public Person createAdmin(AdminEntity newAdmin){
 
         try {

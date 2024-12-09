@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.component.SessionManager;
-import edu.alexu.cse.dripmeup.Service.AdminService;
+import edu.alexu.cse.dripmeup.Component.SessionManager;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -22,12 +20,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class AdminSessionController {
 
     private static final long SUPER_ID = 123456789;
+    private long sessionID = 123456789;
 
     @Autowired
     private AdminRepository adminRepository;
 
-    @Autowired
-    private AdminService adminService = new AdminService();
 
     private final SessionManager sessionManager = new SessionManager(adminRepository);
 
@@ -44,18 +41,19 @@ public class AdminSessionController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestHeader("UserName") String userName,
-            @RequestHeader("Password") String password) {
+    public ResponseEntity<Person> login(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
         System.out.println("Admin Login request received");
         System.out.println("Username: " + userName);
         System.out.println("Password: " + password);
 
-        boolean isAuthenticated = adminService.adminLogin(userName, password);
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(401).body("Admin login failed");
+        Person person = sessionManager.adminLogin(userName, password);
+        if(null == person)
+            return ResponseEntity.status(401).body(null);
+        else{
+            person.setSessionID(sessionID);
+            return ResponseEntity.ok(person);
         }
+
     }
 
 }
