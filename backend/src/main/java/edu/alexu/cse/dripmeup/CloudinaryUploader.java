@@ -8,12 +8,18 @@ import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CloudinaryUploader implements ImageUploader{
 
     private Dotenv dotenv;
     private Cloudinary cloudinary;
 
-
+    public static String getIdFromPath(String path){
+        String[] tmp = path.replaceAll(Matcher.quoteReplacement("\\"), "/").split("/");
+        return tmp[tmp.length-1].split("\\.")[0];
+    }
 
     public static boolean isValidImage(byte[] imageBytes) {
         if (imageBytes == null || imageBytes.length == 0) {
@@ -37,7 +43,7 @@ public class CloudinaryUploader implements ImageUploader{
     }
 
     @Override
-    public Image uploadImage(byte[] image) throws IOException {
+    public String uploadImage(byte[] image) throws IOException {
         if (image.length == 0) {
             throw new EmptyImageException("Can't Upload Empty image");
         }
@@ -45,25 +51,28 @@ public class CloudinaryUploader implements ImageUploader{
             throw new IOException("Invalid Image");
         }
         Map resource = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
-        return new Image((String)resource.get("url"), (String)resource.get("public_id"));
+        return (String)resource.get("url");
     }
 
     @Override
-    public void deleteImage(String cloudId) throws IOException {
+    public void deleteImage(String path) throws IOException {
+        String cloudId = getIdFromPath(path);
+        System.out.println(cloudId);
         cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
     }
 
     @Override
-    public Image updateImage(String cloudId, byte[] image) throws IOException {
+    public String updateImage(String path, byte[] image) throws IOException {
         if (image.length == 0) {
             throw new EmptyImageException("Can't Upload Empty image");
         }
         else if (!isValidImage(image)) {
             throw new IOException("Invalid Image");
         }
+        String cloudId = getIdFromPath(path);
         cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
         Map resource = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
-        return new Image((String)resource.get("url"), (String)resource.get("public_id"));
+        return (String)resource.get("url");
     }
 
 }
