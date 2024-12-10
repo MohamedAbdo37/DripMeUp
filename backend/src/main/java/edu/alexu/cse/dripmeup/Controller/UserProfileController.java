@@ -7,13 +7,11 @@ import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.ResponseBodyMessage;
 import edu.alexu.cse.dripmeup.Service.UserProfileService;
 import edu.alexu.cse.dripmeup.Service.UserService;
+import edu.alexu.cse.dripmeup.excpetion.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +33,42 @@ public class UserProfileController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching user info"));
         }
+    }
+    @PutMapping("/")
+    public ResponseEntity<?> changeUserInfo(@RequestBody HashMap<String, String> body){
+        try{
+            userProfileService.updateUserInfo(USER_ID, body);
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while updating user info"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("User info updated successfully"));
+    }
+    @PutMapping("/photo")
+    public ResponseEntity<?> changeUserPhoto(@RequestBody byte[] body){
+        try{
+            userProfileService.updateUserPhoto(USER_ID, body);
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while uploading your photo"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("Photo uploaded successfully"));
+    }
+    @DeleteMapping("/photo")
+    public ResponseEntity<?> deleteUserPhoto(){
+        try{
+            userProfileService.deleteUserPhoto(USER_ID);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while removing your photo"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("Photo removed successfully"));
     }
 
 }

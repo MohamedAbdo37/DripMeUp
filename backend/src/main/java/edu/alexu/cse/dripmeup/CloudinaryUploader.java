@@ -3,6 +3,8 @@ import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
 import edu.alexu.cse.dripmeup.Entity.Image;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.stereotype.Component;
+
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
@@ -10,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+@Component
 public class CloudinaryUploader implements ImageUploader{
 
     private Dotenv dotenv;

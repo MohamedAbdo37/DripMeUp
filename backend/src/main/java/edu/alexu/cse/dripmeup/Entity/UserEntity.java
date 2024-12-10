@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity implements EntityIF {
+public class UserEntity implements EntityIF{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "userID")
-    private long userID;
+    private Long userID;
 
     @Column(name = "userName")
     private String userName;
@@ -87,5 +87,20 @@ public class UserEntity implements EntityIF {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+    //copy constructor
+    public UserEntity(UserEntity user) {
+        this.userID = user.userID;
+        this.userName = user.userName;
+        this.password = user.password;
+        this.email = user.email;
+        this.gender = user.gender;
+        this.photo = user.photo;
+        this.description = user.description;
+        this.theme = user.theme;
+        this.phone = user.phone;
+    }
+
+
 
 }
