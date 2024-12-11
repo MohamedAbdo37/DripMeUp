@@ -1,9 +1,9 @@
 package edu.alexu.cse.dripmeup.handler;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Service.Handler.ValidAdminUserNameHandler;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

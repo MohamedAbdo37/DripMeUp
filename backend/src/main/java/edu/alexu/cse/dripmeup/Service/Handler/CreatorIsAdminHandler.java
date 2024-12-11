@@ -4,7 +4,7 @@ import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Enumeration.Role;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 
 public class CreatorIsAdminHandler extends Handler {
     private final Person person;

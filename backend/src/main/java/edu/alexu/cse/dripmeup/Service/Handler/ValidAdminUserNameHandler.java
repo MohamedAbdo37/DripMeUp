@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup.Service.Handler;
 
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 
 public class ValidAdminUserNameHandler extends Handler{

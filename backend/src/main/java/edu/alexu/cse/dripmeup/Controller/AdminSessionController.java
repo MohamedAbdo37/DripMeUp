@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.controller;
+package edu.alexu.cse.dripmeup.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

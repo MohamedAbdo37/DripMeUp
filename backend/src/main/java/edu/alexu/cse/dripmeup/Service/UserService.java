@@ -2,13 +2,13 @@ package edu.alexu.cse.dripmeup.Service;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @Service
 public class UserService {

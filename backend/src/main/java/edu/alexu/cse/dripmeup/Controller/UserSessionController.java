@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.controller;
+package edu.alexu.cse.dripmeup.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.alexu.cse.dripmeup.Component.SessionManager;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
-import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")

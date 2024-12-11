@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.controller;
+package edu.alexu.cse.dripmeup.Controller;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Service.UserProfileService;

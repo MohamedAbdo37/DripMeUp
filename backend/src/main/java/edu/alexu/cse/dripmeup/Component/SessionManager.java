@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.AdminService;
@@ -17,8 +19,6 @@ import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
 import edu.alexu.cse.dripmeup.Service.Builder.AdminPersonBuilder;
 import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
-import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
-import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @Component
 public class SessionManager {
