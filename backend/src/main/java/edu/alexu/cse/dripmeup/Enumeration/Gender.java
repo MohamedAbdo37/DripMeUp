@@ -1,6 +1,6 @@
-package edu.alexu.cse.dripmeup.enumeration;
+package edu.alexu.cse.dripmeup.Enumeration;
 
-public enum Gender{
+public enum Gender {
     MALE,
     FEMALE,
     UNKNOWN

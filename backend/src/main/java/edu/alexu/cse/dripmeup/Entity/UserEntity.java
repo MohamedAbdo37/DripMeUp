@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import edu.alexu.cse.dripmeup.enumeration.Gender;
-import edu.alexu.cse.dripmeup.enumeration.Theme;
+import edu.alexu.cse.dripmeup.Enumeration.Gender;
+import edu.alexu.cse.dripmeup.Enumeration.Theme;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,10 +43,9 @@ public class UserEntity implements EntityIF {
 
     @Column(name = "theme")
     private Theme theme;
-    
+
     @Column(name = "phone")
     private String phone;
-
 
     public String getUserName() {
         return this.userName;
@@ -80,12 +79,12 @@ public class UserEntity implements EntityIF {
         this.gender = gender;
     }
 
-    public String getPhoto() {
-        return this.photo;
+    public String getPhone() {
+        return this.phone;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
 }

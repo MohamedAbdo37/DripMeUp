@@ -7,7 +7,7 @@ import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.alexu.cse.dripmeup.Service.builder.UserPersonBuilder;
+import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @Service
@@ -21,9 +21,9 @@ public class UserService {
         return user != null && user.getPassword().equals(password);
     }
 
-    public Person signup(UserEntity user) throws HandlerException{
+    public Person signup(UserEntity user) throws HandlerException {
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new HandlerException("Email already exists") ;
+            throw new HandlerException("Email already exists");
         }
         return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
     }
@@ -34,9 +34,9 @@ public class UserService {
     }
 
     // public boolean changePassword(String email, UserEntity newPassword) {
-    //     UserEntity user = userRepository.findByEmail(email);
-    //     // changing password goes here
-    //     return true;
+    // UserEntity user = userRepository.findByEmail(email);
+    // // changing password goes here
+    // return true;
     // }
 
     public boolean changePassword(String email, UserEntity newPassword) {

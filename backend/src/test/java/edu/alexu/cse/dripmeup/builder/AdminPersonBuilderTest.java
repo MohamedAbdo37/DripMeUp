@@ -8,10 +8,10 @@ import static org.mockito.Mockito.mock;
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Service.builder.AdminPersonBuilder;
+import edu.alexu.cse.dripmeup.Service.Builder.AdminPersonBuilder;
 
 public class AdminPersonBuilderTest {
-    
+
     @Mock
     private Person mockPerson;
     @Mock
@@ -25,18 +25,18 @@ public class AdminPersonBuilderTest {
         mockAdminEntity = mock(AdminEntity.class);
         mockAdminRepository = mock(AdminRepository.class);
     }
-    
+
     @Test
     void testBuild() {
         // Arrange
-        
+
         AdminPersonBuilder adminPersonBuilder = new AdminPersonBuilder(mockAdminEntity, mockAdminRepository);
-        
+
         // Act
         Person person = adminPersonBuilder.build();
-        
+
         // Assert
         assertEquals(mockPerson, person);
     }
-    
+
 }

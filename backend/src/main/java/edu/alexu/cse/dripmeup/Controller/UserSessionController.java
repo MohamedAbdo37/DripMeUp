@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Controller;
+package edu.alexu.cse.dripmeup.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ import edu.alexu.cse.dripmeup.excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080/api/5/")
-@RequestMapping("users")
+@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping("/api/5/users")
 
 public class UserSessionController {
 
@@ -34,20 +34,19 @@ public class UserSessionController {
 
     private final SessionManager sessionManager = new SessionManager(userRepository);
 
-
     @GetMapping("/login")
-    public ResponseEntity<Person> login(@RequestHeader("Email") String email, @RequestHeader("Password") String password) {
+    public ResponseEntity<Person> login(@RequestHeader("Email") String email,
+            @RequestHeader("Password") String password) {
         Person person = sessionManager.userLogin(email, password);
-        if(null == person)
+        if (null == person)
             return ResponseEntity.status(401).body(null);
-        else{
+        else {
             person.setSessionID(sessionID);
             return ResponseEntity.ok(person);
         }
     }
 
     @GetMapping("/g/login")
-
     public ResponseEntity<Person> googleLogIn(@RequestHeader("Email") String email) {
         Person person;
         try {
@@ -55,9 +54,9 @@ public class UserSessionController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }
-        if(null == person)
+        if (null == person)
             return ResponseEntity.status(401).body(null);
-        else{
+        else {
             person.setSessionID(sessionID);
             return ResponseEntity.ok(person);
         }
@@ -78,8 +77,12 @@ public class UserSessionController {
     }
 
     @PatchMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") UserEntity newPassword,
+    public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
             @RequestHeader("Email") String email) {
+
+        // this part modified by ibrahim
+        UserEntity newPassword = new UserEntity();
+        newPassword.setPassword(password);
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
             if (userService.changePassword(email, newPassword)) {
@@ -94,7 +97,8 @@ public class UserSessionController {
 
     @PostMapping("/signup")
     public ResponseEntity<Person> signUp(@RequestBody UserEntity user, @RequestHeader("UserID") long id) {
-        if(id != user.getUserID())
+
+        if (id != user.getUserID())
             return ResponseEntity.status(400).body(null);
         Person person;
         try {
@@ -105,8 +109,9 @@ public class UserSessionController {
         return ResponseEntity.ok(person);
     }
 
-    @GetMapping("/g/signup")
+    @PostMapping("/g/signup")
     public ResponseEntity<Person> googleSignUp(@RequestBody UserEntity user, @RequestHeader("IDToken") String token) {
+
         Person person;
         try {
             person = sessionManager.userSignUp(user, token);

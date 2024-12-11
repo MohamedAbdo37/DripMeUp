@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Controller;
+package edu.alexu.cse.dripmeup.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080/api/6/")
-@RequestMapping("admin")
+@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping("/api/6/admin")
 public class AdminSessionController {
 
     private static final long SUPER_ID = 123456789;
@@ -25,12 +25,12 @@ public class AdminSessionController {
     @Autowired
     private AdminRepository adminRepository;
 
-
     private final SessionManager sessionManager = new SessionManager(adminRepository);
 
-    @PostMapping("signUp")
+    @PostMapping("signup")
     public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName,
             @RequestHeader("Password") String password, @RequestHeader("SuperID") long superID) {
+
         if (superID == SUPER_ID)
             return ResponseEntity.status(400).body(null);
         Person person = sessionManager.adminSignUP(userName, password);
@@ -41,15 +41,17 @@ public class AdminSessionController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<Person> login(@RequestHeader("UserName") String userName, @RequestHeader("Password") String password) {
+    public ResponseEntity<Person> login(@RequestHeader("UserName") String userName,
+            @RequestHeader("Password") String password) {
+
         System.out.println("Admin Login request received");
         System.out.println("Username: " + userName);
         System.out.println("Password: " + password);
 
         Person person = sessionManager.adminLogin(userName, password);
-        if(null == person)
+        if (null == person)
             return ResponseEntity.status(401).body(null);
-        else{
+        else {
             person.setSessionID(sessionID);
             return ResponseEntity.ok(person);
         }

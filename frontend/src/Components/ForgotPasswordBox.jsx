@@ -27,27 +27,30 @@ const ForgotPasswordBox = () =>{
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
+        let returnValue = null;
         const userFetched = await fetch(`http://localhost:8081/api/5/users/getUsername`,{
             method: "GET",
             headers:{
                 'Email': email
             }
         })
-        .then(response=>response.json())
+        .then(Response=>Response.status==200 || Response.status==201? (() => { return Response.json() })():(() => { throw new Error('Something went wrong');})())
         .then((data)=>{
+            console.log("before");
             setUsername(data.userName);
             setErrorMessage('');
-            return true;
+            returnValue = true;
         })
         .catch(error=>{
             setErrorMessage("This email isn't regesterd in the system");
-            return false;
+            returnValue = false;
         });
+        return returnValue;
     }
 
     const generateCode = ()=>{
         let generatedCode = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const characters = '0123456789';
         for (let i = 0; i < 4; i++) {
             generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
         }
@@ -60,24 +63,26 @@ const ForgotPasswordBox = () =>{
         let c = generateCode();
         console.log(c)
         setTrueCode(c);
+        console.log(u);
         if (u){
+            // removed after uncommenting
             setPhase(2);
-            emailjs
-                .send(
-                    'service_j4cifp3', // Replace with your EmailJS Service ID
-                    'template_zlx3hfj', // Replace with your EmailJS Template ID
-                    {email: email, to_name: u, code: c},
-                    '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
-                )
-                .then(
-                    (result) => {
-                        console.log('Email sent successfully!');
-                        setPhase(2);
-                    },
-                    (error) => {
-                        alert('Failed to send email.');
-                    }
-                );
+            // emailjs
+            //     .send(
+            //         'service_j4cifp3', // Replace with your EmailJS Service ID
+            //         'template_zlx3hfj', // Replace with your EmailJS Template ID
+            //         {email: email, to_name: u, code: c},
+            //         '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
+            //     )
+            //     .then(
+            //         (result) => {
+            //             console.log('Email sent successfully!');
+            //             setPhase(2);
+            //         },
+            //         (error) => {
+            //             alert('Failed to send email.');
+            //         }
+            //     );
             }
     }
     const checkCode = (e)=>{

@@ -27,18 +27,31 @@ const SignupBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const register = await fetch(`http://localhost:8081/api/5/users/g/signUp`,{
-            method: 'GET',
+        console.log(user);
+        const register = await fetch(`http://localhost:8081/api/5/users/g/signup`,{
+            method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
                 'IDToken': response.credential
-            }
+            },
+            body: JSON.stringify({
+                userID: '',
+                userName: user.name,
+                email: user.email,
+                password: '',
+                phone: '',
+                gender: 'UNKNOWN',
+                photo: '',
+                description: '',
+                theme: 'LIGHT'
+            })
          })
-        .then(Response=>Response=>Response.status==200 || Response.status==201? (() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
+        .then(Response=>Response.status==200 || Response.status==201? (() => { return Response.json() })():(() => { throw new Error('Something went wrong');})())
         .then((userData)=>{
             navigate('/profile', {state: {user: userData}});
         })
         .catch(error=>{
+            console.log(error);
             setErrorMessage('Email already exists in the system');
             setErrorTrigger('googleEmailError');
         });
@@ -60,7 +73,7 @@ const SignupBox = () =>{
       
     const generateCode = ()=>{
         let generatedCode = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const characters = '0123456789';
         for (let i = 0; i < 4; i++) {
             generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
         }
@@ -72,24 +85,25 @@ const SignupBox = () =>{
         let c = generateCode();
         console.log(c)
         setTrueCode(c);
-        if (phone && isValidPhoneNumber(phone)){                    
+        if (phone && isValidPhoneNumber(phone)){  
+            // should be removed after uncommenting                  
             setPhase(2);
-            emailjs
-                .send(
-                    'service_j4cifp3', // Replace with your EmailJS Service ID
-                    'template_zlx3hfj', // Replace with your EmailJS Template ID
-                    {email: email, to_name: username, code: c},
-                    '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
-                )
-                .then(
-                    (result) => {
-                        console.log('Email sent successfully!');
-                        setPhase(2);
-                    },
-                    (error) => {
-                        alert('Failed to send email.');
-                    }
-                );
+            // emailjs
+            //     .send(
+            //         'service_j4cifp3', // Replace with your EmailJS Service ID
+            //         'template_zlx3hfj', // Replace with your EmailJS Template ID
+            //         {email: email, to_name: username, code: c},
+            //         '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
+            //     )
+            //     .then(
+            //         (result) => {
+            //             console.log('Email sent successfully!');
+            //             setPhase(2);
+            //         },
+            //         (error) => {
+            //             alert('Failed to send email.');
+            //         }
+            //     );
         }else{
             setErrorMessage("Phone number is not correct");
             setErrorTrigger("phoneError");
@@ -108,8 +122,8 @@ const SignupBox = () =>{
     }
 
     const signup = async ()=>{
-        userID = generateCode();
-        const register = await fetch(`http://localhost:8081/api/5/users/signUp`,{
+        let userID = generateCode();
+        const register = await fetch(`http://localhost:8081/api/5/users/signup`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
@@ -124,7 +138,7 @@ const SignupBox = () =>{
                 gender: gender,
                 photo: '',
                 description: '',
-                theme: LIGHT
+                theme: 'LIGHT'
             })
          })
         .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())

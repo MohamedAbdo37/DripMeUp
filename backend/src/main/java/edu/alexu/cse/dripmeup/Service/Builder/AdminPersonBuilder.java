@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Service.builder;
+package edu.alexu.cse.dripmeup.Service.Builder;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;

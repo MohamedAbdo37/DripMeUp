@@ -13,7 +13,7 @@ const AddAdminBox = () =>{
 
     const addAdmin = async (e)=>{
         e.preventDefault()
-        const loginUser = await fetch(`http://localhost:8081/api/6/admin/signUp`, {
+        const loginUser = await fetch(`http://localhost:8081/api/6/admin/signup`, {
             method: "POST",
             headers:{
                 'UserName': username,
