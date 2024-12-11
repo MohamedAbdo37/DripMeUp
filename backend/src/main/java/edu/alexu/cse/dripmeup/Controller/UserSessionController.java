@@ -16,6 +16,7 @@ import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.UserService;
 
@@ -29,10 +30,10 @@ public class UserSessionController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
+    
 
-    private final SessionManager sessionManager = new SessionManager(userRepository);
+    @Autowired
+    private SessionManager sessionManager;
 
     @GetMapping("/login")
     public ResponseEntity<Person> login(@RequestHeader("Email") String email,
@@ -67,7 +68,7 @@ public class UserSessionController {
 
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
-            UserEntity user = userRepository.findByEmail(email);
+            UserEntity user = this.sessionManager.getUserRepository().findByEmail(email);
             UserEntity response = new UserEntity();
             response.setUserName(user.getUserName());
             return ResponseEntity.ok(response);

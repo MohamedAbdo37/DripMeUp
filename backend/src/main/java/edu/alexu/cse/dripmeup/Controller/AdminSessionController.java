@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
+import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Component.SessionManager;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +23,9 @@ public class AdminSessionController {
     private static final long SUPER_ID = 123456789;
     private long sessionID = 123456789;
 
-    @Autowired
-    private AdminRepository adminRepository;
 
-    private final SessionManager sessionManager = new SessionManager(adminRepository);
+    @Autowired
+    private SessionManager sessionManager;
 
     @PostMapping("signup")
     public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName,

@@ -13,8 +13,13 @@ import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 @Service
 public class UserService {
 
+    
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     public boolean login(String email, String password) {
         UserEntity user = userRepository.findByEmail(email);
