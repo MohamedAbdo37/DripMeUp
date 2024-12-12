@@ -107,4 +107,13 @@ public class SessionManager {
         } else
             throw new AuthorizationException("Not Authorized");
     }
+
+    public Person forgetPasswordPerson(String email) throws AuthorizationException {
+        boolean isAuthenticated = new UserService(this.userRepository).logInWithoutPassword(email);
+        if (isAuthenticated) {
+            UserEntity user = userRepository.findByEmail(email);
+            return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
+        } else
+            throw new AuthorizationException("Not Authorized");
+    }
 }

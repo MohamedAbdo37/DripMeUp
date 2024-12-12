@@ -15,7 +15,6 @@ import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
-// import edu.alexu.cse.dripmeup.Service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -23,10 +22,7 @@ import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 
 public class UserSessionController {
 
-    private long sessionID = 123456789;
-
-    // @Autowired
-    // private UserService userService;
+    private final long sessionID = 123456789;
 
     @Autowired
     private SessionManager sessionManager;
@@ -59,19 +55,15 @@ public class UserSessionController {
         }
     }
 
-    // @GetMapping("/getUsername")
-    // public ResponseEntity<UserEntity> getUsername(@RequestHeader("Email") String email) {
-
-    //     boolean isAuthenticated = userService.logInWithoutPassword(email);
-    //     if (isAuthenticated) {
-    //         UserEntity user = this.sessionManager.getUserRepository().findByEmail(email);
-    //         UserEntity response = new UserEntity();
-    //         response.setUserName(user.getUserName());
-    //         return ResponseEntity.ok(response);
-    //     } else {
-    //         return ResponseEntity.status(401).body(null);
-    //     }
-    // }
+    @GetMapping("/getUsername")
+    public ResponseEntity<Person> getUsername(@RequestHeader("Email") String email) {
+        try {   
+            Person person = sessionManager.forgetPasswordPerson(email);
+            return ResponseEntity.ok(person);
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(400).body(null);
+        }
+    }
 
     @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
