@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,6 @@ public class UserSessionController {
 
     @Autowired
     private UserService userService;
-    
 
     @Autowired
     private SessionManager sessionManager;
@@ -48,10 +48,10 @@ public class UserSessionController {
     }
 
     @GetMapping("/g/login")
-    public ResponseEntity<Person> googleLogIn(@RequestHeader("Email") String email) {
+    public ResponseEntity<Person> googleLogIn(@RequestHeader("IDToken") String token) {
         Person person;
         try {
-            person = sessionManager.userLogin(email);
+            person = sessionManager.userLogin(token);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }
@@ -77,18 +77,20 @@ public class UserSessionController {
         }
     }
 
-    @PatchMapping("/changePassword")
+    @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
             @RequestHeader("Email") String email) {
 
         // this part modified by ibrahim
         UserEntity newPassword = new UserEntity();
         newPassword.setPassword(password);
+        System.out.println(newPassword.toString());
         boolean isAuthenticated = userService.logInWithoutPassword(email);
         if (isAuthenticated) {
             if (userService.changePassword(email, newPassword)) {
-                return ResponseEntity.ok("Password updated successfully");
+                return ResponseEntity.status(200).body(null);
             } else {
+                System.out.println("Error here");
                 return ResponseEntity.status(400).body("Faild to update password");
             }
         } else {

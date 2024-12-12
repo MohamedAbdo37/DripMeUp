@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import org.json.JSONObject;
@@ -27,8 +28,6 @@ public class SessionManager {
 
     @Autowired
     private UserRepository userRepository;
-
-    
 
     public Person adminSignUP(String userName, String password) {
         AdminEntity admin = new AdminEntity();
@@ -82,9 +81,11 @@ public class SessionManager {
     }
 
     private String extractEmail(String token) {
-        Base64.Decoder decoder = Base64.getDecoder();
-        String payload = new String(decoder.decode(token));
-        JSONObject jsonObject = new JSONObject(payload);
+        String[] parts = token.split("\\.", 0);
+        byte[] bytes = Base64.getUrlDecoder().decode(parts[1]);
+        String decodedString = new String(bytes, StandardCharsets.UTF_8);
+        JSONObject jsonObject = new JSONObject(decodedString);
+
         return jsonObject.getString("email");
     }
 

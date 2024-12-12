@@ -13,11 +13,10 @@ import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 @Service
 public class UserService {
 
-    
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -38,13 +37,17 @@ public class UserService {
         return user != null;
     }
 
+    public boolean changePassword(String email, UserEntity newPassword) {
+        UserEntity user = userRepository.findByEmail(email);
+        // changing password goes here
+        user.setPassword(newPassword.getPassword());
+        this.userRepository.save(user);
+
+        return true;
+    }
+
     // public boolean changePassword(String email, UserEntity newPassword) {
-    // UserEntity user = userRepository.findByEmail(email);
-    // // changing password goes here
     // return true;
     // }
 
-    public boolean changePassword(String email, UserEntity newPassword) {
-        return true;
-    }
 }

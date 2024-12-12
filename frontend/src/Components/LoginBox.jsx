@@ -16,11 +16,11 @@ const LoginBox = () =>{
         const loginUser = await fetch(`http://localhost:8081/api/5/users/g/login`, {
                 method: "GET",
                 headers:{
-                    Email: user.email
+                    'IDToken': response.credential
                 }
             }
         )
-        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
         .then((userData)=>{
             setErrorMessage('');
             navigate('/profile', {state: {user: userData}})
@@ -54,8 +54,9 @@ const LoginBox = () =>{
                 Password: password
             }
         })
-        .then(response=>{response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
         .then((userData)=>{
+            console.log("respond: ",userData);
             setErrorMessage('');
             navigate('/profile', {state: {user: userData}})
         })  

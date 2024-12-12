@@ -19,10 +19,10 @@ const AdminLoginBox = () =>{
                 'Password': password
             }
         })
-        .then(response=>{response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
         .then((adminData)=>{
             setErrorMessage('');
-            navigate('/admin/profile', {state: {admin: {'userName': username}}})
+            navigate('/admin/profile', {state: {admin: adminData}})
          })
         .catch(error=>{
             setErrorMessage('Wrong username or password');

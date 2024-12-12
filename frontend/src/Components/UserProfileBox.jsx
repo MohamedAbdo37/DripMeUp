@@ -3,6 +3,7 @@ import {useLocation} from 'react-router-dom';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
 
 const UserProfileBox = () => {
+  const location = useLocation();
   const { user } = location.state || {};
   
   const [isEditingName, setIsEditingName] = useState(false);

@@ -21,4 +21,10 @@ public class Person {
     private Gender gender;
     private Theme theme;
     private long sessionID;
+
+    @Override
+    public String toString() {
+
+        return this.username + ", " + this.email;
+    }
 }

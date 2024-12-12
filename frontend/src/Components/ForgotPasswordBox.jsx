@@ -16,14 +16,14 @@ const ForgotPasswordBox = () =>{
 
     const changePassword = async ()=>{
         const changePw = await fetch(`http://localhost:8081/api/5/users/changePassword`,{
-            method: 'PATCH',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Email': email,
                 'NewPassword': password
             }
         })
-        .then((response)=>{response.status!=200 || response.status!=201 ? (()=>{throw new Error("Error updating password");})() : console.log("Password Changed Successfully");})
+        .then(response=>response.status==200 || response.status==201?(() => { alert("Password Changed Successfully ") })():(() => { throw new Error('Something went wrong'); })())
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
