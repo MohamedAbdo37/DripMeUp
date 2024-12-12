@@ -28,9 +28,6 @@ public abstract class Builder {
         this.person.setUsername(userName);
     }
 
-    public void buildPersonID(String PersonID) {
-        this.person.setPersonID(person.getPersonID());
-    }
 
     public void buildName(String name) {
         this.person.setUsername(name);

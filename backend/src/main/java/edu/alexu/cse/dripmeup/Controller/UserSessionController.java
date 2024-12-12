@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +15,7 @@ import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Repository.UserRepository;
-import edu.alexu.cse.dripmeup.Service.UserService;
+// import edu.alexu.cse.dripmeup.Service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -29,8 +25,8 @@ public class UserSessionController {
 
     private long sessionID = 123456789;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
     @Autowired
     private SessionManager sessionManager;
@@ -52,7 +48,7 @@ public class UserSessionController {
         Person person;
         try {
             person = sessionManager.userLogin(token);
-        } catch (Exception e) {
+        } catch (AuthorizationException e) {
             return ResponseEntity.status(500).body(null);
         }
         if (null == person)
@@ -63,38 +59,31 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("getUsername")
-    public ResponseEntity<?> getUsername(@RequestHeader("Email") String email) {
+    // @GetMapping("/getUsername")
+    // public ResponseEntity<UserEntity> getUsername(@RequestHeader("Email") String email) {
 
-        boolean isAuthenticated = userService.logInWithoutPassword(email);
-        if (isAuthenticated) {
-            UserEntity user = this.sessionManager.getUserRepository().findByEmail(email);
-            UserEntity response = new UserEntity();
-            response.setUserName(user.getUserName());
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
-        }
-    }
+    //     boolean isAuthenticated = userService.logInWithoutPassword(email);
+    //     if (isAuthenticated) {
+    //         UserEntity user = this.sessionManager.getUserRepository().findByEmail(email);
+    //         UserEntity response = new UserEntity();
+    //         response.setUserName(user.getUserName());
+    //         return ResponseEntity.ok(response);
+    //     } else {
+    //         return ResponseEntity.status(401).body(null);
+    //     }
+    // }
 
     @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
             @RequestHeader("Email") String email) {
 
-        // this part modified by ibrahim
-        UserEntity newPassword = new UserEntity();
-        newPassword.setPassword(password);
-        System.out.println(newPassword.toString());
-        boolean isAuthenticated = userService.logInWithoutPassword(email);
-        if (isAuthenticated) {
-            if (userService.changePassword(email, newPassword)) {
+        try{
+            if(this.sessionManager.changePassword(email, password))
                 return ResponseEntity.status(200).body(null);
-            } else {
-                System.out.println("Error here");
-                return ResponseEntity.status(400).body("Faild to update password");
-            }
-        } else {
-            return ResponseEntity.status(400).body("Not Authorised");
+            else
+                return ResponseEntity.status(400).body("Failed to update password");
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(400).body("Not Authorized");
         }
     }
 

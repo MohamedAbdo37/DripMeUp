@@ -63,8 +63,9 @@ public class SessionManager {
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
-        }
-        return null;
+        } else
+            throw new AuthorizationException("Not Authorised");
+
     }
 
     public Person userSignUp(UserEntity newUser) throws HandlerException {
@@ -95,5 +96,15 @@ public class SessionManager {
 
     public UserRepository getUserRepository() {
         return userRepository;
+    }
+
+    public boolean changePassword(String email, String password) throws AuthorizationException {
+        UserEntity newPassword = new UserEntity();
+        newPassword.setPassword(password);
+        boolean isAuthenticated = new UserService(this.userRepository).logInWithoutPassword(email);
+        if (isAuthenticated) {
+            return new UserService(this.userRepository).changePassword(email, newPassword);
+        } else
+            throw new AuthorizationException("Not Authorized");
     }
 }

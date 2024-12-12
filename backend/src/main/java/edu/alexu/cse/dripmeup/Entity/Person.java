@@ -11,7 +11,6 @@ import lombok.Setter;
 public class Person {
 
     private Role role;
-    private int personID;
     private String username;
     private String photo;
     // private List<> favorites;

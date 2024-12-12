@@ -1,11 +1,11 @@
 package edu.alexu.cse.dripmeup;
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Service.AdminService;
 import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
 import edu.alexu.cse.dripmeup.Enumeration.Role;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class AdminCreationServiceTest {
         when(mockAdmin.getRole()).thenReturn(Role.ADMIN);
 
         // Act
-        Person result = AdminService.createAdmin(mockAdmin, mockNewAdmin);
+        Person result = new AdminService(adminRepository).createAdmin(mockNewAdmin);
 
         // Assert
 //        assertNotNull(result);
