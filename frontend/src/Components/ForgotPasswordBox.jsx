@@ -96,7 +96,7 @@ const ForgotPasswordBox = () =>{
     }
     const checkCode = async(e)=>{
         e.preventDefault()
-        const checkCode = await fetch(`http://localhost:8081/api/5/users/forgotPassword/checkCode`,{
+        const checkCode = await fetch(`http://localhost:8081/api/5/users/checkCode`,{
             method:'GET',
             headers:{
                 'CodeID': trueCodeID,
