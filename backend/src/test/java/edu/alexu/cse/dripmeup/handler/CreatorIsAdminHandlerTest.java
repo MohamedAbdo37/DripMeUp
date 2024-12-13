@@ -1,23 +1,32 @@
 package edu.alexu.cse.dripmeup.handler;
 
+import javax.management.relation.Role;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Enumeration.Role;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import edu.alexu.cse.dripmeup.Enumeration.Role;
-
 class CreatorIsAdminHandlerTest {
 
+    @Mock
     private Person mockPerson;
+    @Mock
     private AdminEntity mockAdminEntity;
 
     @Autowired
@@ -33,6 +42,7 @@ class CreatorIsAdminHandlerTest {
 
     @Test
     void testHandleNullPerson() {
+        @SuppressWarnings("static-access")
         HandlerException exception = assertThrows(HandlerException.class, () ->
             new CreatorIsAdminHandler(null, mockAdminEntity, mockAdminRepository).handle()
         );

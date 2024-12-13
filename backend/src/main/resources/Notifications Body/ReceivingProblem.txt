@@ -1,0 +1,20 @@
+Hey [User's Name],
+
+We wanted to let you know that your order was returned to us as it could not be delivered to the provided address.
+
+Order Details:
+
+Order Number: [Order Number]
+
+Items Ordered: [Item Names]
+
+Total Amount: [Order Total]
+
+We’re here to help you resolve this!
+
+If you prefer solution, such as a resent , please let us know by replying to this email or contacting us directly at DripMeUp2026@gmail.com.
+
+We sincerely apologize for the inconvenience and appreciate your understanding. Please let us know how you’d like to proceed!
+
+Best regards,
+The DripMeUp Store Team

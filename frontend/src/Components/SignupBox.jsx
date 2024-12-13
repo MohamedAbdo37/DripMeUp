@@ -122,6 +122,7 @@ const SignupBox = () =>{
             setErrorMessage("Wrong Code, Try again or click resend");
     }
 
+
     const signup = async ()=>{
         let userID = generateCode();
         const register = await fetch(`http://localhost:8081/api/5/users/signup`,{

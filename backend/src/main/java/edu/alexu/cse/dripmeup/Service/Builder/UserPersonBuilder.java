@@ -2,7 +2,6 @@ package edu.alexu.cse.dripmeup.Service.Builder;
 
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
-import edu.alexu.cse.dripmeup.Service.DatabaseService;
 import edu.alexu.cse.dripmeup.Enumeration.Role;
 
 public class UserPersonBuilder extends Builder {

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Component.SessionManager;
 
 import org.springframework.web.bind.annotation.GetMapping;

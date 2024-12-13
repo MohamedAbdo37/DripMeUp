@@ -106,5 +106,4 @@ public class UserSessionController {
         }
         return ResponseEntity.ok(person);
     }
-
 }
