@@ -85,7 +85,7 @@ public class SessionManager {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
         } else
-            throw new AuthorizationException("Not Authorised");
+            throw new AuthorizationException("Not Authorized");
 
     }
 
