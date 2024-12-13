@@ -21,7 +21,7 @@ import edu.alexu.cse.dripmeup.Excpetion.InvalidResendCodeException;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
+import edu.alexu.cse.dripmeup.Excpetion.FailedToSendMailException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -44,7 +44,7 @@ public class UserSessionController {
             person.setSessionID(sessionID);
             try{
                 this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
-            } catch (SendMailException | IOException e) {
+            } catch (FailedToSendMailException | IOException e) {
                 System.out.println(e.getMessage());
             }
             return ResponseEntity.ok(person);
@@ -65,7 +65,7 @@ public class UserSessionController {
             person.setSessionID(sessionID);
             try{
                 this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
-            } catch (SendMailException | IOException e) {
+            } catch (FailedToSendMailException | IOException e) {
                 System.out.println(e.getMessage());
             }
             return ResponseEntity.ok(person);
@@ -105,7 +105,7 @@ public class UserSessionController {
         try {
             String code = sessionManager.generateCodeSignUp(email, userName);
             return ResponseEntity.ok(code);
-        } catch (IOException | SendMailException ex) {
+        } catch (IOException | FailedToSendMailException ex) {
             return ResponseEntity.status(409).body("Email not sent");
         } catch (InvalidResendCodeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -119,7 +119,7 @@ public class UserSessionController {
         try {
             String code = sessionManager.generateCodeForgetPassword(email, userName);
             return ResponseEntity.ok(code);
-        } catch (IOException | SendMailException ex) {
+        } catch (IOException | FailedToSendMailException ex) {
             return ResponseEntity.status(409).body("Email not sent");
         }catch (InvalidResendCodeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -148,7 +148,7 @@ public class UserSessionController {
 
         try {
             this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
-        } catch (SendMailException | IOException e) {
+        } catch (FailedToSendMailException | IOException e) {
             System.out.println(e.getMessage());
         }
 
@@ -169,7 +169,7 @@ public class UserSessionController {
 
         try{
             this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
-        } catch (SendMailException | IOException e) {
+        } catch (FailedToSendMailException | IOException e) {
             System.out.println(e.getMessage());
         }
 

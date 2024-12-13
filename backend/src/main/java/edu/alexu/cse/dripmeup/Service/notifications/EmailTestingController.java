@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
+import edu.alexu.cse.dripmeup.Excpetion.FailedToSendMailException;
 
 
 @RestController
@@ -31,7 +31,7 @@ public class EmailTestingController {
             System.out.println(accountManagement.VerifyAccount());
             // System.out.println(accountManagement.ChangeEmail());
             // System.out.println(accountManagement.ForgetPassword());
-        } catch (IOException | SendMailException e) {
+        } catch (IOException | FailedToSendMailException e) {
             System.out.println(e.getMessage());
         }
 //

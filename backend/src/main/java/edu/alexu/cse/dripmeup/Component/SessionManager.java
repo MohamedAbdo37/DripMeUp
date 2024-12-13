@@ -17,7 +17,7 @@ import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.Excpetion.InvalidResendCodeException;
-import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
+import edu.alexu.cse.dripmeup.Excpetion.FailedToSendMailException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Repository.CodeRepository;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
@@ -138,7 +138,7 @@ public class SessionManager {
             throw new AuthorizationException("Not Authorized");
     }
 
-    public String generateCodeSignUp(String email, String userName) throws IOException, SendMailException, InvalidResendCodeException {
+    public String generateCodeSignUp(String email, String userName) throws IOException, FailedToSendMailException, InvalidResendCodeException {
         int code = this.random.nextInt(100000, 1000000);
         this.accountManagement.setEmail(email);
         this.accountManagement.setUsername(userName);
@@ -163,7 +163,7 @@ public class SessionManager {
         return String.valueOf(codeEntity.getCodeID());
     }
 
-    public String generateCodeForgetPassword(String email, String userName) throws IOException, SendMailException, InvalidResendCodeException {
+    public String generateCodeForgetPassword(String email, String userName) throws IOException, FailedToSendMailException, InvalidResendCodeException {
         int code = this.random.nextInt(100000, 1000000);
 
         this.accountManagement.setEmail(email);
@@ -191,7 +191,7 @@ public class SessionManager {
         return String.valueOf(codeEntity.getCodeID());
     }
     
-    public void sendGreeting(String email, String userName) throws IOException, SendMailException {
+    public void sendGreeting(String email, String userName) throws IOException, FailedToSendMailException {
         this.welcomeGoodbyeManagement.setEmail(email);
         this.welcomeGoodbyeManagement.setUsername(userName);
         System.out.println("Greeting");
