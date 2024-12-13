@@ -17,6 +17,7 @@ import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Excpetion.InvalidResendCodeException;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,6 +42,11 @@ public class UserSessionController {
             return ResponseEntity.status(401).body(null);
         else {
             person.setSessionID(sessionID);
+            try{
+                this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
+            } catch (SendMailException | IOException e) {
+                System.out.println(e.getMessage());
+            }
             return ResponseEntity.ok(person);
         }
     }
@@ -57,6 +63,11 @@ public class UserSessionController {
             return ResponseEntity.status(401).body(null);
         else {
             person.setSessionID(sessionID);
+            try{
+                this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
+            } catch (SendMailException | IOException e) {
+                System.out.println(e.getMessage());
+            }
             return ResponseEntity.ok(person);
         }
     }
@@ -96,6 +107,8 @@ public class UserSessionController {
             return ResponseEntity.ok(code);
         } catch (IOException | SendMailException ex) {
             return ResponseEntity.status(409).body("Email not sent");
+        } catch (InvalidResendCodeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -108,6 +121,8 @@ public class UserSessionController {
             return ResponseEntity.ok(code);
         } catch (IOException | SendMailException ex) {
             return ResponseEntity.status(409).body("Email not sent");
+        }catch (InvalidResendCodeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -131,6 +146,12 @@ public class UserSessionController {
             return ResponseEntity.status(409).body(null);
         }
 
+        try {
+            this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
+        } catch (SendMailException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         return ResponseEntity.ok(person);
     }
 
@@ -145,6 +166,13 @@ public class UserSessionController {
         } catch (AuthorizationException e) {
             return ResponseEntity.status(400).body(null);
         }
+
+        try{
+            this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
+        } catch (SendMailException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         return ResponseEntity.ok(person);
     }
 }
