@@ -1,29 +1,11 @@
 package edu.alexu.cse.dripmeup.Service.notifications;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 
 @Service
 public class OrderManagement extends NotificationService{
-    private String filePath ;
-    private String subject ;
 
-    private void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    private void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    private String getFilePath() {
-        return this.filePath;
-    }
-
-    private String getSubject() {
-        return this.subject;
-    }
-
+    // specific attribute for this class
     private int orderId ;
     public int getOrderId() {
         return this.orderId;
@@ -32,27 +14,31 @@ public class OrderManagement extends NotificationService{
         this.orderId = orderId;
     }
 
+    // IF there is an error with reading file return error else try to send message if there is an error return error
+    // else return that email has been sent
     private String OrderManagementMessage() {
-        String body = "" ;
+
         try {
-            body = this.readFileFromResources(this.getFilePath()) ;
+            this.setBody(this.readFileFromResources()) ;
         }
         catch(IOException e) {
             return "Error occurred while reading file.";
         }
 
         // making message body
-        body = body.replace("[User\'s Name]" , this.getUsername()) ;
-        body = body.replace("[Order Number]" ,  String.valueOf(this.getOrderId())) ;
+        this.setBody(this.getBody().replace("[User's Name]" , this.getUsername()));
+        this.setBody(this.getBody().replace("[Order Number]" ,  String.valueOf(this.getOrderId())));
         /*
         make queries to get order data
          */
 
-        if (this.sendMessage(body , this.getSubject()))
+        if (this.sendMessage())
             return "email was sent" ;
         return "error in sending email" ;
     }
 
+
+    // set body and subject of each message type
 
     public String SendOrder() {
         this.setSubject("Thank You for Your Order!") ;
@@ -91,7 +77,7 @@ public class OrderManagement extends NotificationService{
     }
 
     public String ReceiveOrder() {
-        this.setSubject("We\'d love your feedback on your recent purchase!") ;
+        this.setSubject("We'd love your feedback on your recent purchase!") ;
         this.setFilePath("file:src/main/resources/Notifications Body/ReceivingOrder.txt") ;
         return this.OrderManagementMessage() ;
     }

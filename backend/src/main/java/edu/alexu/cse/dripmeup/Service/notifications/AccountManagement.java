@@ -1,31 +1,14 @@
 package edu.alexu.cse.dripmeup.Service.notifications;
-
 import org.springframework.stereotype.Service;
+
+import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
 
 import java.io.IOException;
 
 @Service
 public class AccountManagement extends NotificationService {
 
-    private String filePath ;
-    private String subject ;
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public String getSubject() {
-        return this.subject;
-    }
-
+    // specific attribute for this class
     private int code ;
     public int getCode() {
         return this.code;
@@ -34,37 +17,36 @@ public class AccountManagement extends NotificationService {
         this.code = code;
     }
 
-    private String ManagingAccountMessage() {
+    // IF there is an error with reading file return error else try to send message if there is an error return error
+    // else return that email has been sent
+    private String ManagingAccountMessage() throws IOException, SendMailException {
 
-        String body = "" ;
-        try {
-            body = this.readFileFromResources(this.getFilePath()) ;
-        }
-        catch(IOException e) {
-            return "Error occurred while reading file.";
-        }
+        this.setBody(this.readFileFromResources()) ;
+    
 
         // making message body
-        body = body.replace("[User\'s Name]" , this.getUsername()) ;
-        body = body.replace("[Code]" ,  String.valueOf(this.getCode())) ;
-        if (this.sendMessage(body , this.getSubject()))
+        this.setBody(this.getBody().replace("[User's Name]" , this.getUsername()));
+        this.setBody(this.getBody().replace("[Code]" ,  String.valueOf(this.getCode())));
+        if (this.sendMessage())
             return "email was sent" ;
-        return "error in sending email" ;
+        else
+            throw new SendMailException("error in sending email") ;
     }
 
-    public String VerifyAccount() {
+    // set body and subject of each message type
+    public String VerifyAccount() throws IOException, SendMailException {
         this.setSubject("Verify Your DripMeUp Store Account") ;
         this.setFilePath("file:src/main/resources/Notifications Body/AccountVerification.txt") ;
         return this.ManagingAccountMessage() ;
     }
 
-    public String ChangeEmail() {
+    public String ChangeEmail() throws IOException, SendMailException {
         this.setSubject ("Confirm Your Email Change Request") ;
         this.setFilePath ("file:src/main/resources/Notifications Body/ChangingEmail.txt") ;
         return this.ManagingAccountMessage() ;
     }
 
-    public String ForgetPassword(){
+    public String ForgetPassword() throws IOException, SendMailException {
         this.setSubject("Password Change Verification Code") ;
         this.setFilePath("file:src/main/resources/Notifications Body/ForgetPassword.txt") ;
         return this.ManagingAccountMessage() ;
