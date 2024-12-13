@@ -120,22 +120,22 @@ const SignupBox = () =>{
         }
     }
 
-    const checkCode = async(e)=>{
-        e.preventDefault()
-        const checkCode = await fetch(`http://localhost:8081/api/5/users/signup/checkCode`,{
-            method:'GET',
-            headers:{
-                'CodeID': trueCodeID,
-                'Code': code
-            }
-        })
-        .then(response=>response.status==200 || response.status==201 ? (()=>{
-            setPhase(1);
-            setErrorMessage("");
-            signup();
-        })() : (()=>{setErrorMessage("Wrong Code, Try again or click resend");})())
-        .catch(e=>console.log(e));
-    }
+    // const checkCode = async(e)=>{
+    //     e.preventDefault()
+    //     const checkCode = await fetch(`http://localhost:8081/api/5/users/signup/checkCode`,{
+    //         method:'GET',
+    //         headers:{
+    //             'CodeID': trueCodeID,
+    //             'Code': code
+    //         }
+    //     })
+    //     .then(response=>response.status==200 || response.status==201 ? (()=>{
+    //         setPhase(1);
+    //         setErrorMessage("");
+    //         signup();
+    //     })() : (()=>{setErrorMessage("Wrong Code, Try again or click resend");})())
+    //     .catch(e=>console.log(e));
+    // }
 
 
     const signup = async ()=>{
@@ -144,7 +144,9 @@ const SignupBox = () =>{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
-                'UserID': userID
+                'UserID': userID,
+                'CodeID': trueCodeID,
+                'Code': code
             },
             body: JSON.stringify({
                 userID: userID,
@@ -236,7 +238,7 @@ const SignupBox = () =>{
                 </>
             )}
             {phase==2 && (
-                <form id="codeForm" onSubmit={checkCode}>
+                <form id="codeForm" onSubmit={signup}>
                     <p style={{fontSize:'1rem'}}>{username} we have sent you a code of 4 characters on your email, please check your inbox (or your spam).</p>
                     <label htmlFor="code"><b>Code</b></label>
                     <input type="text" name='code' placeholder="Enter Code" value={code} onChange={(e)=>setCode(e.target.value)} required></input>

@@ -12,6 +12,7 @@ const ForgotPasswordBox = () =>{
     const [trueCodeID, setTrueCodeID] = useState('');
     const [phase,setPhase] = useState(1);
     const [errorMessage, setErrorMessage] = useState('');
+    const [sessionID, setSessionID] = useState('');
     const navigate = useNavigate();
 
     const changePassword = async ()=>{
@@ -20,7 +21,8 @@ const ForgotPasswordBox = () =>{
             headers: {
                 'Content-Type': 'application/json',
                 'Email': email,
-                'NewPassword': password
+                'NewPassword': password,
+                'SessionID': sessionID
             }
         })
         .then(response=>response.status==200 || response.status==201?(() => { alert("Password Changed Successfully ") })():(() => { throw new Error('Something went wrong'); })())
@@ -101,13 +103,18 @@ const ForgotPasswordBox = () =>{
                 'Code': code
             }
         })
-        .then(response=>response.status==200 || response.status==201 ? (()=>{
+        .then(response=>response.status==200 || response.status==201 ? (()=>{return response.json()})() : (()=>{throw Error("Error code doesn't match")})())
+        .then(sessionID=>{
             setPhase(3);
             setErrorMessage("");
-            signup();
-        })() : (()=>{setErrorMessage("Wrong Code, Try again or click resend");})())
-        .catch(e=>console.log(e));
+            setSessionID(sessionID);
+        })
+        .catch(e=>{
+            console.log(e);
+            setErrorMessage("Wrong Code, Try again or click resend");
+        });
     }
+
     const checkPassword = async (e)=>{
         e.preventDefault()
         if (password == confermPassword){
