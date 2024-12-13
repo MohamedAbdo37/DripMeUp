@@ -13,11 +13,17 @@ const LoginBox = () =>{
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
-        const loginUser = await fetch(`http://localhost:8081/users/login/${user.email}`)
-        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
-        .then((data)=>{
+        const loginUser = await fetch(`http://localhost:8081/api/5/users/g/login`, {
+                method: "GET",
+                headers:{
+                    'IDToken': response.credential
+                }
+            }
+        )
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
+        .then((userData)=>{
             setErrorMessage('');
-            navigate('/homepage', {state: {user: data, userType: "user"}});
+            navigate('/profile', {state: {user: userData}})
         })
         .catch(async (error)=>{
             setErrorMessage('Email does not exist in the system');
@@ -41,9 +47,16 @@ const LoginBox = () =>{
 
     const login = async (e)=>{
         e.preventDefault()
-        const userFetched = await fetch(`http://localhost:8081/users/login/${email}_${password}`)
-        .then(response=>{response.status==200 || Response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })()})
+        const userFetched = await fetch(`http://localhost:8081/api/5/users/login`,{
+            method: "GET",
+            headers: {
+                Email: email,
+                Password: password
+            }
+        })
+        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
         .then((userData)=>{
+            console.log("respond: ",userData);
             setErrorMessage('');
             navigate('/profile', {state: {user: userData}})
         })  

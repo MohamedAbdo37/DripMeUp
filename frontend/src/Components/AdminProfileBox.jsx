@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useLocation} from 'react-router-dom';
-import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
+import adminPhoto from '../assets/admin.png'; // Adjust the path as necessary
 
 const AdminProfileBox = () => {
-  const { passedAdmin } = location.state || {};
-  const [user, setUser] = useState({
-    name: passedAdmin.userName,
-    email: passedAdmin.email,
-    photo: passedAdmin.picture == '' ? null : passedAdmin.picture,
-  });
+  const location = useLocation();
+  const { admin } = location.state || {};
+  
   const [isEditingName, setIsEditingName] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
   };
 
   const handlePhotoChange = (e) => {
-    setUser({ ...user, photo: e.target.files[0] });
   };
 
+  useEffect(()=>{
+    console.log(admin);
+  },[]);
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditingName(false);
     // Handle form submission logic here
-    console.log('User data submitted:', user);
+    console.log('User data submitted:', admin);
   };
 
   return (
@@ -36,13 +34,13 @@ const AdminProfileBox = () => {
             <input
               type="text"
               name="name"
-              value={user.name}
+              value={admin.username}
               onChange={handleInputChange}
               style={styles.input}
             />
           ) : (
             <div style={styles.staticTextContainer}>
-              <p style={styles.staticText}>{user.name}</p>
+              <p style={styles.staticText}>{admin.username}</p>
               <button
                 type="button"
                 onClick={() => setIsEditingName(true)}
@@ -55,7 +53,7 @@ const AdminProfileBox = () => {
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Email:</label>
-          <p style={styles.staticText}>{user.email}</p>
+          <p style={styles.staticText}>{admin.email}</p>
         </div>
         <div style={styles.formGroup}>
           <label style={styles.label}>Photo:</label>
@@ -67,7 +65,7 @@ const AdminProfileBox = () => {
           />
           <div style={styles.preview}>
             <img
-              src={user.photo ? URL.createObjectURL(user.photo) : unknownPhoto}
+              src={adminPhoto}
               alt="User Photo"
               style={styles.image}
             />

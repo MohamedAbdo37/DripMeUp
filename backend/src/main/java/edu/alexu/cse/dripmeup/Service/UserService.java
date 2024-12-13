@@ -1,30 +1,37 @@
 package edu.alexu.cse.dripmeup.Service;
 
-import edu.alexu.cse.dripmeup.Entity.UserEntity;
-import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Repository.UserRepository;
+import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
 
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public boolean login(String email, String password) {
         UserEntity user = userRepository.findByEmail(email);
         return user != null && user.getPassword().equals(password);
     }
 
-    public String signup(UserEntity user) {
+    public Person signup(UserEntity user) throws HandlerException {
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            return "Email already exists";
+            throw new HandlerException("Email already exists");
         }
-        userRepository.save(user);
-        return "User created successfully";
+        return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
     }
 
-    public boolean logInWithoutPassword(String email) {
+    public boolean isEmailPresent(String email) {
         UserEntity user = userRepository.findByEmail(email);
         return user != null;
     }
@@ -32,6 +39,11 @@ public class UserService {
     public boolean changePassword(String email, UserEntity newPassword) {
         UserEntity user = userRepository.findByEmail(email);
         // changing password goes here
+        user.setPassword(newPassword.getPassword());
+        this.userRepository.save(user);
+
         return true;
     }
+
+
 }

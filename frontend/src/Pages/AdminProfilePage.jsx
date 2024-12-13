@@ -1,4 +1,4 @@
-import AdminProfileBox from "../Components/UserProfileBox";
+import AdminProfileBox from "../Components/AdminProfileBox";
 
 const AdminProfilePage = () => {
     return (

@@ -4,13 +4,8 @@ import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessar
 
 const UserProfileBox = () => {
   const location = useLocation();
-  const { passedUser } = location.state || {};
-
-  const [user, setUser] = useState({
-    name: passedUser ? passedUser.userName : '',
-    email: passedUser ? passedUser.email : '',
-    photo: passedUser && passedUser.picture ? passedUser.picture : null,
-  });
+  const { user } = location.state || {};
+  
   const [isEditingName, setIsEditingName] = useState(false);
 
   const handleInputChange = (e) => {
@@ -38,13 +33,13 @@ const UserProfileBox = () => {
             <input
               type="text"
               name="name"
-              value={user.name}
+              value={user.username}
               onChange={handleInputChange}
               style={styles.input}
             />
           ) : (
             <div style={styles.staticTextContainer}>
-              <p style={styles.staticText}>{user.name}</p>
+              <p style={styles.staticText}>{user.username}</p>
               <button
                 type="button"
                 onClick={() => setIsEditingName(true)}
