@@ -59,7 +59,7 @@ public class SessionManager {
 
     public Person userLogin(String token) throws AuthorizationException {
         String email = this.extractEmail(token);
-        boolean isAuthenticated = new UserService(this.userRepository).logInWithoutPassword(email);
+        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
@@ -101,7 +101,7 @@ public class SessionManager {
     public boolean changePassword(String email, String password) throws AuthorizationException {
         UserEntity newPassword = new UserEntity();
         newPassword.setPassword(password);
-        boolean isAuthenticated = new UserService(this.userRepository).logInWithoutPassword(email);
+        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
         if (isAuthenticated) {
             return new UserService(this.userRepository).changePassword(email, newPassword);
         } else
@@ -109,7 +109,7 @@ public class SessionManager {
     }
 
     public Person forgetPasswordPerson(String email) throws AuthorizationException {
-        boolean isAuthenticated = new UserService(this.userRepository).logInWithoutPassword(email);
+        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));

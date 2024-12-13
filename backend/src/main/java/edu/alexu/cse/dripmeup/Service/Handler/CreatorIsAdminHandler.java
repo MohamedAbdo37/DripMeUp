@@ -2,9 +2,9 @@ package edu.alexu.cse.dripmeup.Service.Handler;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 import edu.alexu.cse.dripmeup.Enumeration.Role;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Repository.AdminRepository;
 
 public class CreatorIsAdminHandler extends Handler {
     private final Person person;
@@ -19,7 +19,7 @@ public class CreatorIsAdminHandler extends Handler {
 
     @Override
     public void handle() {
-        if (null == person || null == admin) {
+        if (person == null || admin == null) {
             throw new HandlerException("Invalid input.");
         }
 
