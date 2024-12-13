@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
 
-
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/5/users")
@@ -64,7 +63,7 @@ public class UserSessionController {
 
     @GetMapping("/getUsername")
     public ResponseEntity<Person> getUsername(@RequestHeader("Email") String email) {
-        try {   
+        try {
             Person person = sessionManager.forgetPasswordPerson(email);
             return ResponseEntity.ok(person);
         } catch (AuthorizationException e) {
@@ -76,11 +75,11 @@ public class UserSessionController {
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
             @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
 
-        if(!this.sessionID.equals(Long.valueOf(sessionID)))
+        if (!this.sessionID.equals(Long.valueOf(sessionID)))
             return ResponseEntity.status(400).body("Not Authorized");
 
-        try{
-            if(this.sessionManager.changePassword(email, password))
+        try {
+            if (this.sessionManager.changePassword(email, password))
                 return ResponseEntity.status(200).body(null);
             else
                 return ResponseEntity.status(409).body("Failed to update password");
@@ -90,7 +89,8 @@ public class UserSessionController {
     }
 
     @GetMapping("signup/code")
-    public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email, @RequestHeader("UserName") String userName) {
+    public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email,
+            @RequestHeader("UserName") String userName) {
         try {
             String code = sessionManager.generateCodeSignUp(email, userName);
             return ResponseEntity.ok(code);
@@ -98,9 +98,11 @@ public class UserSessionController {
             return ResponseEntity.status(409).body("Email not sent");
         }
     }
-    
-    @GetMapping("/forgotPassword/code") 
-    public ResponseEntity<String> sendCodeForgetPassword(@RequestHeader("Email") String email, @RequestHeader("UserName") String userName) {
+
+    @GetMapping("/forgotPassword/code")
+    public ResponseEntity<String> sendCodeForgetPassword(@RequestHeader("Email") String email,
+            @RequestHeader("UserName") String userName) {
+        System.out.println("userName" + userName);
         try {
             String code = sessionManager.generateCodeForgetPassword(email, userName);
             return ResponseEntity.ok(code);
@@ -110,13 +112,14 @@ public class UserSessionController {
     }
 
     @GetMapping("/checkCode")
-    public ResponseEntity<Long> checkCodeForgetPassword(@RequestHeader("CodeID") String codeID, @RequestHeader("Code") String code) {
+    public ResponseEntity<Long> checkCodeForgetPassword(@RequestHeader("CodeID") String codeID,
+            @RequestHeader("Code") String code) {
         if (this.sessionManager.checkCode(codeID, code))
             return ResponseEntity.ok(this.sessionID);
         else
             return ResponseEntity.status(400).body(null);
     }
-    
+
     @PostMapping("/signup")
     public ResponseEntity<Person> signUp(@RequestBody UserEntity user, @RequestHeader("UserID") long id) {
         if (id != user.getUserID())

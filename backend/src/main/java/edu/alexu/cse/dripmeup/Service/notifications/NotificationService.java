@@ -1,4 +1,5 @@
 package edu.alexu.cse.dripmeup.Service.notifications;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -21,11 +22,11 @@ public abstract class NotificationService {
     // shared attributes between all classes
 
     // email and user_name of admin that we will send the email to
-    private String email ;
-    private String username ;
-    private String filePath ;   // file path of email template
-    private String subject ;    // subject of email
-    private String body ;
+    private String email;
+    private String username;
+    private String filePath; // file path of email template
+    private String subject; // subject of email
+    private String body;
 
     public String getBody() {
         return this.body;
@@ -68,7 +69,6 @@ public abstract class NotificationService {
         this.username = username;
     }
 
-
     // shared methods between all classes
 
     // Reading file from resource
@@ -95,12 +95,12 @@ public abstract class NotificationService {
             message.setTo(this.getEmail());
             message.setSubject(this.getSubject());
             message.setText(this.getBody());
+            System.out.println(this.getBody());
             this.mailSender.send(message);
-            return true ;
-        }
-        catch (Exception e){
+            return true;
+        } catch (Exception e) {
             System.out.println(e);
-            return false ;
+            return false;
         }
     }
 

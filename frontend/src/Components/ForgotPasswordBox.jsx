@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import '../style.css';
-// import emailjs from 'emailjs-com';
 
 const ForgotPasswordBox = () =>{
     const [email, setEmail] = useState('');
@@ -29,7 +28,7 @@ const ForgotPasswordBox = () =>{
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
-        let returnValue = null;
+        let userName = null;
         const userFetched = await fetch(`http://localhost:8081/api/5/users/getUsername`,{
             method: "GET",
             headers:{
@@ -38,60 +37,36 @@ const ForgotPasswordBox = () =>{
         })
         .then(Response=>Response.status==200 || Response.status==201? (() => { return Response.json() })():(() => { throw new Error('Something went wrong');})())
         .then((data)=>{
-            setUsername(data.userName);
+            setUsername(data.username);
             setErrorMessage('');
-            returnValue = true;
+            userName = data.username;
         })
         .catch(error=>{
             setErrorMessage("This email isn't regesterd in the system");
-            returnValue = false;
         });
-        return returnValue;
+        return userName;
     }
-
-    // const generateCode = ()=>{
-    //     let generatedCode = '';
-    //     const characters = '0123456789';
-    //     for (let i = 0; i < 4; i++) {
-    //         generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
-    //     }
-    //     return (generatedCode);
-    // }
 
     const sendCode = async (e)=>{
         e.preventDefault();
-        let userCheck = await getUsername()
-        if (userCheck){
+        let u = await getUsername()
+        console.log("userName:", u);
+        if (u != null){
             const getCodeID = await fetch(`http://localhost:8081/api/5/users/forgotPassword/code`, {
                 method: 'GET',
                 headers:{
                     'Email': email,
-                    'UserName': username
+                    'UserName': u
                 }
             })
             .then(response=>response.status == 200 || response.status == 201? (()=>{return response.json()})() : (()=>{throw Error("Error sending code")})())
             .then(codeID=>{
+                
                 setTrueCodeID(codeID);
                 console.log('Email sent successfully!');
                 setPhase(2);
             })
             .catch(e=>alert('Failed to send email.'));
-            // emailjs
-            //     .send(
-            //         'service_j4cifp3', // Replace with your EmailJS Service ID
-            //         'template_zlx3hfj', // Replace with your EmailJS Template ID
-            //         {email: email, to_name: u, code: c},
-            //         '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
-            //     )
-            //     .then(
-            //         (result) => {
-            //             console.log('Email sent successfully!');
-            //             setPhase(2);
-            //         },
-            //         (error) => {
-            //             alert('Failed to send email.');
-            //         }
-            //     );
             }
     }
     const checkCode = async(e)=>{
@@ -139,7 +114,7 @@ const ForgotPasswordBox = () =>{
             )}
             {phase==2 && (
                 <form id="codeForm" onSubmit={checkCode}>
-                    <p style={{fontSize:'1rem'}}>{username} we have sent you a code of 4 characters on your email, please check your inbox (or your spam).</p>
+                    <p style={{fontSize:'1rem'}}>{username} we have sent you a code of 6 characters on your email, please check your inbox (or your spam).</p>
                     <label htmlFor="code"><b>Code</b></label>
                     <input type="text" name='code' placeholder="Enter Code" value={code} onChange={(e)=>setCode(e.target.value)} required></input>
                     <div style={{display:'flex', justifyContent: 'space-between'}}>

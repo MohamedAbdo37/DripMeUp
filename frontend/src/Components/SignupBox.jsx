@@ -3,9 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../style.css';
 import 'react-phone-number-input/style.css'
 import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
-import countryNames from 'react-phone-number-input/locale/en'
 import {jwtDecode} from 'jwt-decode';
-// import emailjs from 'emailjs-com';
 
 
 const SignupBox = () =>{
@@ -13,10 +11,7 @@ const SignupBox = () =>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confermPassword, setConfermPassword] = useState("");
-    // const [country, setCountry] = useState("+20");
     const [phone, setPhone] = useState("");
-    // const [city, setCity] = useState("");
-    // const [address, setAddress] = useState("");
     const [gender, setGender] = useState("UNKNOWN");
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTrigger, setErrorTrigger] = useState('');
@@ -72,14 +67,14 @@ const SignupBox = () =>{
         google.accounts.id.prompt();
       }, []);
       
-    // const generateCode = ()=>{
-    //     let generatedCode = '';
-    //     const characters = '0123456789';
-    //     for (let i = 0; i < 4; i++) {
-    //         generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
-    //     }
-    //     return (generatedCode);
-    // }
+    const generateCode = ()=>{
+        let generatedCode = '';
+        const characters = '0123456789';
+        for (let i = 0; i < 4; i++) {
+            generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return (generatedCode);
+    }
 
     const sendCode = async (e)=>{
         e.preventDefault();
@@ -98,22 +93,7 @@ const SignupBox = () =>{
                 setPhase(2);
             })
             .catch(e=>alert('Failed to send email.'));
-            // emailjs
-            //     .send(
-            //         'service_j4cifp3', // Replace with your EmailJS Service ID
-            //         'template_zlx3hfj', // Replace with your EmailJS Template ID
-            //         {email: email, to_name: username, code: c},
-            //         '6nj8Z27gLH-R_ZFsc' // Replace with your EmailJS User ID
-            //     )
-            //     .then(
-            //         (result) => {
-            //             console.log('Email sent successfully!');
-            //             setPhase(2);
-            //         },
-            //         (error) => {
-            //             alert('Failed to send email.');
-            //         }
-            //     );
+           
         }else{
             setErrorMessage("Phone number is not correct");
             setErrorTrigger("phoneError");
@@ -209,10 +189,7 @@ const SignupBox = () =>{
                     <label htmlFor="phone"><b>Phone</b></label>
                     <PhoneInput className="phoneInput" international placeholder="Enter phone number" value={phone} onChange={setPhone} isValidPhoneNumber required/>
                     {errorTrigger == "phoneError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
-                    {/* <label htmlFor="city"><b>City</b></label>
-                    <input type="text" name='city' placeholder="City" value={city} onChange={(e)=>setCity(e.target.value)} required></input>
-                    <label htmlFor="address"><b>Address</b></label>
-                    <input type="text" name='address' placeholder="Address" value={address} onChange={(e)=>setAddress(e.target.value)} required></input> */}
+                    
                     <label htmlFor="gender"><b>Gender</b></label>
                     <div className="gender">
                         <div>
@@ -237,7 +214,7 @@ const SignupBox = () =>{
             )}
             {phase==2 && (
                 <form id="codeForm" onSubmit={checkCode}>
-                    <p style={{fontSize:'1rem'}}>{username} we have sent you a code of 4 characters on your email, please check your inbox (or your spam).</p>
+                    <p style={{fontSize:'1rem'}}>{username} we have sent you a code of 6 characters on your email, please check your inbox (or your spam).</p>
                     <label htmlFor="code"><b>Code</b></label>
                     <input type="text" name='code' placeholder="Enter Code" value={code} onChange={(e)=>setCode(e.target.value)} required></input>
                     <div style={{display:'flex', justifyContent: 'space-between'}}>

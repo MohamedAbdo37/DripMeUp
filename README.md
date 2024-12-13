@@ -48,6 +48,8 @@ DripMeUp is an online e-commerce platform for a clothing store, developed by stu
    ```bash
    cd frontend
    npm install
+   npm i jwt-decode
+   npm i react-phone-number-input
    npm run dev
    ```
 

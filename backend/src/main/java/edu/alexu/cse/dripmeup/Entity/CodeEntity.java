@@ -12,18 +12,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "VerificationCode")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CodeEntity implements EntityIF{
-    
+public class CodeEntity implements EntityIF {
+
     @Id
     @Column(name = "codeId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codeID;
+    private Long ID;
 
     @Column(name = "code")
     private int code;
@@ -34,5 +33,4 @@ public class CodeEntity implements EntityIF{
     // @Column(name = "createdDate")
     // private Date createdDate;
 
-    
 }

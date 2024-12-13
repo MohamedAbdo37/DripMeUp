@@ -39,7 +39,11 @@ public class SessionManager {
     @Autowired
     private CodeRepository codeRepository;
 
-    private final Random random = new Random();    
+    @Autowired
+    private AccountManagement accountManagement;
+
+    private final Random random = new Random();
+
     public Person adminSignUP(String userName, String password) {
         AdminEntity admin = new AdminEntity();
         admin.setUserName(userName);
@@ -130,44 +134,45 @@ public class SessionManager {
 
     public String generateCodeSignUp(String email, String userName) throws IOException, SendMailException {
         int code = this.random.nextInt(100000, 1000000);
-        AccountManagement accountManagement = new AccountManagement();
-        accountManagement.setEmail(email);
-        accountManagement.setUsername(userName);
-        accountManagement.setCode(code);
-        
-        System.out.println(email +", "+ code + ", message : "+ accountManagement.VerifyAccount());
-        
+        this.accountManagement.setEmail(email);
+        this.accountManagement.setUsername(userName);
+        this.accountManagement.setCode(code);
+
+        System.out.println(email + ", " + code + ", message : " + this.accountManagement.VerifyAccount());
+
         CodeEntity codeEntity = new CodeEntity();
         codeEntity.setCode(code);
         codeEntity.setEmail(email);
         codeRepository.save(codeEntity);
 
-        return String.valueOf(code);
+        return String.valueOf(codeEntity.getID());
     }
 
     public String generateCodeForgetPassword(String email, String userName) throws IOException, SendMailException {
         int code = this.random.nextInt(100000, 1000000);
-        AccountManagement accountManagement = new AccountManagement();
-        accountManagement.setEmail(email);
-        accountManagement.setUsername(userName);
-        accountManagement.setCode(code);
-        
-        System.out.println(email +", "+ code + ", message : "+ accountManagement.ForgetPassword());
-        
+
+        this.accountManagement.setEmail(email);
+        this.accountManagement.setUsername(userName);
+        this.accountManagement.setCode(code);
+
+        System.out.println(email + ", " + code + ", message : " + this.accountManagement.ForgetPassword());
+
         CodeEntity codeEntity = new CodeEntity();
         codeEntity.setCode(code);
         codeEntity.setEmail(email);
         codeRepository.save(codeEntity);
 
-        return String.valueOf(code);
+        return String.valueOf(codeEntity.getID());
     }
 
-    public boolean checkCode(String codeID, String code){
+    public boolean checkCode(String codeID, String code) {
         Long codeIDLong = Long.valueOf(codeID);
-        CodeEntity codeEntity = codeRepository.findByCodeID(codeIDLong);
-        if(!Integer.valueOf(code).equals(codeEntity.getCode()))
+        System.out.println("codeID: " + codeID);
+        CodeEntity codeEntity = codeRepository.getReferenceById(codeIDLong);
+        System.out.println("codeEntity" + codeEntity.toString());
+        if (!Integer.valueOf(code).equals(codeEntity.getCode()))
             return false;
-        
+
         this.codeRepository.delete(codeEntity);
         return true;
     }
