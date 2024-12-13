@@ -1,22 +1,29 @@
 package edu.alexu.cse.dripmeup.Component;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.util.Base64;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.Entity.AdminEntity;
+import edu.alexu.cse.dripmeup.Entity.CodeEntity;
 import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
 import edu.alexu.cse.dripmeup.Repository.AdminRepository;
+import edu.alexu.cse.dripmeup.Repository.CodeRepository;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.AdminService;
 import edu.alexu.cse.dripmeup.Service.Builder.AdminPersonBuilder;
 import edu.alexu.cse.dripmeup.Service.Builder.UserPersonBuilder;
+import edu.alexu.cse.dripmeup.Service.notifications.AccountManagement;
 import edu.alexu.cse.dripmeup.Service.PersonDirector;
 import edu.alexu.cse.dripmeup.Service.UserService;
 
@@ -29,6 +36,10 @@ public class SessionManager {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CodeRepository codeRepository;
+
+    private final Random random = new Random();    
     public Person adminSignUP(String userName, String password) {
         AdminEntity admin = new AdminEntity();
         admin.setUserName(userName);
@@ -115,5 +126,49 @@ public class SessionManager {
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
         } else
             throw new AuthorizationException("Not Authorized");
+    }
+
+    public String generateCodeSignUp(String email, String userName) throws IOException, SendMailException {
+        int code = this.random.nextInt(100000, 1000000);
+        AccountManagement accountManagement = new AccountManagement();
+        accountManagement.setEmail(email);
+        accountManagement.setUsername(userName);
+        accountManagement.setCode(code);
+        
+        System.out.println(email +", "+ code + ", message : "+ accountManagement.VerifyAccount());
+        
+        CodeEntity codeEntity = new CodeEntity();
+        codeEntity.setCode(code);
+        codeEntity.setEmail(email);
+        codeRepository.save(codeEntity);
+
+        return String.valueOf(code);
+    }
+
+    public String generateCodeForgetPassword(String email, String userName) throws IOException, SendMailException {
+        int code = this.random.nextInt(100000, 1000000);
+        AccountManagement accountManagement = new AccountManagement();
+        accountManagement.setEmail(email);
+        accountManagement.setUsername(userName);
+        accountManagement.setCode(code);
+        
+        System.out.println(email +", "+ code + ", message : "+ accountManagement.ForgetPassword());
+        
+        CodeEntity codeEntity = new CodeEntity();
+        codeEntity.setCode(code);
+        codeEntity.setEmail(email);
+        codeRepository.save(codeEntity);
+
+        return String.valueOf(code);
+    }
+
+    public boolean checkCode(String codeID, String code){
+        Long codeIDLong = Long.valueOf(codeID);
+        CodeEntity codeEntity = codeRepository.findByCodeID(codeIDLong);
+        if(!Integer.valueOf(code).equals(codeEntity.getCode()))
+            return false;
+        
+        this.codeRepository.delete(codeEntity);
+        return true;
     }
 }

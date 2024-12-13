@@ -1,5 +1,7 @@
 package edu.alexu.cse.dripmeup.Controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +17,11 @@ import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Excpetion.AuthorizationException;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
+import edu.alexu.cse.dripmeup.Excpetion.SendMailException;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -67,21 +74,51 @@ public class UserSessionController {
 
     @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
-            @RequestHeader("Email") String email) {
+            @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
+
+        if(!this.sessionID.equals(Long.valueOf(sessionID)))
+            return ResponseEntity.status(400).body("Not Authorized");
 
         try{
             if(this.sessionManager.changePassword(email, password))
                 return ResponseEntity.status(200).body(null);
             else
-                return ResponseEntity.status(400).body("Failed to update password");
+                return ResponseEntity.status(409).body("Failed to update password");
         } catch (AuthorizationException e) {
             return ResponseEntity.status(400).body("Not Authorized");
         }
     }
 
+    @GetMapping("signup/code")
+    public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email, @RequestHeader("UserName") String userName) {
+        try {
+            String code = sessionManager.generateCodeSignUp(email, userName);
+            return ResponseEntity.ok(code);
+        } catch (IOException | SendMailException ex) {
+            return ResponseEntity.status(409).body("Email not sent");
+        }
+    }
+    
+    @GetMapping("/forgotPassword/code") 
+    public ResponseEntity<String> sendCodeForgetPassword(@RequestHeader("Email") String email, @RequestHeader("UserName") String userName) {
+        try {
+            String code = sessionManager.generateCodeForgetPassword(email, userName);
+            return ResponseEntity.ok(code);
+        } catch (IOException | SendMailException ex) {
+            return ResponseEntity.status(409).body("Email not sent");
+        }
+    }
+
+    @GetMapping("/checkCode")
+    public ResponseEntity<Long> checkCodeForgetPassword(@RequestHeader("CodeID") String codeID, @RequestHeader("Code") String code) {
+        if (this.sessionManager.checkCode(codeID, code))
+            return ResponseEntity.ok(this.sessionID);
+        else
+            return ResponseEntity.status(400).body(null);
+    }
+    
     @PostMapping("/signup")
     public ResponseEntity<Person> signUp(@RequestBody UserEntity user, @RequestHeader("UserID") long id) {
-
         if (id != user.getUserID())
             return ResponseEntity.status(400).body(null);
         Person person;
@@ -90,6 +127,7 @@ public class UserSessionController {
         } catch (HandlerException e) {
             return ResponseEntity.status(409).body(null);
         }
+
         return ResponseEntity.ok(person);
     }
 
