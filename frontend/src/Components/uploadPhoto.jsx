@@ -11,7 +11,7 @@ const UploadPhoto = ({ onClose, onUpload }) => {
   const handleUploadPhoto = async () => {
 
     try {
-      const response = await fetch('http://localhost:8080/users/photo', {
+      const response = await fetch('http://localhost:8081/users/photo', {
         method: 'PUT',
         headers: {
           'Cookie': document.cookie // Automatically includes sessionId

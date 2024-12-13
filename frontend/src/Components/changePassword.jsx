@@ -14,7 +14,7 @@ const ChangePassword = ({ onClose }) => {
 
   const handleChangePassword = async () => {
     try {
-      const response = await fetch('http://localhost:8080/users/', {
+      const response = await fetch('http://localhost:8081/users/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
