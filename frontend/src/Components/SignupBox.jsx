@@ -5,7 +5,7 @@ import 'react-phone-number-input/style.css'
 import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
 import countryNames from 'react-phone-number-input/locale/en'
 import {jwtDecode} from 'jwt-decode';
-import emailjs from 'emailjs-com';
+// import emailjs from 'emailjs-com';
 
 
 const SignupBox = () =>{
@@ -22,7 +22,7 @@ const SignupBox = () =>{
     const [errorTrigger, setErrorTrigger] = useState('');
     const [phase, setPhase] = useState(1);
     const [code, setCode] = useState('');
-    const [trueCode, setTrueCode] = useState('');
+    const [trueCodeID, setTrueCodeID] = useState('');
     const navigate = useNavigate();
 
     const handleCallbackResponse = async (response)=>{
@@ -72,23 +72,32 @@ const SignupBox = () =>{
         google.accounts.id.prompt();
       }, []);
       
-    const generateCode = ()=>{
-        let generatedCode = '';
-        const characters = '0123456789';
-        for (let i = 0; i < 4; i++) {
-            generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return (generatedCode);
-    }
+    // const generateCode = ()=>{
+    //     let generatedCode = '';
+    //     const characters = '0123456789';
+    //     for (let i = 0; i < 4; i++) {
+    //         generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    //     }
+    //     return (generatedCode);
+    // }
 
     const sendCode = async (e)=>{
         e.preventDefault();
-        let c = generateCode();
-        console.log(c)
-        setTrueCode(c);
         if (phone && isValidPhoneNumber(phone)){  
-            // should be removed after uncommenting                  
-            setPhase(2);
+            const getCodeID = await fetch(`http://localhost:8081/api/5/users/signup/code`, {
+                method: 'GET',
+                headers:{
+                    'Email': email,
+                    'UserName': username
+                }
+            })
+            .then(response=>response.status == 200 || response.status == 201? (()=>{return response.json()})() : (()=>{throw Error("Error sending code")})())
+            .then(codeID=>{
+                setTrueCodeID(codeID);
+                console.log('Email sent successfully!');
+                setPhase(2);
+            })
+            .catch(e=>alert('Failed to send email.'));
             // emailjs
             //     .send(
             //         'service_j4cifp3', // Replace with your EmailJS Service ID
@@ -111,15 +120,21 @@ const SignupBox = () =>{
         }
     }
 
-    const checkCode = (e)=>{
+    const checkCode = async(e)=>{
         e.preventDefault()
-        if (trueCode == code){
+        const checkCode = await fetch(`http://localhost:8081/api/5/users/signup/checkCode`,{
+            method:'GET',
+            headers:{
+                'CodeID': trueCodeID,
+                'Code': code
+            }
+        })
+        .then(response=>response.status==200 || response.status==201 ? (()=>{
             setPhase(1);
             setErrorMessage("");
-            signup()
-        }
-        else
-            setErrorMessage("Wrong Code, Try again or click resend");
+            signup();
+        })() : (()=>{setErrorMessage("Wrong Code, Try again or click resend");})())
+        .catch(e=>console.log(e));
     }
 
 
