@@ -22,7 +22,7 @@ import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
 
 public class UserSessionController {
 
-    private final long sessionID = 123456789;
+    private final Long sessionID = (long) 123456789;
 
     @Autowired
     private SessionManager sessionManager;
@@ -31,7 +31,7 @@ public class UserSessionController {
     public ResponseEntity<Person> login(@RequestHeader("Email") String email,
             @RequestHeader("Password") String password) {
         Person person = sessionManager.userLogin(email, password);
-        if (null == person)
+        if (person == null)
             return ResponseEntity.status(401).body(null);
         else {
             person.setSessionID(sessionID);
@@ -47,7 +47,7 @@ public class UserSessionController {
         } catch (AuthorizationException e) {
             return ResponseEntity.status(500).body(null);
         }
-        if (null == person)
+        if (person == null)
             return ResponseEntity.status(401).body(null);
         else {
             person.setSessionID(sessionID);

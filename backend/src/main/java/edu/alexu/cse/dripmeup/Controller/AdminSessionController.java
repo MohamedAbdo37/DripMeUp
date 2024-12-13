@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RequestMapping("/api/6/admin")
 public class AdminSessionController {
 
-    private static final long SUPER_ID = 123456789;
-    private long sessionID = 123456789;
+    private static final Long SUPER_ID = (long)123456789;
+    private Long sessionID = (long) 123456789;
 
 
     @Autowired
@@ -29,9 +29,9 @@ public class AdminSessionController {
 
     @PostMapping("signup")
     public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName,
-            @RequestHeader("Password") String password, @RequestHeader("SuperID") long superID) {
+            @RequestHeader("Password") String password, @RequestHeader("SuperID") Long superID) {
 
-        if (superID == SUPER_ID)
+        if (superID.equals(SUPER_ID))
             return ResponseEntity.status(400).body(null);
         Person person = sessionManager.adminSignUP(userName, password);
         if (null != person)
@@ -49,7 +49,7 @@ public class AdminSessionController {
         System.out.println("Password: " + password);
 
         Person person = sessionManager.adminLogin(userName, password);
-        if (null == person)
+        if (person == null)
             return ResponseEntity.status(401).body(null);
         else {
             person.setSessionID(sessionID);

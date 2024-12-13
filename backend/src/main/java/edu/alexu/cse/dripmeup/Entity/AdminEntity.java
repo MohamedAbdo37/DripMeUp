@@ -1,7 +1,5 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-
 import edu.alexu.cse.dripmeup.Enumeration.Theme;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +21,7 @@ public class AdminEntity implements EntityIF {
     @Id
     @Column(name = "admin_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long userID;
+    private Long userID;
 
     @Column(name = "userName")
     private String userName;

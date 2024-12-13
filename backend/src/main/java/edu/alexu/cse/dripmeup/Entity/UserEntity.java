@@ -21,7 +21,7 @@ public class UserEntity implements EntityIF {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "userID")
-    private long userID;
+    private Long userID;
 
     @Column(name = "userName")
     private String userName;

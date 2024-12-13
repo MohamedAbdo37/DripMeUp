@@ -19,7 +19,7 @@ public class Person {
     private String phone;
     private Gender gender;
     private Theme theme;
-    private long sessionID;
+    private Long sessionID;
 
     @Override
     public String toString() {
