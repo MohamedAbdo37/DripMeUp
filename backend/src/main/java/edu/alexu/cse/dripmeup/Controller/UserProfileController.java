@@ -6,7 +6,7 @@ import edu.alexu.cse.dripmeup.Entity.UserEntity;
 import edu.alexu.cse.dripmeup.Repository.UserRepository;
 import edu.alexu.cse.dripmeup.Service.ResponseBodyMessage;
 import edu.alexu.cse.dripmeup.Service.UserProfileService;
-import edu.alexu.cse.dripmeup.Service.UserService;
+
 import edu.alexu.cse.dripmeup.excpetion.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 @RequestMapping("users")
 
 public class UserProfileController {
