@@ -1,11 +1,10 @@
 package edu.alexu.cse.dripmeup;
-import edu.alexu.cse.dripmeup.Entity.AdminEntity;
-import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Service.AdminService;
-import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
-import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import edu.alexu.cse.dripmeup.Entity.AdminEntity;
+import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Enumeration.Role;
+import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.Repository.AdminRepository;
+import edu.alexu.cse.dripmeup.Service.AdminService;
+import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
 
 class AdminCreationServiceTest {
 
@@ -60,7 +64,7 @@ class AdminCreationServiceTest {
     void testCreateAdminWithNullCreator() {
         // Act & Assert
 
-        Person person = AdminService.createAdmin(null, mockNewAdmin);
+        Person person = new AdminService(adminRepository).createAdmin(mockNewAdmin);
 
         assertNull(person);
     }
@@ -72,7 +76,7 @@ class AdminCreationServiceTest {
                 .when(mockAdmin).getRole();
 
         // Act
-        Person result = AdminService.createAdmin(mockAdmin, mockNewAdmin);
+        Person result = new AdminService(adminRepository).createAdmin(mockNewAdmin);
 
         // Assert
         assertNull(result);
