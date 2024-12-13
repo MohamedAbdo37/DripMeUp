@@ -1,152 +1,276 @@
-import React, { useState } from 'react';
-import {useLocation} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
+import UploadPhoto from './UploadPhoto';
+import ChangePassword from './ChangePassword';
 
 const UserProfileBox = () => {
   const location = useLocation();
-  const { user } = location.state || {};
-  
-  const [isEditingName, setIsEditingName] = useState(false);
+  const { user: initialUser } = location.state || {};
+  const [user, setUser] = useState(initialUser);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isUploadPhotoOpen, setIsUploadPhotoOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    gender: '',
+    phoneNumber: ''
+  });
+  const [profilePhoto, setProfilePhoto] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:8081/users/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': document.cookie // Automatically includes sessionId
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+          setFormData({
+            username: userData.username,
+            email: userData.email,
+            gender: userData.gender,
+            phoneNumber: userData.phoneNumber || ''
+          });
+          setProfilePhoto(userData.profilePhoto || unknownPhoto);
+        } else if (response.status === 401) {
+          console.error('Unauthorized');
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handlePhotoChange = (e) => {
-    setUser({ ...user, photo: e.target.files[0] });
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setFormData({
+      username: user.username,
+      email: user.email,
+      gender: user.gender,
+      phoneNumber: user.phoneNumber || ''
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsEditingName(false);
-    // Handle form submission logic here
-    console.log('User data submitted:', user);
+    try {
+      const response = await fetch('http://localhost:8081/users/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': document.cookie // Automatically includes sessionId
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result.message);
+        setUser({ ...user, ...formData });
+        setIsEditing(false);
+      } else if (response.status === 400) {
+        const error = await response.json();
+        console.error('Invalid input data:', error.error);
+      } else if (response.status === 401) {
+        console.error('Unauthorized');
+      } else {
+        console.error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
   };
+
+  const handleUploadPhotoOpen = () => {
+    setIsUploadPhotoOpen(true);
+  };
+
+  const handleUploadPhotoClose = () => {
+    setIsUploadPhotoOpen(false);
+  };
+
+  const handleChangePasswordOpen = () => {
+    setIsChangePasswordOpen(true);
+  };
+
+  const handleChangePasswordClose = () => {
+    setIsChangePasswordOpen(false);
+  };
+
+  const handlePhotoUpload = (newPhoto) => {
+    setProfilePhoto(newPhoto);
+    setUser({ ...user, profilePhoto: newPhoto });
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="user-profile-box" style={styles.container}>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Name:</label>
-          {isEditingName ? (
-            <input
+    <ProfileContainer>
+      <ProfileImage src={profilePhoto || unknownPhoto} alt="Profile" />
+      {isEditing ? (
+        <form onSubmit={handleSubmit}>
+          <ProfileDetails>
+            <ProfileInput
               type="text"
-              name="name"
-              value={user.username}
+              name="username"
+              value={formData.username}
               onChange={handleInputChange}
-              style={styles.input}
+              placeholder="Username"
+              required
             />
-          ) : (
-            <div style={styles.staticTextContainer}>
-              <p style={styles.staticText}>{user.username}</p>
-              <button
-                type="button"
-                onClick={() => setIsEditingName(true)}
-                style={styles.editButton}
-              >
-                Edit
-              </button>
-            </div>
-          )}
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Email:</label>
-          <p style={styles.staticText}>{user.email}</p>
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Photo:</label>
-          <input
-            type="file"
-            name="photo"
-            onChange={handlePhotoChange}
-            style={styles.input}
-          />
-          <div style={styles.preview}>
-            <img
-              src={user.photo ? URL.createObjectURL(user.photo) : unknownPhoto}
-              alt="User Photo"
-              style={styles.image}
+            <ProfileInput
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              required
             />
-          </div>
-        </div>
-        <div style={styles.buttonGroup}>
-          <button type="submit" style={styles.button}>Save</button>
-        </div>
-      </form>
-    </div>
+            <ProfileSelect
+              name="gender"
+              value={formData.gender}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="UNKNOWN">Prefer not to say</option>
+            </ProfileSelect>
+            <ProfileInput
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              placeholder="Phone Number"
+            />
+            <ButtonContainer>
+              <ProfileButton type="submit">Save</ProfileButton>
+              <ProfileButton type="button" onClick={handleCancelClick}>
+                Cancel
+              </ProfileButton>
+              <ProfileButton type="button" onClick={handleUploadPhotoOpen}>
+                Upload Photo
+              </ProfileButton>
+              <ProfileButton type="button" onClick={handleChangePasswordOpen}>
+                Change Password
+              </ProfileButton>
+            </ButtonContainer>
+          </ProfileDetails>
+        </form>
+      ) : (
+        <ProfileDetails>
+          <ProfileName>{user.username}</ProfileName>
+          <ProfileInfo>Email: {user.email}</ProfileInfo>
+          <ProfileInfo>Gender: {user.gender}</ProfileInfo>
+          <ProfileInfo>Phone Number: {user.phoneNumber}</ProfileInfo>
+          <ProfileButton onClick={handleEditClick}>Edit Profile</ProfileButton>
+        </ProfileDetails>
+      )}
+      {isUploadPhotoOpen && (
+        <UploadPhoto onClose={handleUploadPhotoClose} onUpload={handlePhotoUpload} />
+      )}
+      {isChangePasswordOpen && (
+        <ChangePassword onClose={handleChangePasswordClose} />
+      )}
+    </ProfileContainer>
   );
 };
 
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '0 auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  formGroup: {
-    marginBottom: '15px',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold',
-  },
-  input: {
-    padding: '8px',
-    fontSize: '16px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  },
-  staticTextContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  staticText: {
-    padding: '8px',
-    fontSize: '16px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    backgroundColor: '#f9f9f9',
-    marginRight: '10px',
-  },
-  editButton: {
-    padding: '5px 10px',
-    fontSize: '12px',
-    borderRadius: '4px',
-    border: 'none',
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    cursor: 'pointer',
-  },
-  buttonGroup: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  button: {
-    padding: '10px',
-    fontSize: '16px',
-    borderRadius: '4px',
-    border: 'none',
-    backgroundColor: '#007BFF',
-    color: '#fff',
-    cursor: 'pointer',
-  },
-  preview: {
-    marginTop: '20px',
-    textAlign: 'center',
-  },
-  image: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '50%',
-  },
-};
-
 export default UserProfileBox;
+
+// Styled components
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+`;
+
+const ProfileImage = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+`;
+
+const ProfileDetails = styled.div`
+  text-align: center;
+`;
+
+const ProfileName = styled.h1`
+  font-size: 24px;
+  margin-bottom: 10px;
+`;
+
+const ProfileInfo = styled.p`
+  font-size: 16px;
+  color: #555;
+  margin: 5px 0;
+`;
+
+const ProfileInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const ProfileSelect = styled.select`
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const ProfileButton = styled.button`
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+`;

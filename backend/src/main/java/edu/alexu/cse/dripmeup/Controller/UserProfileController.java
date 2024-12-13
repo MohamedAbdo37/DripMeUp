@@ -1,56 +1,74 @@
 package edu.alexu.cse.dripmeup.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Entity.EntityIF;
+import edu.alexu.cse.dripmeup.Entity.Profile;
+import edu.alexu.cse.dripmeup.Entity.UserEntity;
+import edu.alexu.cse.dripmeup.Repository.UserRepository;
+import edu.alexu.cse.dripmeup.Service.ResponseBodyMessage;
 import edu.alexu.cse.dripmeup.Service.UserProfileService;
 
+import edu.alexu.cse.dripmeup.excpetion.BadInputException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("users/profile")
+@CrossOrigin
+@RequestMapping("users")
+
 public class UserProfileController {
-    private final UserProfileService userProfileService;
-
     @Autowired
-    public UserProfileController(UserProfileService userProfileService) {
-        this.userProfileService = userProfileService;
-    }
+    private UserProfileService userProfileService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Person> getUserProfile(@PathVariable String userId) {
-        Person person = userProfileService.getUserProfile(userId);
-        return new ResponseEntity<>(person, HttpStatus.OK);
-    }
-
-    @GetMapping("/photo/{userId}")
-    public ResponseEntity<byte[]> getUserProfilePhoto(@PathVariable String userId) {
-        byte[] photo = userProfileService.getUserProfilePhoto(userId);
-        if (photo != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Type", "image/jpeg");
-            return new ResponseEntity<>(photo, headers, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    private final Long USER_ID = 1L;
+    @GetMapping("/")
+    public ResponseEntity<?> getUserInfo(){
+        try{
+            Profile profile = userProfileService.getUserProfile(USER_ID);
+            return ResponseEntity.ok(profile);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching user info"));
         }
     }
-
-    @PostMapping("/photo/{userId}")
-    public ResponseEntity<String> changeUserProfilePhoto(@PathVariable String userId, @RequestBody byte[] photo) {
-        userProfileService.changeUserProfilePhoto(userId, photo);
-        return new ResponseEntity<>("photo changed successfully", HttpStatus.OK);
+    @PutMapping("/")
+    public ResponseEntity<?> changeUserInfo(@RequestBody HashMap<String, String> body){
+        try{
+            userProfileService.updateUserInfo(USER_ID, body);
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while updating user info"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("User info updated successfully"));
+    }
+    @PutMapping("/photo")
+    public ResponseEntity<?> changeUserPhoto(@RequestBody byte[] body){
+        try{
+            userProfileService.updateUserPhoto(USER_ID, body);
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while uploading your photo"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("Photo uploaded successfully"));
+    }
+    @DeleteMapping("/photo")
+    public ResponseEntity<?> deleteUserPhoto(){
+        try{
+            userProfileService.deleteUserPhoto(USER_ID);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while removing your photo"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("Photo removed successfully"));
     }
 
-    @PostMapping("/username/{userId}")
-    public ResponseEntity<String> changeUsername(@PathVariable String userId, @RequestBody String username) {
-        userProfileService.changeUsername(userId, username);
-        return new ResponseEntity<>("username changed successfully", HttpStatus.OK);
-    }
 }
