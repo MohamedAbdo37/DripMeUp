@@ -1,4 +1,4 @@
-package edu.alexu.cse.dripmeup.Excpetion;
+package edu.alexu.cse.dripmeup.excpetion;
 
 public class BadInputException extends Exception {
     public BadInputException(String message) {

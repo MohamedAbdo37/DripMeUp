@@ -46,6 +46,13 @@ public class SecurityConfig {
                                 "/api/5/users/signup",
                                 "/api/5/users/g/login",
                                 "/api/5/users/g/signup",
+                                "/api/5/users/getUsername",
+                                "/api/5/users/changePassword",
+                                "/api/5/users/signup/code",
+                                "/api/5/users/forgotPassword/code",
+                                "/api/5/users/checkCode",
+                                "/api/5/users/signup",
+                                "/api/5/users/signup",
                                 "/api/6/admin/login"
                         ).permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints

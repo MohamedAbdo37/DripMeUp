@@ -36,6 +36,8 @@ public class UserSessionController {
     @Autowired
     private JwtService jwtService;
 
+    private final Long sessionID = (long) 123456789;
+
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestHeader("Email") String email,
                                         @RequestHeader("Password") String password) {
@@ -44,7 +46,6 @@ public class UserSessionController {
         if (person == null)
             return ResponseEntity.status(401).body(null);
         else {
-            person.setSessionID(sessionID);
             try{
                 this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
             } catch (FailedToSendMailException | IOException e) {
@@ -69,7 +70,6 @@ public class UserSessionController {
         if (person == null)
             return ResponseEntity.status(401).body(null);
         else {
-            person.setSessionID(sessionID);
             try{
                 this.sessionManager.sendGreeting(person.getEmail(), person.getUsername());
             } catch (FailedToSendMailException | IOException e) {

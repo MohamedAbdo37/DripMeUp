@@ -49,10 +49,12 @@ const SignupBox = () =>{
                 theme: 'LIGHT'
             })
          })
-        .then(Response=>Response.status==200 || Response.status==201? (() => { return Response.json() })():(() => { throw new Error('Something went wrong');})())
-        .then((userData)=>{
-            console.log(userData);
-            navigate('/profile', {state: {user: userData}});
+        .then(Response=>Response.status==200 || Response.status==201? (() => { return Response.text() })():(() => { throw new Error('Something went wrong');})())
+        .then((data)=>{
+            localStorage.setItem('drip_me_up_jwt', data);
+            console.log(data)
+            setErrorMessage('');
+            navigate('/profile')
         })
         .catch(error=>{
             console.log(error);
@@ -149,9 +151,12 @@ const SignupBox = () =>{
                 theme: 'LIGHT'
             })
          })
-        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
-        .then((userData)=>{
-            navigate('/profile', {state: {user: userData}})
+        .then(response=>response.status==200 || response.status==201?(() => { return response.text() })():(() => { throw new Error('Something went wrong'); })())
+        .then((data)=>{
+            localStorage.setItem('drip_me_up_jwt', data);
+            console.log(data)
+            setErrorMessage('');
+            navigate('/profile')
         })
         .catch(error=>{
             setErrorMessage("Email already exists");
