@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { ToastContainer } from "react-toastify";
 import {Route, createRoutesFromElements, RouterProvider, createBrowserRouter} from 'react-router-dom';
 import LoginPage from './Pages/LoginPage';
 import AdminLoginPage from './Pages/AdminLoginPage';
@@ -9,6 +9,8 @@ import UserProfilePage from './Pages/UserProfilePage';
 import AdminProfilePage from './Pages/AdminProfilePage';
 import WelcomePage from './Pages/WelcomePage';
 import HomePage from './Pages/HomePage';
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   
@@ -31,6 +33,18 @@ function App() {
   return (
     <>
       <RouterProvider router={router}/>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   )
 }

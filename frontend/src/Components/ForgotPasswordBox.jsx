@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import '../style.css';
 
 const ForgotPasswordBox = () =>{
@@ -12,7 +13,35 @@ const ForgotPasswordBox = () =>{
     const [phase,setPhase] = useState(1);
     const [errorMessage, setErrorMessage] = useState('');
     const [sessionID, setSessionID] = useState('');
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [timer, setTimer] = useState(0);
+    const[sendCodeCounter, setSendCodeCounter] = useState(0);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const interval = null;
+        if (phase == 2){
+            const interval = setInterval(() => {
+                setTimer((prev) =>{
+                    if (prev > 59){
+                        clearInterval(interval); // Cleanup on unmount
+                        sendCode(new Event("Null event"));
+                        return prev;
+                    }
+                    else return prev + 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+      }, [sendCodeCounter]);
+
+    const notifyChangedPassword = () => {
+        toast.success(`Password changed successfully`);
+    };
+
+    const notifySentCode = () => {
+        toast.success(`Code was sent to ${email} successfully`);
+    };
 
     const changePassword = async ()=>{
         const changePw = await fetch(`http://localhost:8081/api/5/users/changePassword`,{
@@ -24,7 +53,7 @@ const ForgotPasswordBox = () =>{
                 'SessionID': sessionID
             }
         })
-        .then(response=>response.status==200 || response.status==201?(() => { alert("Password Changed Successfully ") })():(() => { throw new Error('Something went wrong'); })())
+        .then(response=>response.status==200 || response.status==201?(() => { notifyChangedPassword() })():(() => { throw new Error('Something went wrong'); })())
         .catch((error)=>console.log(error));
     }
     const getUsername = async ()=>{
@@ -49,6 +78,8 @@ const ForgotPasswordBox = () =>{
 
     const sendCode = async (e)=>{
         e.preventDefault();
+        setPhase(2);
+        setIsDisabled(true);
         let u = await getUsername()
         console.log("userName:", u);
         if (u != null){
@@ -61,13 +92,15 @@ const ForgotPasswordBox = () =>{
             })
             .then(response=>response.status == 200 || response.status == 201? (()=>{return response.json()})() : (()=>{throw Error("Error sending code")})())
             .then(codeID=>{
-                
                 setTrueCodeID(codeID);
                 console.log('Email sent successfully!');
-                setPhase(2);
+                setIsDisabled(false);
+                notifySentCode();
+                setTimer(()=>0);
+                setSendCodeCounter((prev)=>prev+1);
             })
             .catch(e=>alert('Failed to send email.'));
-            }
+        }
     }
     const checkCode = async(e)=>{
         e.preventDefault()
@@ -119,9 +152,10 @@ const ForgotPasswordBox = () =>{
                     <input type="text" name='code' placeholder="Enter Code" value={code} onChange={(e)=>setCode(e.target.value)} required></input>
                     <div style={{display:'flex', justifyContent: 'space-between'}}>
                         <p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>
-                        <button className="resendCodeLink" onClick={sendCode}>Resend code</button>
+                        <button className="resendCodeLink" onClick={sendCode}  disabled={isDisabled}>Resend code</button>
                     </div>
-                    <button className="loginButton" form="codeForm" type="submit">Conferm Code</button>
+                    <p style={{fontSize:"1rem"}}>Email will expire and automatically resent again after 1 min: {timer} sec</p>
+                    <button className="loginButton" form="codeForm" type="submit" disabled={isDisabled}>Confirm Code</button>
                 </form>
             )}
             {phase==3 && (

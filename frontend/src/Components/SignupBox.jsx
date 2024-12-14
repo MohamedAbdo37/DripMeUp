@@ -4,7 +4,7 @@ import '../style.css';
 import 'react-phone-number-input/style.css'
 import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
 import {jwtDecode} from 'jwt-decode';
-
+import { toast } from "react-toastify";
 
 const SignupBox = () =>{
     const [username, setUsername] = useState('');
@@ -18,7 +18,15 @@ const SignupBox = () =>{
     const [phase, setPhase] = useState(1);
     const [code, setCode] = useState('');
     const [trueCodeID, setTrueCodeID] = useState('');
+    const [isDisabled, setIsDisabled] = useState(true);
     const navigate = useNavigate();
+
+    const notify = () => {
+        toast.success(`Code was sent to ${email} successfully`);
+        // toast.error("This is an error message!");
+        // toast.info("This is an info message!");
+        // toast.warn("This is a warning message!");
+    };
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
@@ -78,6 +86,8 @@ const SignupBox = () =>{
 
     const sendCode = async (e)=>{
         e.preventDefault();
+        setPhase(2);
+        setIsDisabled(true);
         if (phone && isValidPhoneNumber(phone)){  
             const getCodeID = await fetch(`http://localhost:8081/api/5/users/signup/code`, {
                 method: 'GET',
@@ -90,7 +100,8 @@ const SignupBox = () =>{
             .then(codeID=>{
                 setTrueCodeID(codeID);
                 console.log('Email sent successfully!');
-                setPhase(2);
+                setIsDisabled(false);
+                notify();
             })
             .catch(e=>alert('Failed to send email.'));
            
@@ -180,7 +191,7 @@ const SignupBox = () =>{
                         <p style={{color: 'green', fontSize:'1rem'}}>• at least 8 characters.</p> :
                         <p style={{color: 'black', fontSize:'1rem'}}>• at least 8 characters.</p>
                     }
-                    <label htmlFor="confermPassword"><b>Conferm Password</b></label>
+                    <label htmlFor="confermPassword"><b>Confirm Password</b></label>
                     <input type="password" name='confermPassword' placeholder="Conferm Password" value={confermPassword} onChange={(e)=>setConfermPassword(e.target.value)} pattern={password} required></input>
                     {confermPassword == password ?
                         <></> :
@@ -221,7 +232,7 @@ const SignupBox = () =>{
                         <p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>
                         <button className="resendCodeLink" onClick={sendCode}>Resend code</button>
                     </div>
-                    <button className="loginButton" form="codeForm" type="submit">Conferm Code</button>
+                    <button className="loginButton" form="codeForm" type="submit" disabled={isDisabled}>Conferm Code</button>
                 </form>
             )
         }
