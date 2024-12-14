@@ -99,7 +99,9 @@ public class UserProfileService {
 
     public void updateUserPhoto(Long userId, byte[] body) throws Exception {
         UserEntity user = userRepository.findById(userId).orElse(null);
+        System.out.println("---------5----------");
         if(user == null) throw new Exception("User not found");
+        System.out.println("---------6----------");
         if(!ImageUploader.isValidImage(body)) throw new BadInputException("Invalid image");
         if(user.getPhoto() == null){
             user.setPhoto(imageUploader.uploadImage(body));
