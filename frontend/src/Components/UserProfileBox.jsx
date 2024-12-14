@@ -22,12 +22,14 @@ const UserProfileBox = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const token = localStorage.getItem('drip_me_up_jwt');
+      console.log(token.length)
       try {
         const response = await fetch('http://localhost:8081/users/', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Cookie': document.cookie // Automatically includes sessionId
+            'Authorization': `Bearer ${token}`
           }
         });
 
@@ -43,6 +45,8 @@ const UserProfileBox = () => {
           setProfilePhoto(userData.profilePhoto || unknownPhoto);
         } else if (response.status === 401) {
           console.error('Unauthorized');
+        }  else if (response.status === 403) {
+          console.error('Forbidden');
         } else {
           console.error('Failed to fetch user data');
         }
@@ -76,11 +80,12 @@ const UserProfileBox = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('drip_me_up_jwt');
       const response = await fetch('http://localhost:8081/users/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': document.cookie // Automatically includes sessionId
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });
