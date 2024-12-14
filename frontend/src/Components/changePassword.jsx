@@ -13,12 +13,13 @@ const ChangePassword = ({ onClose }) => {
   };
 
   const handleChangePassword = async () => {
+    const token = localStorage.getItem('drip_me_up_jwt');
     try {
       const response = await fetch('http://localhost:8081/users/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': document.cookie // Automatically includes sessionId
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });

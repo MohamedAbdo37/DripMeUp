@@ -70,8 +70,16 @@ public class CloudinaryUploader implements ImageUploader{
         else if (!isValidImage(image)) {
             throw new IOException("Invalid Image");
         }
-        String cloudId = getIdFromPath(path);
-        cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
+        if(path != null){
+            try{
+                String cloudId = getIdFromPath(path);
+                cloudinary.uploader().destroy(cloudId, ObjectUtils.emptyMap());
+            }
+            catch (Exception e){
+
+            }
+
+        }
         Map resource = cloudinary.uploader().upload(image, ObjectUtils.emptyMap());
         return (String)resource.get("url");
     }

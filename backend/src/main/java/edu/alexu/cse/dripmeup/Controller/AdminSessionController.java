@@ -1,61 +1,59 @@
 package edu.alexu.cse.dripmeup.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import edu.alexu.cse.dripmeup.Entity.Person;
 import edu.alexu.cse.dripmeup.Component.SessionManager;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import edu.alexu.cse.dripmeup.Entity.Person;
+import edu.alexu.cse.dripmeup.Service.JwtService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 @RequestMapping("/api/6/admin")
 public class AdminSessionController {
-
-    private static final Long SUPER_ID = (long)123456789;
-    private Long sessionID = (long) 123456789;
 
 
     @Autowired
     private SessionManager sessionManager;
 
-    @PostMapping("signup")
-    public ResponseEntity<Person> adminSignUp(@RequestHeader("UserName") String userName,
-            @RequestHeader("Password") String password, @RequestHeader("SuperID") Long superID) {
+    @Autowired
+    private JwtService jwtService;
 
-        if (superID.equals(SUPER_ID))
-            return ResponseEntity.status(400).body(null);
+    @Autowired
+    private Environment env;
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+    @PostMapping("/signup")
+    public ResponseEntity<String> adminSignUp(@RequestHeader("UserName") String userName,
+                                              @RequestHeader("Password") String password) {
         Person person = sessionManager.adminSignUP(userName, password);
-        if (null != person)
-            return ResponseEntity.ok(person);
-        else
-            return ResponseEntity.status(409).body(null);
+        if (person != null) {
+            return ResponseEntity.ok("Admin created successfully");
+        } else {
+            return ResponseEntity.status(409).body("Conflict");
+        }
     }
 
     @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestHeader("UserName") String userName,
+                                        @RequestHeader("Password") String password) {
+        String superAdminPassword = env.getProperty("super.admin.password");
+        String superAdminName = env.getProperty("super.admin.name");
 
-    public ResponseEntity<Person> login(@RequestHeader("UserName") String userName,
-            @RequestHeader("Password") String password) {
 
-
-        System.out.println("Admin Login request received");
-        System.out.println("Username: " + userName);
-        System.out.println("Password: " + password);
-
-        Person person = sessionManager.adminLogin(userName, password);
-        if (person == null)
-            return ResponseEntity.status(401).body(null);
-        else {
-            person.setSessionID(sessionID);
-            return ResponseEntity.ok(person);
+        if (superAdminName.equals(userName) && superAdminPassword.equals(password)) {
+            String token = jwtService.generateToken(userName, "ROLE_SUPER_ADMIN", 0L);
+            return ResponseEntity.ok(token);
         }
 
+        Person person = sessionManager.adminLogin(userName, password);
+        if (person == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        } else {
+            String token = jwtService.generateToken(userName, "ROLE_ADMIN", 0L);
+            return ResponseEntity.ok(token);
+        }
     }
-
 }
