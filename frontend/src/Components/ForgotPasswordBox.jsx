@@ -108,8 +108,6 @@ const ForgotPasswordBox = () =>{
             .catch(e=>{
                 console.log(e);
                 notifyFailSentCode();
-                // setIsDisabled(false);
-                // resetTimer();
             });
         }
     }
@@ -124,6 +122,7 @@ const ForgotPasswordBox = () =>{
         })
         .then(response=>response.status==200 || response.status==201 ? (()=>{return response.json()})() : (()=>{throw Error("Error code doesn't match")})())
         .then(sessionID=>{
+            setIsDisabled(true);
             setPhase(3);
             setErrorMessage("");
             setSessionID(sessionID);
