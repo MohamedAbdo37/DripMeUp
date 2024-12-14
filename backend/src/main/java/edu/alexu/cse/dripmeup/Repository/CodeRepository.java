@@ -4,5 +4,5 @@ import edu.alexu.cse.dripmeup.Entity.CodeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CodeRepository extends JpaRepository<CodeEntity, Long> {
-    CodeEntity findByID(Long codeID);
+    CodeEntity findByEmail(String email);
 }

@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.Entity;
 
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ public class CodeEntity implements EntityIF {
     @Id
     @Column(name = "codeId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private Long codeID;
 
     @Column(name = "code")
     private int code;
@@ -30,7 +31,10 @@ public class CodeEntity implements EntityIF {
     @Column(name = "email")
     private String email;
 
-    // @Column(name = "createdDate")
-    // private Date createdDate;
+    @Column(name = "createdDate")
+    private LocalDateTime createdDate;
+
+    @Column(name = "expiredDate")
+    private LocalDateTime expiredDate;
 
 }
