@@ -20,10 +20,11 @@ const LoginBox = () =>{
                 }
             }
         )
-        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
-        .then((userData)=>{
+        .then(response=>response.status==200 || response.status==201?(() => { return response.text() })():(() => { throw new Error('Something went wrong'); })())
+        .then((data)=>{
+            localStorage.setItem('drip_me_up_jwt', data);
             setErrorMessage('');
-            navigate('/profile', {state: {user: userData}})
+            navigate('/profile', {state: {user: null}})
         })
         .catch(async (error)=>{
             setErrorMessage('Email does not exist in the system');
@@ -46,6 +47,9 @@ const LoginBox = () =>{
       }, []);
 
     const login = async (e)=>{
+        const dummy_user = {
+            username: "name",
+        }
         e.preventDefault()
         const userFetched = await fetch(`http://localhost:8081/api/5/users/login`,{
             method: "GET",
@@ -54,13 +58,15 @@ const LoginBox = () =>{
                 Password: password
             }
         })
-        .then(response=>response.status==200 || response.status==201?(() => { return response.json() })():(() => { throw new Error('Something went wrong'); })())
-        .then((userData)=>{
-            console.log("respond: ",userData);
+        .then(response=>response.status==200 || response.status==201?(() => { return response.text()})():(() => { throw new Error('Something went wrong'); })())
+        .then((data)=>{
+            localStorage.setItem('drip_me_up_jwt', data);
+            console.log(data)
             setErrorMessage('');
-            navigate('/profile', {state: {user: userData}})
+            navigate('/profile')
         })  
         .catch(async(error)=>{
+            console.log(error);
             setErrorMessage('Wrong email or password');
             setErrorTrigger('emailError');
         }); 

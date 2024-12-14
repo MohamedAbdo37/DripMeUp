@@ -9,12 +9,12 @@ const UploadPhoto = ({ onClose, onUpload }) => {
   };
 
   const handleUploadPhoto = async () => {
-
+    const token = localStorage.getItem('drip_me_up_jwt');
     try {
       const response = await fetch('http://localhost:8081/users/photo', {
         method: 'PUT',
         headers: {
-          'Cookie': document.cookie // Automatically includes sessionId
+          'Authorization': `Bearer ${token}`
         },
         body: photoFile
       });
