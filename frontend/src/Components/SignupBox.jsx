@@ -19,13 +19,31 @@ const SignupBox = () =>{
     const [code, setCode] = useState('');
     const [trueCodeID, setTrueCodeID] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
+    const [timer, setTimer] = useState(0);
+
     const navigate = useNavigate();
 
-    const notify = () => {
+    useEffect(() => {
+        if (timer < 59 && !isDisabled){
+            const interval = setInterval(() => {
+                setTimer((prev) =>prev+1);
+            }, 1000);
+            return ()=>clearInterval(interval);
+        }
+        else if (!isDisabled)
+            sendCode(new Event("Resend code"));            
+      }, [timer, isDisabled]);
+
+    const resetTimer=()=>{
+        setTimer(0);
+    }
+
+    const notifySentCode = () => {
         toast.success(`Code was sent to ${email} successfully`);
-        // toast.error("This is an error message!");
-        // toast.info("This is an info message!");
-        // toast.warn("This is a warning message!");
+    };
+
+    const notifyFailSentCode = () => {
+        toast.error(`Failed to send code to ${email}`);
     };
 
     const handleCallbackResponse = async (response)=>{
@@ -101,9 +119,13 @@ const SignupBox = () =>{
                 setTrueCodeID(codeID);
                 console.log('Email sent successfully!');
                 setIsDisabled(false);
-                notify();
+                notifySentCode();
+                resetTimer();
             })
-            .catch(e=>alert('Failed to send email.'));
+            .catch(e=>{
+                notifyFailSentCode();
+                console.log(e);
+            });
            
         }else{
             setErrorMessage("Phone number is not correct");

@@ -15,32 +15,36 @@ const ForgotPasswordBox = () =>{
     const [sessionID, setSessionID] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
     const [timer, setTimer] = useState(0);
-    const[sendCodeCounter, setSendCodeCounter] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const interval = null;
-        if (phase == 2){
+        if (timer < 59 && !isDisabled){
             const interval = setInterval(() => {
-                setTimer((prev) =>{
-                    if (prev > 59){
-                        clearInterval(interval); // Cleanup on unmount
-                        sendCode(new Event("Null event"));
-                        return prev;
-                    }
-                    else return prev + 1;
-                });
+                setTimer((prev) =>prev+1);
             }, 1000);
+            return ()=>clearInterval(interval);
         }
-        return () => clearInterval(interval);
-      }, [sendCodeCounter]);
+        else if (!isDisabled)
+            sendCode(new Event("Resend code"));            
+      }, [timer, isDisabled]);
 
+    const resetTimer=()=>{
+        setTimer(0);
+    }
     const notifyChangedPassword = () => {
         toast.success(`Password changed successfully`);
     };
 
+    const notifyFailChangedPassword = () => {
+        toast.error(`Failed to change password`);
+    };
+
     const notifySentCode = () => {
         toast.success(`Code was sent to ${email} successfully`);
+    };
+
+    const notifyFailSentCode = () => {
+        toast.error(`Failed to send code to ${email}`);
     };
 
     const changePassword = async ()=>{
@@ -54,7 +58,10 @@ const ForgotPasswordBox = () =>{
             }
         })
         .then(response=>response.status==200 || response.status==201?(() => { notifyChangedPassword() })():(() => { throw new Error('Something went wrong'); })())
-        .catch((error)=>console.log(error));
+        .catch((error)=>{
+            console.log(error);
+            notifyFailChangedPassword();
+        });
     }
     const getUsername = async ()=>{
         let userName = null;
@@ -96,10 +103,14 @@ const ForgotPasswordBox = () =>{
                 console.log('Email sent successfully!');
                 setIsDisabled(false);
                 notifySentCode();
-                setTimer(()=>0);
-                setSendCodeCounter((prev)=>prev+1);
+                resetTimer();
             })
-            .catch(e=>alert('Failed to send email.'));
+            .catch(e=>{
+                console.log(e);
+                notifyFailSentCode();
+                // setIsDisabled(false);
+                // resetTimer();
+            });
         }
     }
     const checkCode = async(e)=>{
