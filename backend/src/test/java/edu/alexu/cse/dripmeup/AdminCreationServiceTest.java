@@ -14,13 +14,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import edu.alexu.cse.dripmeup.Entity.AdminEntity;
-import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Enumeration.Role;
+import edu.alexu.cse.dripmeup.entity.AdminEntity;
+import edu.alexu.cse.dripmeup.entity.Person;
 import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Service.AdminService;
-import edu.alexu.cse.dripmeup.Service.Handler.CreatorIsAdminHandler;
+import edu.alexu.cse.dripmeup.repository.AdminRepository;
+import edu.alexu.cse.dripmeup.service.AdminService;
+import edu.alexu.cse.dripmeup.service.handler.CreatorIsAdminHandler;
 
 class AdminCreationServiceTest {
 

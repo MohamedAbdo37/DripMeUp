@@ -1,16 +1,10 @@
 package edu.alexu.cse.dripmeup;
-import edu.alexu.cse.dripmeup.Service.notifications.AccountManagement;
-import edu.alexu.cse.dripmeup.Service.notifications.OrderManagement;
-import edu.alexu.cse.dripmeup.Service.notifications.WelcomeandGoodbyeManagement;
+import edu.alexu.cse.dripmeup.service.notifications.AccountManagement;
+import edu.alexu.cse.dripmeup.service.notifications.OrderManagement;
+import edu.alexu.cse.dripmeup.service.notifications.WelcomeandGoodbyeManagement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import static org.junit.jupiter.api.Assertions.*;
 
