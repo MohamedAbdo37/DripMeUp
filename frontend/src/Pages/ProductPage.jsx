@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import unknownPhoto from '../assets/pic.png'; // Adjust the path as necessary
 import FeedbackBox from '../Components/FeedbackBox';
 import favouriteImage from '../assets/favourite.png';
@@ -6,11 +6,14 @@ import filledStar from '../assets/filledStar.png';
 import star from '../assets/star.png';
 import shareImage from '../assets/share.png';
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 const ProductPage = () =>{
+    const {id} = useParams();
     const [product, setProduct] = useState();
     // useEffect(async ()=>{
     //     const token = localStorage.getItem('drip_me_up_jwt');
-    //     const getProducts = await fetch(`http://localhost/api/5/getProduct`,{
+    //     const getProducts = await fetch(`http://localhost:8081/api/5/getProduct`,{
     //         method:'GET',
     //         headers:{
     //             'Content-Type': 'application/json',
@@ -21,6 +24,14 @@ const ProductPage = () =>{
     //     .then(data=>setProduct(data))
     //     .catch(e=>console.log(e));
     // },[]);
+
+    const notifyAddToCart = () => {
+        toast.success(`Product added to cart successfully`);
+    };
+
+    const notifyFailAddToCart = () => {
+        toast.error(`Error adding to cart`);
+    };
     const person = 'user';
     setProduct({
         description:"Description goes here",
@@ -57,14 +68,30 @@ const ProductPage = () =>{
     const buy = ()=>{
 
     }
-    const addToCart = ()=>{
-
+    const addToCart = async()=>{
+        // const addCart = await fetch(`http://localhost:8081/cart/${id}`,{
+        //     method: 'POST',
+        //     headers:{
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+        //     }
+        // })
+        // .then(response=>response.status == 200 || response.status == 201? notifyAddToCart(): notifyFailAddToCart())
+        // .catch(e=>console.log(e));
     }
     const edit = ()=>{
 
     }
     const deleteProduct = ()=>{
-
+        // const addCart = await fetch(`http://localhost:8081/products/${id}`,{
+        //     method: 'DELETE',
+        //     headers:{
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+        //     }
+        // })
+        // .then(response=>response.status == 200 || response.status == 201? notifyDelete(): notifyFailDelete())
+        // .catch(e=>console.log(e));
     }
     const share = ()=>{
 
