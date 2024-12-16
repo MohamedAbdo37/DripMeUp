@@ -2,7 +2,7 @@ package edu.alexu.cse.dripmeup;
 import org.junit.jupiter.api.Test;
 
 
-import edu.alexu.cse.dripmeup.Excpetion.EmptyImageException;
+import edu.alexu.cse.dripmeup.exception.EmptyImageException;
 
 import java.io.IOException;
 

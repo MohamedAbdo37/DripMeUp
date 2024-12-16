@@ -53,7 +53,12 @@ public class SecurityConfig {
                                 "/api/5/users/checkCode",
                                 "/api/5/users/signup",
                                 "/api/5/users/signup",
-                                "/api/6/admin/login"
+                                "/api/6/admin/login",
+                                "/api/7/categories/",
+                                "/api/7/categories/create",
+                                "/api/7/categories/{categoryName}",
+                                "/api/7/categories/delete",
+                                "/api/7/categories/edit/{id}"
                         ).permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints
                 )

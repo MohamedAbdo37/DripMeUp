@@ -36,7 +36,6 @@ public class UserSessionController {
 
     private final Long sessionID = (long) 123456789;
 
-    @GetMapping("/login")
     public ResponseEntity<String> login(@RequestHeader("Email") String email,
                                         @RequestHeader("Password") String password) {
         Person person = sessionManager.userLogin(email, password);
@@ -56,7 +55,6 @@ public class UserSessionController {
     }
     
 
-    @GetMapping("/g/login")
     public ResponseEntity<String> googleLogIn(@RequestHeader("IDToken") String token) {
         Person person;
         try {
@@ -77,7 +75,6 @@ public class UserSessionController {
             return ResponseEntity.ok(jwtToken);
         }
     }
-    @GetMapping("/getUsername")
     public ResponseEntity<Person> getUsername(@RequestHeader("Email") String email) {
         try {
             Person person = sessionManager.forgetPasswordPerson(email);
@@ -87,7 +84,6 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
             @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
 
@@ -104,7 +100,6 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("signup/code")
     public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email,
             @RequestHeader("UserName") String userName) {
         try {
@@ -117,7 +112,6 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/forgotPassword/code")
     public ResponseEntity<String> sendCodeForgetPassword(@RequestHeader("Email") String email,
             @RequestHeader("UserName") String userName) {
         System.out.println("userName" + userName);
@@ -131,7 +125,6 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/checkCode")
     public ResponseEntity<Long> checkCodeForgetPassword(@RequestHeader("CodeID") String codeID,
             @RequestHeader("Code") String code) {
         if (this.sessionManager.checkCode(codeID, code))

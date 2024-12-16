@@ -6,7 +6,7 @@ import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import java.io.IOException;
 
 @Service
-public class AccountManagement extends NotificationService {
+public class AccountManagement extends edu.alexu.cse.dripmeup.service.notifications.NotificationService {
 
     // specific attribute for this class
     private int code ;

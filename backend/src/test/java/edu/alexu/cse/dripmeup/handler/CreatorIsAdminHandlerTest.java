@@ -1,6 +1,6 @@
 package edu.alexu.cse.dripmeup.handler;
 
-import javax.management.relation.Role;
+import edu.alexu.cse.dripmeup.enumeration.Role;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
 import edu.alexu.cse.dripmeup.entity.Person;
-import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.exception.HandlerException;
 import edu.alexu.cse.dripmeup.repository.AdminRepository;
 import edu.alexu.cse.dripmeup.service.handler.CreatorIsAdminHandler;
 
@@ -28,7 +28,7 @@ class CreatorIsAdminHandlerTest {
     @Mock
     private AdminEntity mockAdminEntity;
 
-    @Autowired
+    @Mock
     private AdminRepository mockAdminRepository;
 
 

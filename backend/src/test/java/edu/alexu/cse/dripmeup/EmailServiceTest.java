@@ -1,10 +1,12 @@
 package edu.alexu.cse.dripmeup;
 import edu.alexu.cse.dripmeup.service.notifications.AccountManagement;
 import edu.alexu.cse.dripmeup.service.notifications.OrderManagement;
-import edu.alexu.cse.dripmeup.service.notifications.WelcomeandGoodbyeManagement;
+import edu.alexu.cse.dripmeup.service.notifications.WelcomeGoodbyeManagement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,14 +16,14 @@ class EmailServiceTest {
     @Autowired
     AccountManagement accountManagement;
     @Autowired
-    WelcomeandGoodbyeManagement welcomeandGoodbyeManagement ;
+    WelcomeGoodbyeManagement welcomeandGoodbyeManagement ;
 
     @Autowired
     OrderManagement orderManagement ;
 
 
     @Test
-    void testVerifyAccount_Success() {
+    void testVerifyAccount_Success() throws IOException {
         accountManagement.setEmail("ni254828@gmail.com");
         accountManagement.setCode(123456);
         accountManagement.setUsername("Nira Ibrahim");
@@ -30,7 +32,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void testChangeEmail_Success(){
+    void testChangeEmail_Success() throws IOException {
         accountManagement.setEmail("ni254828@gmail.com");
         accountManagement.setCode(123456);
         accountManagement.setUsername("Nira Ibrahim");
@@ -39,7 +41,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void testForgetPassword_Success(){
+    void testForgetPassword_Success() throws IOException {
         accountManagement.setEmail("ni254828@gmail.com");
         accountManagement.setCode(123456);
         accountManagement.setUsername("Nira Ibrahim");
@@ -121,7 +123,7 @@ class EmailServiceTest {
 
 
     @Test
-    void testWelcomeMessage_Success() {
+    void testWelcomeMessage_Success() throws IOException {
         welcomeandGoodbyeManagement.setEmail("ni254828@gmail.com");
         welcomeandGoodbyeManagement.setUsername("Nira Ibrahim");
         String result = welcomeandGoodbyeManagement.WelcomeMessage();
@@ -129,7 +131,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void testVerifyGoodbyeMessage() {
+    void testVerifyGoodbyeMessage() throws IOException {
         welcomeandGoodbyeManagement.setEmail("ni254828@gmail.com");
         welcomeandGoodbyeManagement.setUsername("Nira Ibrahim");
         String result = welcomeandGoodbyeManagement.GoodbyeMessage();
