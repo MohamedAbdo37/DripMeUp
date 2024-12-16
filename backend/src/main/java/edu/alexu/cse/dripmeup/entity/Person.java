@@ -6,20 +6,19 @@ import edu.alexu.cse.dripmeup.enumeration.Theme;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+
 public class Person {
 
-    private Role role;
-    private String username;
-    private String photo;
+    private @Setter @Getter Role role;
+    private @Setter @Getter String username;
+    private @Setter @Getter String photo;
     // private List<> favorites;
-    private String description;
-    private String email;
-    private String phone;
-    private Gender gender;
-    private Theme theme;
-    private Long sessionID;
+    private @Setter @Getter String description;
+    private @Setter @Getter String email;
+    private @Setter @Getter String phone;
+    private @Setter @Getter Gender gender;
+    private @Setter @Getter Theme theme;
+    private @Setter @Getter Long sessionID;
 
     @Override
     public String toString() {
