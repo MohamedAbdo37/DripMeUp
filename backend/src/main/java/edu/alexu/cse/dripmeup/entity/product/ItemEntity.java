@@ -22,13 +22,6 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long itemID;
 
-    @Column(name = "productID")
-    private Long productID;
-
-    
-    @Column(name = "variantID")
-    private Long variantID;
-
     @Column(name = "price")
     private double price;
 

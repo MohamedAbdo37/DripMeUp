@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.alexu.cse.dripmeup.component.ShopManager;
+import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 
 @RestController
@@ -29,6 +30,15 @@ public class ShopController {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/product")
+    public ResponseEntity<Product> getProduct(@RequestParam("productID") long productID) {
+        Product product = shopManager.getProduct(productID);
+        if ( product == null ) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(product);
+    }
+    
 
 }
 

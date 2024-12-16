@@ -2,6 +2,7 @@ package edu.alexu.cse.dripmeup.entity.product;
 
 import java.util.List;
 
+import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,5 +59,6 @@ public class VariantEntity {
     @Column(name = "Sold")
     private int sold ;
 
-
+    @Column(name = "State")
+    private ProductState state ;
 }

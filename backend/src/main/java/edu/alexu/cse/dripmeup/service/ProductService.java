@@ -25,4 +25,12 @@ public class ProductService {
         List<VariantEntity> variants = variantRepository.findByProduct(product);
         return variants.get(0).getVariantImages().get(0).getImagePath();
     }
+
+    public List<VariantEntity> getVariantsOfProduct(ProductEntity product) {
+        return product.getVariants();
+    }
+
+    public ProductEntity getProduct(ProductRepository productRepository,long productID) {
+        return productRepository.findById(productID).get();
+    }
 }
