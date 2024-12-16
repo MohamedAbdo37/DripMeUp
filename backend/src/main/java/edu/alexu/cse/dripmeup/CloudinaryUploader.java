@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup;
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
-import edu.alexu.cse.dripmeup.Excpetion.EmptyImageException;
+import edu.alexu.cse.dripmeup.exception.EmptyImageException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Component;
 

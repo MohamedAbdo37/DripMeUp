@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 
-import edu.alexu.cse.dripmeup.Entity.AdminEntity;
-import edu.alexu.cse.dripmeup.Entity.Person;
-import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-import edu.alexu.cse.dripmeup.Service.Builder.AdminPersonBuilder;
+import edu.alexu.cse.dripmeup.entity.AdminEntity;
+import edu.alexu.cse.dripmeup.entity.Person;
+import edu.alexu.cse.dripmeup.repository.AdminRepository;
+import edu.alexu.cse.dripmeup.service.builder.AdminPersonBuilder;
 
 public class AdminPersonBuilderTest {
 

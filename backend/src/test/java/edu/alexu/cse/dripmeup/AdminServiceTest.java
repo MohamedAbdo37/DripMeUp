@@ -1,8 +1,8 @@
 package edu.alexu.cse.dripmeup;
 
-import edu.alexu.cse.dripmeup.Entity.AdminEntity;
-        import edu.alexu.cse.dripmeup.Repository.AdminRepository;
-        import edu.alexu.cse.dripmeup.Service.AdminService;
+import edu.alexu.cse.dripmeup.entity.AdminEntity;
+        import edu.alexu.cse.dripmeup.repository.AdminRepository;
+        import edu.alexu.cse.dripmeup.service.AdminService;
         import org.junit.jupiter.api.BeforeEach;
         import org.junit.jupiter.api.Test;
         import org.mockito.InjectMocks;

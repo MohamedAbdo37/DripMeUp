@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup;
-import edu.alexu.cse.dripmeup.Entity.UserEntity;
-import edu.alexu.cse.dripmeup.Repository.UserRepository;
-import edu.alexu.cse.dripmeup.Service.UserService;
+import edu.alexu.cse.dripmeup.entity.UserEntity;
+import edu.alexu.cse.dripmeup.repository.UserRepository;
+import edu.alexu.cse.dripmeup.service.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
