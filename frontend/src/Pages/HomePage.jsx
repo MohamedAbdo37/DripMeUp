@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "../homepage.css";
 
 const ITEMS_PER_PAGE = 10;
@@ -18,32 +17,38 @@ const HomePage = () => {
 
   // Function to fetch all products (for default category)
   const fetchAllProducts = async (page = 1) => {
-    try {
-      const response = await axios.get(`http://localhost:8081/api/1000/shop/products`, {
-        params: {
-          page,
-        },
-      });
-      setProducts(response.data.products);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error("Error fetching all products:", error);
-    }
+    const response = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}`, {
+      method:'GET',
+      // headers:{
+      //   'Content-Type': 'application/json',
+      //   'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+      // }
+    })
+    .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
+    .then(data=>{
+      setProducts(data.products);
+      setTotalPages(data.totalPages);
+    })
+    .catch(e=>console.log(e));
+    
   };
 
   // Function to fetch products for a specific category
   const fetchCategoryProducts = async (category, page = 1) => {
-    try {
-      const response = await axios.get(`/api/products/bycategory/${category}`, {
-        params: {
-          page,
-        },
-      });
-      setProducts(response.data.products);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error(`Error fetching products for category ${category}:`, error);
-    }
+      const response = await fetch(`http://localhost:8081/api/products/bycategory?category=${category}&page=${page}`, {
+        method: 'GET',
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+        }
+      })
+      .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
+      .then(data=>{
+        setProducts(data.products);
+        setTotalPages(data.totalPages);
+      })
+      .catch(e=>console.error(`Error fetching products for category ${category}:`, e));
+    
   };
 
   useEffect(() => {
@@ -114,7 +119,7 @@ const HomePage = () => {
         <div className="product-grid">
           {products.map((product) => (
             <div key={product.id} className="product-card">
-              <Link to={`/product/${product.id}`}>
+              <Link to={`userSession/product/${product.id}`}>
                 {/* Display image */}
                 <img src={product.image} alt={product.name} className="product-image" />
               </Link>

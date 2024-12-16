@@ -12,12 +12,11 @@ const ProductPage = () =>{
     const {id} = useParams();
     const [product, setProduct] = useState();
     // useEffect(async ()=>{
-    //     const token = localStorage.getItem('drip_me_up_jwt');
     //     const getProducts = await fetch(`http://localhost:8081/api/5/getProduct`,{
     //         method:'GET',
     //         headers:{
     //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${token}`
+    //             'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
     //             }
     //     })
     //     .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
