@@ -1,9 +1,6 @@
-import {useLocation} from 'react-router-dom';
-import {useState} from 'react';
+import {useOutletContext} from 'react-router-dom';
 import UnauthorizedPage from './UnauthorizedPage';
 const HomePage = () =>{
-    const location = useLocation();
-    const { userType, user } = location.state || {};
     if(userType=="user"){
         return(<>
             <center>User</center>

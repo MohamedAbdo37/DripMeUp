@@ -1,3 +1,25 @@
+/* Style the scrollbar */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+  }
+  
+  /* Style the track (background of the scrollbar) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  /* Style the handle (scroll thumb) */
+  ::-webkit-scrollbar-thumb {
+    background: #f30ee4;
+    border-radius: 10px;
+  }
+  
+  /* Style the handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00c8ff;
+  }
+  
 html, body{
     margin: 0;
     padding: 0;
@@ -236,3 +258,176 @@ center{
     color: #ea3b98;
 }
 
+/* .productImg{
+    width: 100%;
+} */
+
+.ratingBox, .Img, .controller, .controllerRightDescription{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: inherit;
+    margin: 1rem;
+}
+
+
+
+.Img{
+    justify-content: center;
+}
+
+.share-favouriteButtons img{
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.controllerButtons button{
+    width: 15rem;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: #eb2f93;
+    color: white;
+    text-decoration: none;
+    margin: 1rem;
+    font-size: large;
+}
+
+.controllerButtons button:hover{
+    background-color: #f6aad2;
+    color: black;
+}
+
+.sale{
+    display: flex;
+    background-color: yellow;
+    border-radius: 20px;
+    justify-content: center;
+    padding: 0.2rem;
+    font-size: 1rem;
+}
+
+.saleData{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.descriptionTable{
+    width: 100%;
+}
+
+.controllerButtons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controllerRightDescription{
+    margin: 0;
+    /* color: #ccc; */
+}
+
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 1em;
+    text-align: left;
+  }
+  
+.styled-table thead tr {
+  background-color: #009879;
+  color: white;
+}
+ 
+.styled-table th, .styled-table td {
+  border: 1px solid #dddddd;
+  padding: 8px 12px;
+}
+ 
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+.reviewPhoto{
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  margin: 1rem;
+}
+
+.feedbacks{
+  background-color: #b5eff2;
+  padding: 0.2rem;
+}
+
+.feedbackBox{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 20px;
+  background-color: #39f1fb;
+  margin: 1rem;
+  cursor: pointer;
+}
+ 
+.feedbackBox:hover{
+  background-color: #98f5f9;
+}
+
+.yellowStar{
+  width: 2rem;
+  height: 2rem;
+}
+
+.emptyStar{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+ 
+.rating{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #cccccc6b;
+  border-radius: 20px;
+  padding: 0.5rem;
+}
+
+.navBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: palevioletred;
+    padding: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    
+}
+
+.navBarButtons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 25%; */
+    cursor: pointer;
+    margin-right: 0.2rem;
+    margin-left: 0.2em;
+}
+
+.navBar input[type="text"]{
+    margin: 0;
+    width: 75%;
+}
+
+
+
+.navBarButtons:hover{
+    background-color: #cccccc67;
+}

@@ -24,7 +24,7 @@ const LoginBox = () =>{
         .then((data)=>{
             localStorage.setItem('drip_me_up_jwt', data);
             setErrorMessage('');
-            navigate('/profile', {state: {user: null}})
+            navigate('/userSession');
         })
         .catch(async (error)=>{
             setErrorMessage('Email does not exist in the system');
@@ -63,7 +63,7 @@ const LoginBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/profile')
+            navigate('/userSession')
         })  
         .catch(async(error)=>{
             console.log(error);

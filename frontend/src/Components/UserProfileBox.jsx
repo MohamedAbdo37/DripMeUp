@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
 import UploadPhoto from './UploadPhoto';
 import ChangePassword from './ChangePassword';
 
 const UserProfileBox = () => {
-  const location = useLocation();
-  const { user: initialUser } = location.state || {};
-  const [user, setUser] = useState(initialUser);
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadPhotoOpen, setIsUploadPhotoOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);

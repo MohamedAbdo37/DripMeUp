@@ -72,7 +72,7 @@ const SignupBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/profile')
+            navigate('/userSession')
         })
         .catch(error=>{
             console.log(error);
@@ -178,7 +178,7 @@ const SignupBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/profile')
+            navigate('/userSession')
         })
         .catch(error=>{
             setErrorMessage("Email already exists");
