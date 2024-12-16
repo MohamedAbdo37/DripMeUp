@@ -26,8 +26,9 @@ public class ShopController {
         if ( products == null || products.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(products);
     }
+
 
 }
 
