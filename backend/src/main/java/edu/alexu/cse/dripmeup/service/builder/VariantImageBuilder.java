@@ -1,24 +1,36 @@
 package edu.alexu.cse.dripmeup.service.builder;
 
+import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
-import edu.alexu.cse.dripmeup.repository.ImageRepository;
 
 public class VariantImageBuilder implements ProductBuilderIF{
 
     private final VariantImageEntity variantImage;
+    private String path;
+    private VariantEntity variant;
 
-
-    public VariantImageBuilder(ImageRepository imageRepository, Long imageID) {
-        this.variantImage = imageRepository.findByImageID(imageID);
+    public VariantImageBuilder(String path, VariantEntity variant) {
+        this.path = path;
+        this.variantImage = new VariantImageEntity();
+        this.variant = variant;
     }
 
-    public VariantImageBuilder(){
-        this.variantImage = new VariantImageEntity();
+    public VariantImageBuilder(VariantImageEntity variantImage) {
+        this.variantImage = variantImage;
+    }
+
+    public void buildPath(){
+        this.variantImage.setImagePath(this.path);
+    }
+
+    public void buildVariant(){
+        this.variantImage.setVariant(this.variant);
     }
 
     @Override
     public void build() {
-        // TODO Auto-generated method stub
+        this.buildPath();
+        this.buildVariant();
     }
 
     @Override
