@@ -1,11 +1,13 @@
 package edu.alexu.cse.dripmeup.component;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import edu.alexu.cse.dripmeup.CloudinaryUploader;
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
@@ -35,6 +37,9 @@ public class ShopManager {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private CloudinaryUploader cloudinaryUploader;
     
     public ProductRepository getProductRepository() {
         return productRepository;
@@ -83,5 +88,12 @@ public class ShopManager {
         if ( variant == null )
             throw new IllegalArgumentException("There is no variant with id " + variantID);
         new ProductService().addImage(this.imageRepository, imagePath, variant);
+    }
+
+    public String getImagePath(byte[] image) throws IOException {
+        if (!CloudinaryUploader.isValidImage(image)) 
+            throw new ProductCreationException("Invalid image");
+            
+        return this.cloudinaryUploader.uploadImage(image);
     }
 }
