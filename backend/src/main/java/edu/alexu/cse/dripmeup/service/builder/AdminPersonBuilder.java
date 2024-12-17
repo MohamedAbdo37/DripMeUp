@@ -3,7 +3,7 @@ package edu.alexu.cse.dripmeup.service.builder;
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
 import edu.alexu.cse.dripmeup.repository.AdminRepository;
 
-public class AdminPersonBuilder extends Builder {
+public class AdminPersonBuilder extends PersonBuilder {
 
     private final AdminRepository adminRepository;
 
