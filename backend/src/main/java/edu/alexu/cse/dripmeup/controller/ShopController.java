@@ -41,6 +41,11 @@ public class ShopController {
         }
         return ResponseEntity.ok(product);
     }
+
+    @PostMapping("/c/product")
+    public ResponseEntity<String> createProduct(@RequestBody Product product) {
+        return ResponseEntity.ok("Product created successfully");
+    }
     
 
 }

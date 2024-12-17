@@ -59,6 +59,11 @@ public class ShopManager {
     }
 
     public Product getProduct(long productID) {
-        return new Product(new ProductService().getProduct(this.productRepository, productID));
+        return new Product(new ProductService().getProduct(this.productRepository, productID), this);
+    }
+
+    public void createProduct(Product product) {
+        // TODO Auto-generated method stub
+        
     }
 }
