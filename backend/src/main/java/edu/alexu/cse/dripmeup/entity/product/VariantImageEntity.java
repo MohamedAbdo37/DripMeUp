@@ -7,11 +7,13 @@ import lombok.Data;
 @Entity
 @Table(name = "VARIANT_IMAGE")
 @Data
+
 public class VariantImageEntity implements EntityIF{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ImageID")
+
     private Long imageID;
 
     @ManyToOne
@@ -19,6 +21,7 @@ public class VariantImageEntity implements EntityIF{
     private VariantEntity variant;
 
     @Column(name = "Image")
+
     private String imagePath;
 
 }

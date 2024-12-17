@@ -1,7 +1,7 @@
 package edu.alexu.cse.dripmeup.handler;
 
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
-import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.exception.HandlerException;
 import edu.alexu.cse.dripmeup.repository.AdminRepository;
 import edu.alexu.cse.dripmeup.service.handler.ValidAdminUserNameHandler;
 

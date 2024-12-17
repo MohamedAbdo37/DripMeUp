@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup.entity.product;
 
+
 import edu.alexu.cse.dripmeup.entity.EntityIF;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,10 +19,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ItemEntity implements EntityIF {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long itemID;
+
 
     @Column(name = "price")
     private double price;
@@ -43,6 +46,5 @@ public class ItemEntity implements EntityIF {
 
     @Column(name = "ProductVariantQuantity")
     private Integer productVariantQuantity;
-
 
 }
