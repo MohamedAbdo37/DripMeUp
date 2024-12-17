@@ -13,9 +13,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderMetaDTO {
+    private Long id;
     private Status status;
     private Date timeStamp;
     private String address;
-    private String totalPrice;
+    private float totalPrice;
     private String CustomerName;
 }

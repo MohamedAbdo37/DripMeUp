@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "ProductVariantItemId")
+    @Column(name = "itemId")
     private Long id;
     @Column(name = "ProductName")
     private String ProductName;
@@ -23,7 +23,7 @@ public class Item {
     @Column(name = "ProductVariantColor")
     private String ProductVariantColor;
     @Column(name = "ProductVariantPrice")
-    private Integer ProductVariantPrice;
+    private float ProductVariantPrice;
     @Column(name = "ProductVariantQuantity")
     private Integer ProductVariantQuantity;
 

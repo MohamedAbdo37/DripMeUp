@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
-    private List<ItemDTO> items;
-    private OrderMetaDTO meta;
+public class PageMetaDTO {
+    public int pageNumber;
+    public int pageSize;
+    public int totalPages;
 }
