@@ -5,7 +5,7 @@
   
   /* Style the track (background of the scrollbar) */
   ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #f1f1f114;
     border-radius: 10px;
   }
   
@@ -24,6 +24,9 @@ html, body{
     margin: 0;
     padding: 0;
     height: 100vh;
+    background: linear-gradient(0deg, rgba(91,180,193,1) 0%, rgba(193,91,101,1) 55%);
+    background-attachment: fixed;
+
 }
 .formBox{
     background-color:aliceblue;
@@ -336,23 +339,24 @@ center{
 .styled-table {
     border-collapse: collapse;
     width: 100%;
-    margin: 20px 0;
+    margin: 0;
     font-size: 1em;
     text-align: left;
+    background-color: #ffffff45;
   }
   
 .styled-table thead tr {
-  background-color: #009879;
+  background-color: #00987a45;
   color: white;
 }
  
 .styled-table th, .styled-table td {
-  border: 1px solid #dddddd;
+  border: 1px solid #dddddd4e;
   padding: 8px 12px;
 }
  
 .styled-table tbody tr:nth-child(even) {
-  background-color: #f3f3f3;
+  background-color: #f3f3f343;
 }
 
 .reviewPhoto{
@@ -363,7 +367,7 @@ center{
 }
 
 .feedbacks{
-  background-color: #b5eff2;
+  /* background-color: #b5eff2; */
   padding: 0.2rem;
 }
 
@@ -372,7 +376,7 @@ center{
   align-items: center;
   padding: 1rem;
   border-radius: 20px;
-  background-color: #39f1fb;
+  background-color: #5bb4c1;
   margin: 1rem;
   cursor: pointer;
 }
@@ -405,7 +409,7 @@ center{
     justify-content: space-between;
     align-items: center;
     background-color: #c15b65;
-    padding: 0;
+    padding: 0.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
     
@@ -435,7 +439,7 @@ center{
 .variants{
     display: flex;
     align-items: center;
-    background-color: #cccccc67;
+    /* background-color: #cccccc; */
     overflow-x: scroll;
 }
 .variantCard{
@@ -444,7 +448,8 @@ center{
     border-radius: 20px;
     padding: 1rem;
     margin: 1rem;
-    background-color: #c15b65;
+    background-color: #c15b6542;
+    border: 0.5px solid;
 }
 .variantCard:hover{
     background-color: rgb(248, 221, 180);

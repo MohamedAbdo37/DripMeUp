@@ -6,7 +6,7 @@ const SettingsPage = ()=>{
     }, []);
     return(
     <>
-        <p>This is settings page</p>
+        <center style={{fontSize: "2rem"}}>This is settings page</center>
     </>
     );
 };

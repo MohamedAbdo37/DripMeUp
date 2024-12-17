@@ -13,7 +13,40 @@ const ProductPage = () =>{
     const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
     const person = 'user';
     const [currentVariant, setCurrentVariant] = useState(0); 
-
+    const feedbacks = [
+        {
+            user:{
+                name: "User Name",
+                photo: ""
+            },
+            feedback: "Feedback",
+            time: "Time"
+        },
+        {
+            user:{
+                name: "User Name",
+                photo: ""
+            },
+            feedback: "Feedback",
+            time: "Time"
+        },
+        {
+            user:{
+                name: "User Name",
+                photo: ""
+            },
+            feedback: "Feedback",
+            time: "Time"
+        },
+        {
+            user:{
+                name: "User Name",
+                photo: ""
+            },
+            feedback: "Feedback",
+            time: "Time"
+        }
+    ];
     useEffect(()=>{
         if (!productID) {
             console.error("Product ID is undefined");
@@ -112,12 +145,20 @@ const ProductPage = () =>{
                         <p style={{fontSize: "3rem", margin: "0"}}>{product.description}</p>
                         <p style={{fontSize: "2rem", margin: "0"}}>{product.variants[currentVariant].price-(product.variants[currentVariant].price * product.variants[currentVariant].discount)} LE</p>
                     </div>
+                    {product.variants[currentVariant].state == 'ON_SALE' &&
                     <div className="saleData">
+                        <p style={{color: 'green', margin: "0", marginRight:"1rem"}}>Available</p>
                         <p style={{textDecoration: 'line-through', margin: "0", marginRight:"1rem"}}>old: {product.variants[currentVariant].price} LE</p>
                         <div className="sale">
                             SALE {product.variants[currentVariant].discount * 100} %
                         </div>
-                    </div>
+                    </div>}
+                    {product.variants[currentVariant].state == 'OUT_OF_STOCK' &&
+                    <p style={{color:'#f2e6e8', margin: '0'}}>Out of stock at the moment</p>
+                    }
+                    {product.variants[currentVariant].state == 'DISCONTINUED' &&
+                    <p style={{color: 'green', margin: "0", marginRight:"1rem"}}>Available</p>
+                    }
                 </div>
                 <div className="controllerRight">
                     {person == 'user' &&
@@ -162,11 +203,11 @@ const ProductPage = () =>{
                     </tr>
                 </tbody>
             </table>
-            {/* <div className="feedbacks">
-                {product.feedbacks.map((feedback, i)=>(
+            <div className="feedbacks">
+                {feedbacks.map((feedback, i)=>(
                     <FeedbackBox key={i} feedback={feedback}/>
                 ))}
-            </div> */}
+            </div>
         </div>
     );
 };

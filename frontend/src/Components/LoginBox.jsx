@@ -2,17 +2,19 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate} from 'react-router-dom';
 import '../style.css';
 import {jwtDecode} from 'jwt-decode';
-
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "./ObjectToAppear";
 const LoginBox = () =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTrigger, setErrorTrigger] = useState('');
-
+    const [shouldShowObject, setShouldShowObject] = useState(false);
     const navigate = useNavigate();
 
     const handleCallbackResponse = async (response)=>{
         var user = jwtDecode(response.credential);
+        setShouldShowObject(()=>true);
         const loginUser = await fetch(`http://localhost:8081/api/5/users/g/login`, {
                 method: "GET",
                 headers:{
@@ -27,6 +29,7 @@ const LoginBox = () =>{
             navigate('/userSession');
         })
         .catch(async (error)=>{
+            setShouldShowObject(()=>false);
             console.log(error);
             setErrorMessage('Email does not exist in the system');
             setErrorTrigger('googleEmailError');
@@ -45,13 +48,15 @@ const LoginBox = () =>{
         );
     
         google.accounts.id.prompt();
-      }, []);
+      }, [shouldShowObject]);
 
     const login = async (e)=>{
+        e.preventDefault();
+        setShouldShowObject(()=>true);
         const dummy_user = {
             username: "name",
         }
-        e.preventDefault()
+        
         const userFetched = await fetch(`http://localhost:8081/api/5/users/login`,{
             method: "GET",
             headers: {
@@ -67,13 +72,18 @@ const LoginBox = () =>{
             navigate('/userSession')
         })  
         .catch(async(error)=>{
+            setShouldShowObject(()=>false);
             console.log(error);
             setErrorMessage('Wrong email or password');
             setErrorTrigger('emailError');
         }); 
     }
     return(
-        <div className="formBox">
+        shouldShowObject ?
+        <AnimatePresence>
+            <ObjectToAppear />
+        </AnimatePresence>
+        :<div className="formBox">
             <form id="loginForm" onSubmit={login}>
                 <header>Login</header>
                 <label htmlFor='email'><b>Email</b></label>
@@ -89,6 +99,7 @@ const LoginBox = () =>{
             {errorTrigger == "googleEmailError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
             <center>New user? <Link className="signupLink" to="/signup">Signup</Link></center>
         </div>
+        
     );
 };
 export default LoginBox;

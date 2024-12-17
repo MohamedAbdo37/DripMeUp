@@ -18,7 +18,7 @@ const HomePage = () => {
 
   // Function to fetch all products (for default category)
   const fetchAllProducts = async (page = 1) => {
-    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=1`, {
+    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=20`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',

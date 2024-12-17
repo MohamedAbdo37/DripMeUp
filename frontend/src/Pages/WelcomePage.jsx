@@ -2,12 +2,14 @@ import LoginBox from "../Components/LoginBox"
 import "../style.css"
 import googleLogo from '../assets/logo.png'
 import Cookies from 'js-cookie';
-
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
 const WelcomePage = () =>{
     const navigate = useNavigate();
-
+    const [shouldShowObject, setShouldShowObject] = useState(false);
     const generateID = ()=>{
         let generatedID = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -18,6 +20,7 @@ const WelcomePage = () =>{
     }
 
     const handleShopping = async () =>{
+        setShouldShowObject(()=>true);
         let guestID = Cookies.get('dripMeUpGuestID');
         let guest = {};
         if (!guestID){
@@ -34,7 +37,7 @@ const WelcomePage = () =>{
                     data: 'no data yet',
                     picture: '../assets/guest.png'
                 })
-            }).catch(error=>console.log(error));
+            }).catch(error=>{console.log(error);setShouldShowObject(()=>false);});
             guest = {guestID: guestID,data: 'no data yet'};
         }else{
             console.log(guestID);
@@ -61,9 +64,13 @@ const WelcomePage = () =>{
             })
             .catch(error=>console.log(error));
         }
-        navigate('/homepage', {state: {user: guest, userType: "guest"}});
+        navigate('/userSession');
     }
     return(
+        shouldShowObject ?
+        <AnimatePresence>
+            <ObjectToAppear />
+        </AnimatePresence>:
         <div className="welcomePage">
             <div className="container">
                 <center><h1>Welcome</h1></center>
