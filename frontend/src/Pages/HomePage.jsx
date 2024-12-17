@@ -120,7 +120,7 @@ const HomePage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.productID} className="product-card" onClick={()=>navigate(`product/${product.productID}`)}>
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/${product.productID}`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />
               <div className="product-details">

@@ -7,27 +7,33 @@ import star from '../assets/star.png';
 import shareImage from '../assets/share.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
+import '../style.css';
 const ProductPage = () =>{
     const { productID } = useParams();
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
+    const person = 'user';
+    const [currentVariant, setCurrentVariant] = useState(0); 
 
     useEffect(()=>{
-        alert("product id: ", productID);
-        (async()=>{
-            const productsFetch = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
-                method:'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-                    }
-            })
-            .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
-            .then(data=>setProduct(data))
-            .catch(e=>console.log(e));
-        })();
+        if (!productID) {
+            console.error("Product ID is undefined");
+            return;
+        }
+        getProdect();
     },[productID]);
 
+    const getProdect = async()=>{
+        const productsFetch = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                }
+        })
+        .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
+        .then(data=>{setProduct(()=>data);console.log(data)})
+        .catch(e=>console.log(e));
+    }
     const notifyAddToCart = () => {
         toast.success(`Product added to cart successfully`);
     };
@@ -35,8 +41,17 @@ const ProductPage = () =>{
     const notifyFailAddToCart = () => {
         toast.error(`Error adding to cart`);
     };
-    const person = 'user';
-    
+    const selectVariant = (index, event)=>{
+        let target = event.target;
+        if(event.target.className == 'variantCardChild') 
+            target = target.parentElement;
+        const children =  target.parentElement.children;
+        Array.from(children).forEach((child) => {
+            child.className = "variantCard";
+        });
+        target.className = "selectedVariantCard";
+        setCurrentVariant(index);
+    }
     const buy = ()=>{
 
     }
@@ -75,11 +90,12 @@ const ProductPage = () =>{
         <div style={{fontSize: "1.5rem"}}>
             <div className="productImg">
                 <div className="ratingBox">
-                    {/* <div className="rating">
+                    <div className="rating">
+                        {product.numberOfFeedback}
                         {Array.from({length: product.rate}, (_, i)=>(<img src={filledStar} alt="yellowStar" className="yellowStar"/>))}
                         {Array.from({length: 5-product.rate}, (_, i)=>(<img src={star} alt="emptyStar" className="emptyStar"/>))}
                         {product.rate}/5
-                    </div> */}
+                    </div>
                 </div>
                 <div className="Img">
                     <img src={product.productImage || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
@@ -92,13 +108,14 @@ const ProductPage = () =>{
             <div className="controller">
                 <div className="controllerLeft">
                     <div>
+                        <h6 style={{margin: "0"}}>{(product.dateOfCreation).split("T")[0]}</h6>
                         <p style={{fontSize: "3rem", margin: "0"}}>{product.description}</p>
-                        {/* <p style={{fontSize: "2rem", margin: "0"}}>{product.price-(product.price * product.salePercentage)} LE</p> */}
+                        <p style={{fontSize: "2rem", margin: "0"}}>{product.variants[currentVariant].price-(product.variants[currentVariant].price * product.variants[currentVariant].discount)} LE</p>
                     </div>
                     <div className="saleData">
-                        <p style={{textDecoration: 'line-through', margin: "0", marginRight:"1rem"}}>old: {product.price} LE</p>
+                        <p style={{textDecoration: 'line-through', margin: "0", marginRight:"1rem"}}>old: {product.variants[currentVariant].price} LE</p>
                         <div className="sale">
-                            {/* SALE {product.salePercentage * 100} % */}
+                            SALE {product.variants[currentVariant].discount * 100} %
                         </div>
                     </div>
                 </div>
@@ -117,26 +134,34 @@ const ProductPage = () =>{
                     }
                     <div className="controllerRightDescription">
                         {/* <p>Category: {product.category}</p> */}
-                        {/* <p>No. of remaining items: {product.amountInStock}</p> */}
+                        <p>No. of remaining items: {product.variants[currentVariant].stock}</p>
                     </div>
                 </div>
             </div>
-            {/* <table className="styled-table">
+            <div className="variants">
+                {product.variants.map((variant, index)=>(
+                    <div className="variantCard" key={index} onClick={(event)=>selectVariant(index, event)}>
+                        <img className="variantCardChild" src={variant.variantImage || unknownPhoto} alt="variantImage"/>
+                        <h5 className="variantCardChild">{variant.color} | {variant.size}</h5>
+                    </div>
+                ))}
+            </div>
+            <table className="styled-table">
                 <tbody>
                     <tr>
                         <td style={{width: "0", fontWeight:"bold"}}>Color</td>
-                        <td style={{}}>{product.color}</td>
+                        <td style={{}}>{product.variants[currentVariant].color}</td>
                         <td style={{width: "0", fontWeight:"bold"}}>Size</td>
-                        <td>{product.size}</td>
+                        <td>{product.variants[currentVariant].size}</td>
                     </tr>
                     <tr>
                         <td style={{fontWeight:"bold"}}>Weight</td>
-                        <td style={{}}>{product.weight}</td>
+                        <td style={{}}>{product.variants[currentVariant].weight}</td>
                         <td style={{fontWeight:"bold"}}>Length</td>
-                        <td>{product.length}</td>
+                        <td>{product.variants[currentVariant].length}</td>
                     </tr>
                 </tbody>
-            </table> */}
+            </table>
             {/* <div className="feedbacks">
                 {product.feedbacks.map((feedback, i)=>(
                     <FeedbackBox key={i} feedback={feedback}/>

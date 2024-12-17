@@ -11,7 +11,7 @@
   
   /* Style the handle (scroll thumb) */
   ::-webkit-scrollbar-thumb {
-    background: #f30ee4;
+    background: #c15b65;
     border-radius: 10px;
   }
   
@@ -404,7 +404,7 @@ center{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: palevioletred;
+    background-color: #c15b65;
     padding: 0;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -430,4 +430,32 @@ center{
 
 .navBarButtons:hover{
     background-color: #cccccc67;
+}
+
+.variants{
+    display: flex;
+    align-items: center;
+    background-color: #cccccc67;
+    overflow-x: scroll;
+}
+.variantCard{
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #c15b65;
+}
+.variantCard:hover{
+    background-color: rgb(248, 221, 180);
+    transform: translate(-5%, -5%);
+}
+
+.selectedVariantCard{
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: rgb(248, 221, 180);
 }
