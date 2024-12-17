@@ -38,7 +38,7 @@ public class VariantEntity {
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
     private List<VariantImageEntity> variantImages ;
 
-    @OneToMany(mappedBy = "variant")
+    @OneToMany
     private List<ItemEntity> items ;
 
     @Column(name = "Color")
