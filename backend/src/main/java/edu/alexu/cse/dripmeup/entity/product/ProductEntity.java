@@ -7,6 +7,18 @@ import java.util.Set;
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.*;
+
+import edu.alexu.cse.dripmeup.entity.EntityIF;
+import edu.alexu.cse.dripmeup.enumeration.ProductState;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +28,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity {
+
+public class ProductEntity implements EntityIF {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "productID")
     private Long productID;
-
 
     @Column(name = "Description")
     private String description ;
@@ -30,20 +42,8 @@ public class ProductEntity {
     @Column(name = "DateOfCreation")
     private LocalDateTime time ;
 
-    @OneToMany(mappedBy= "Product", cascade = CascadeType.ALL)
-    private List<VariantEntity> variants ;
-
     @OneToMany(mappedBy= "Product")
     private List<ItemEntity> items ;
-
-    @Column(name = "Price")
-    private double price ;
-
-    @Column(name = "Stock")
-    private int stock ;
-
-    @Column(name = "Sold")
-    private int sold ;
 
     @Column(name = "State")
     private ProductState state ;
