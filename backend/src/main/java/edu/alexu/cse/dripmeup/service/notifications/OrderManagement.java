@@ -1,18 +1,43 @@
 package edu.alexu.cse.dripmeup.service.notifications;
+import edu.alexu.cse.dripmeup.dto.ItemDTO;
+import edu.alexu.cse.dripmeup.dto.OrderDTO;
+import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class OrderManagement extends NotificationService{
 
     // specific attribute for this class
     private int orderId ;
+    private OrderDTO orderDTO ;
     public int getOrderId() {
         return this.orderId;
     }
     public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
+    public OrderDTO getOrderDTO() {
+        return this.orderDTO;
+    }
+    public void setOrderDTO(OrderDTO orderDTO) {
+        this.orderDTO = orderDTO;
+    }
+
+    private static String itemsListToString(List<ItemDTO> items) {
+        StringBuilder itemsString = new StringBuilder();
+        itemsString.append("\n");
+        for (ItemDTO item : items) {
+            itemsString.append(item.getProductVariantQuantity())
+                       .append("x ").append(item.getProductName())
+                       .append(" (").append(item.getProductVariantSize()).append(")")
+                       .append(", ").append(item.getProductVariantColor())
+                       .append("\n");
+        }
+        return itemsString.toString();
+    }
+
 
     // IF there is an error with reading file return error else try to send message if there is an error return error
     // else return that email has been sent
@@ -28,13 +53,15 @@ public class OrderManagement extends NotificationService{
         // making message body
         this.setBody(this.getBody().replace("[User's Name]" , this.getUsername()));
         this.setBody(this.getBody().replace("[Order Number]" ,  String.valueOf(this.getOrderId())));
+        this.setBody(this.getBody().replace("[Item Names]" ,  itemsListToString(orderDTO.getItems())));
+        this.setBody(this.getBody().replace("[Order Total]" ,  String.valueOf(orderDTO.getMeta().getTotalPrice()) + " EGP"));
         /*
         make queries to get order data
          */
 
         if (this.sendMessage())
             return "email was sent" ;
-        return "error in sending email" ;
+        throw new FailedToSendMailException("Failed to send email") ;
     }
 
 
