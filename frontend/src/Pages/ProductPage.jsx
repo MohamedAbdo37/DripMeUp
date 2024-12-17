@@ -1,4 +1,4 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import unknownPhoto from '../assets/pic.png'; // Adjust the path as necessary
 import FeedbackBox from '../Components/FeedbackBox';
 import favouriteImage from '../assets/favourite.png';
@@ -9,20 +9,24 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const ProductPage = () =>{
-    const {productID} = useParams();
-    const [product, setProduct] = useState();
-    useEffect(async ()=>{
-        const getProducts = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
-            method:'GET',
-            headers:{
-                'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-                }
-        })
-        .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
-        .then(data=>setProduct(data))
-        .catch(e=>console.log(e));
-    },[]);
+    const { productID } = useParams();
+    const [product, setProduct] = useState(null);
+
+    useEffect(()=>{
+        alert("product id: ", productID);
+        (async()=>{
+            const productsFetch = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
+                method:'GET',
+                headers:{
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                    }
+            })
+            .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
+            .then(data=>setProduct(data))
+            .catch(e=>console.log(e));
+        })();
+    },[productID]);
 
     const notifyAddToCart = () => {
         toast.success(`Product added to cart successfully`);
@@ -71,7 +75,6 @@ const ProductPage = () =>{
         <div style={{fontSize: "1.5rem"}}>
             <div className="productImg">
                 <div className="ratingBox">
-                    <p>{product.description}</p>
                     {/* <div className="rating">
                         {Array.from({length: product.rate}, (_, i)=>(<img src={filledStar} alt="yellowStar" className="yellowStar"/>))}
                         {Array.from({length: 5-product.rate}, (_, i)=>(<img src={star} alt="emptyStar" className="emptyStar"/>))}
@@ -89,7 +92,7 @@ const ProductPage = () =>{
             <div className="controller">
                 <div className="controllerLeft">
                     <div>
-                        {/* <p style={{fontSize: "3rem", margin: "0"}}>{product.name}</p> */}
+                        <p style={{fontSize: "3rem", margin: "0"}}>{product.description}</p>
                         {/* <p style={{fontSize: "2rem", margin: "0"}}>{product.price-(product.price * product.salePercentage)} LE</p> */}
                     </div>
                     <div className="saleData">

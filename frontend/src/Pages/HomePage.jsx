@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../homepage.css";
 
 const ITEMS_PER_PAGE = 10;
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); // Track the total number of pages
@@ -17,7 +18,7 @@ const HomePage = () => {
 
   // Function to fetch all products (for default category)
   const fetchAllProducts = async (page = 1) => {
-    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}&size=1`, {
+    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=1`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
@@ -26,8 +27,9 @@ const HomePage = () => {
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
-      setProducts(data);
-      setTotalPages(Math.ceil(data.length/10));
+      console.log(data.content)
+      setProducts(data.content);
+      setTotalPages(Math.ceil(data.content.length/10));
     })
     .catch(e=>console.log(e));
     
@@ -118,11 +120,9 @@ const HomePage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.productID} className="product-card">
-              <Link to={`userSession/product/${product.productID}`}>
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`product/${product.productID}`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />
-              </Link>
               <div className="product-details">
                 {/* Display price */}
                 <p className="price">{product.price}</p>

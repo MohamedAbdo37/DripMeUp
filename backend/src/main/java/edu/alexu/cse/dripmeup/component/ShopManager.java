@@ -19,27 +19,27 @@ import edu.alexu.cse.dripmeup.service.ProductService;
 
 @Component
 public class ShopManager {
-    
+
     @Autowired
     private ProductRepository productRepository;
-    
+
     @Autowired
     private VariantRepository variantRepository;
-    
+
     @Autowired
     private ItemRepository itemRepository;
 
     @Autowired
     private ProductMapper productMapper;
-    
+
     public ProductRepository getProductRepository() {
         return productRepository;
     }
-    
+
     public VariantRepository getVariantRepository() {
         return variantRepository;
     }
-    
+
     public ItemRepository getItemRepository() {
         return itemRepository;
     }
@@ -59,6 +59,6 @@ public class ShopManager {
     }
 
     public Product getProduct(long productID) {
-        return new Product(new ProductService().getProduct(this.productRepository, productID));
+        return new Product(new ProductService().getProduct(this.productRepository, productID), this);
     }
 }

@@ -27,7 +27,7 @@ function App() {
         <Route path='/admin/login' element={<AdminLoginPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/signup' element={<SignupPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/forgotpassword' element={<ForgotPasswordPage/>} errorElement= {<EmptyPage/>}/>
-        <Route path='/userSession' element={<NavBar/>} errorElement= {<EmptyPage/>}>
+        <Route path='userSession' element={<NavBar/>} errorElement= {<EmptyPage/>}>
           <Route index element={<HomePage/>} errorElement= {<EmptyPage/>}/>
           <Route path='product/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='profile' element={<UserProfilePage/>} errorElement= {<EmptyPage/>}/>
