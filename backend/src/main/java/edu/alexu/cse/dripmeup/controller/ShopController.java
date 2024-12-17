@@ -22,8 +22,8 @@ public class ShopController {
     private ShopManager shopManager;
     
     @GetMapping("/products")
-    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam("page") int page) {
-        Page<ProductSnapshot> products = shopManager.getAllProducts(page, 10);
+    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
+        Page<ProductSnapshot> products = shopManager.getAllProducts(page, size);
         if ( products == null || products.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
