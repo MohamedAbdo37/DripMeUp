@@ -26,7 +26,8 @@ public class ProductBuilder implements ProductBuilderIF{
     }
 
     public void buildTime(){
-        LocalDateTime dateTime = LocalDateTime.parse(this.product.getDateOfCreation(), formatter);
+        System.out.println(this.product.getDateOfCreation());
+        LocalDateTime dateTime = LocalDateTime.parse(this.product.getDateOfCreation(), this.formatter);
         this.productEntity.setTime(dateTime);
     }
 
@@ -36,14 +37,20 @@ public class ProductBuilder implements ProductBuilderIF{
     
     @Override
     public ProductEntity getResult() {
+        System.out.println("##");
+        System.out.println(this.productEntity.toString());
         return this.productEntity;
     }
 
     @Override
     public void build() {
+        System.out.println("#"+5);
         this.buildTime();
+        System.out.println("#"+5.1);
         this.buildDescription();
+        System.out.println("#"+5.3);
         this.buildState();
+        System.out.println("#"+5.5);
     }
 
 }

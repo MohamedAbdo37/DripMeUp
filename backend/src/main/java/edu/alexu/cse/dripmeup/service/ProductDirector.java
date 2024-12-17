@@ -37,11 +37,12 @@ public class ProductDirector {
     // }
     
     public void construct(ProductBuilderIF builder) {
+        System.out.println("#"+4);
         this.builder = builder;
         this.builder.build();
     }
 
-    public void reconstruct(ProductBuildIf builder) {
+    public void reconstruct(ProductBuilderIF builder) {
         this.builder = builder;
         this.builder.build();
     }
@@ -49,7 +50,9 @@ public class ProductDirector {
     public ProductEntity getProduct(){
         ProductBuilder productBuilder = (ProductBuilder) this.builder;
         ProductEntity product = productBuilder.getResult();
+        System.out.println("#"+7);
         this.productRepository.save(product);
+        System.out.println(product.toString());
         return product;
     }
 

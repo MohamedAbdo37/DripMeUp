@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ItemRepository;
@@ -60,7 +62,9 @@ public class ShopManager {
 
     public List<Variant> getVariantsOfProduct(ProductEntity product) {
         List<VariantEntity> variants = new ProductService().getVariantsOfProduct(product);
-        return variants.stream().map(this.productMapper::toVariantDTO).toList();
+        if (variants == null)
+            return List.of();
+        return variants.stream().map(variant -> this.productMapper.toVariantDTO(variant, this)).toList();
     }
 
     public String getImageOfProduct(ProductEntity product) {
@@ -79,8 +83,8 @@ public class ShopManager {
         ProductEntity product = this.productRepository.findByProductID(productID);
         if ( product == null )
             throw new ProductCreationException("There is no product with id " + productID);
-
-        return new ProductMapper().toVariantDTO(new ProductService().crateVariant(this.variantRepository, variant, product));
+        this.productRepository.save(product);
+        return new ProductMapper().toVariantDTO(new ProductService().crateVariant(this.variantRepository, variant, product), this);
     }
 
     public void addImageToVariant(Long variantID, String imagePath) {
@@ -95,5 +99,19 @@ public class ShopManager {
             throw new ProductCreationException("Invalid image");
             
         return this.cloudinaryUploader.uploadImage(image);
+    }
+
+    public List<String> getImagesOfVariant(VariantEntity variant) {
+        List<VariantImageEntity> images = new ProductService().getImagesOfVariant(variant);
+        List<String> paths = new ArrayList<>();
+        if (images == null)
+            return List.of();
+        else {
+
+            for(VariantImageEntity i: images)
+                paths.add(i.getImagePath());
+            
+        }
+        return paths;
     }
 }

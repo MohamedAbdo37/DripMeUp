@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.alexu.cse.dripmeup.component.ShopManager;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 
-
+@NoArgsConstructor
+@Data
 public class Product {
 
-        
     public Product(ProductEntity productEntity, ShopManager shopManager) {
         this.productID = productEntity.getProductID();
         this.state = productEntity.getState();
@@ -23,12 +26,12 @@ public class Product {
         this.numberOfFeedback = 1;
     }
     
-    private final @Getter Long productID;
-    private final @Getter ProductState state;
-    private final @Getter String description;
-    private final @Getter String dateOfCreation;
-    private final @Getter List<Variant> variants;
-    private final @Getter double rate;
-    private final @Getter int numberOfFeedback;
+    private @Setter @Getter Long productID;
+    private @Setter @Getter ProductState state;
+    private @Setter @Getter String description;
+    private @Setter @Getter String dateOfCreation;
+    private @Setter @Getter List<Variant> variants;
+    private @Setter @Getter double rate;
+    private @Setter @Getter int numberOfFeedback;
     
 }

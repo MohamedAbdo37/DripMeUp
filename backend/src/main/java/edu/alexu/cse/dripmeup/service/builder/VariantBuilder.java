@@ -60,7 +60,6 @@ public class VariantBuilder implements ProductBuilderIF {
     public void buildProduct() {
         this.variantEntity.setProduct(this.product);
         this.product.getVariants().add(this.variantEntity);
-        this.productRepository.save(this.product);
     }
 
     @Override

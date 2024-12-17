@@ -12,6 +12,7 @@ import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
@@ -41,8 +42,10 @@ public class ProductService {
     }
 
     public ProductEntity createProduct(ProductRepository productRepository, Product product) {
+        System.out.println("#"+3);
         ProductDirector director = new ProductDirector(productRepository);
         director.construct(new ProductBuilder(product));
+        System.out.println("#"+6);
         return director.getProduct();
     }
 
@@ -56,6 +59,10 @@ public class ProductService {
         ProductDirector director = new ProductDirector(imageRepository);
         director.construct(new VariantImageBuilder(path, variant));
         director.getImage();
+    }
+
+    public List<VariantImageEntity> getImagesOfVariant(VariantEntity variant) {
+        return variant.getVariantImages();
     }
 
 }

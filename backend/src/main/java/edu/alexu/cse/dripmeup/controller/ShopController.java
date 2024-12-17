@@ -16,7 +16,8 @@ import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
-import io.jsonwebtoken.io.IOException;
+import java.io.IOException;
+
 
 
 @RestController
@@ -69,7 +70,7 @@ public class ShopController {
         try{
             imagePath = this.shopManager.getImagePath(image);
             shopManager.addImageToVariant(variantID, imagePath);
-        } catch (ProductCreationException || IOException e) {
+        } catch (ProductCreationException | IOException e) {
             return ResponseEntity.badRequest().build();
         }
 

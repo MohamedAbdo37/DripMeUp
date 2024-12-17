@@ -13,7 +13,7 @@ public class ProductMapper {
         return new ProductSnapshot(productEntity);
     }
 
-    public Variant toVariantDTO(VariantEntity variantEntity) {
-        return new Variant(variantEntity);
+    public Variant toVariantDTO(VariantEntity variantEntity, ShopManager shopManager) {
+        return new Variant(variantEntity, shopManager);
     }
 }
