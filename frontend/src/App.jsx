@@ -14,6 +14,7 @@ import NavBar from './Layouts/NavBar';
 import FavouritesPage from './Pages/FavouritesPage';
 import CartPage from './Pages/CartPage';
 import SettingsPage from './Pages/SettingsPage';
+import AdminPage from "./Pages/AdminPage";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -22,6 +23,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
+        
         <Route path='/' element={<WelcomePage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/login' element={<LoginPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/admin/login' element={<AdminLoginPage/>} errorElement= {<EmptyPage/>}/>
@@ -37,6 +39,8 @@ function App() {
         </Route>
         
         <Route path='/admin/profile' element={<AdminProfilePage/>} errorElement= {<EmptyPage/>}/>
+        <Route path='/adminSession' element={<AdminPage/>} errorElement= {<EmptyPage/>}/>
+
         
         <Route path='*' element={<EmptyPage/>}/>
       </>
