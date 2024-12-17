@@ -123,7 +123,7 @@ const ProductPage = () =>{
                     {person == 'user' &&
                         <div className="controllerButtons">
                             <button onClick={buy}>Buy</button>
-                            <button onClick={addToCart} style={{backgroundColor: "#2feb7d"}}>Add to Cart</button>
+                            <button onClick={addToCart} style={{backgroundColor: "#3cdc66"}}>Add to Cart</button>
                         </div>
                     }
                     {person == 'admin' &&

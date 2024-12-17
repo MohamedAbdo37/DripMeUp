@@ -290,7 +290,7 @@ center{
     border-radius: 1rem;
     box-sizing: border-box;
     cursor: pointer;
-    background-color: #eb2f93;
+    background-color: #c15b65;
     color: white;
     text-decoration: none;
     margin: 1rem;
@@ -298,7 +298,7 @@ center{
 }
 
 .controllerButtons button:hover{
-    background-color: #f6aad2;
+    background-color: #eda7b0;
     color: black;
 }
 
