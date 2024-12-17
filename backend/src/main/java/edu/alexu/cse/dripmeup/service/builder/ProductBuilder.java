@@ -2,36 +2,40 @@ package edu.alexu.cse.dripmeup.service.builder;
 
 import java.time.LocalDateTime;
 
+import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
-import edu.alexu.cse.dripmeup.enumeration.ProductState;
 
 public class ProductBuilder implements ProductBuilderIF{
-    private final ProductEntity product;
-
-    public ProductBuilder() {
-        this.product = new ProductEntity(); 
+    private final ProductEntity productEntity;
+    private final Product product;
+    
+    public ProductBuilder(Product product) {
+        this.product = product;
+        this.productEntity = new ProductEntity();
     }
 
-    public void buildDescription(String description) {
-        this.product.setDescription(description);
+    public void buildDescription() {
+        this.productEntity.setDescription(this.product.getDescription());
     }
 
     public void buildTime(){
-        this.product.setTime(LocalDateTime.now());
+        this.productEntity.setTime(LocalDateTime.now());
     }
 
-    public void buildState(ProductState state) {
-        this.product.setState(state);
+    public void buildState() {
+        this.productEntity.setState(this.product.getState());
     }
     
     @Override
     public ProductEntity getResult() {
-        return this.product;
+        return this.productEntity;
     }
 
     @Override
     public void build() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.buildTime();
+        this.buildDescription();
+        this.buildState();
     }
 
 }

@@ -1,10 +1,10 @@
 package edu.alexu.cse.dripmeup.service.builder;
 
+import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
-import edu.alexu.cse.dripmeup.repository.VariantRepository;
 
 public class VariantBuilder implements ProductBuilderIF {
     
@@ -12,61 +12,69 @@ public class VariantBuilder implements ProductBuilderIF {
 
 
     private final VariantEntity variantEntity;
+    private final Variant variant;
+    private final ProductEntity product;
 
-    public VariantBuilder() {
+    public VariantBuilder(Variant variant, ProductEntity product) {
+        this.variant = variant;
         this.variantEntity = new VariantEntity();
+        this.product = product;
     }
 
-    public VariantBuilder(ProductRepository productRepository, VariantRepository variantRepository, Long variantID) {
-        this.variantEntity = variantRepository.findByVariantID(variantID);
-        this.productRepository = productRepository;
+    public void buildPrice() {
+        this.variantEntity.setPrice(this.variant.getPrice());
     }
 
-    public void buildPrice(double price) {
-        this.variantEntity.setPrice(price);
+    public void buildColor() {
+        this.variantEntity.setColor(this.variant.getColor());
     }
 
-    public void buildColor(String color) {
-        this.variantEntity.setColor(color);
-    }
-
-    public void buildWeight(String weight) {
-        this.variantEntity.setWeight(weight);
+    public void buildWeight() {
+        this.variantEntity.setWeight(this.variant.getWeight());
     }   
 
-    public void buildLength(String length) {
-        this.variantEntity.setLength(length);
+    public void buildLength() {
+        this.variantEntity.setLength(this.variant.getLength());
     }
 
-    public void buildSize(String size) {
-        this.variantEntity.setSize(size);
+    public void buildSize() {
+        this.variantEntity.setSize(this.variant.getSize());
     }   
 
-    public void buildStock(int stock) {
-        this.variantEntity.setStock(stock);
+    public void buildStock() {
+        this.variantEntity.setStock(this.variant.getStock());
     }
 
-    public void buildSold(int sold) {
-        this.variantEntity.setSold(sold);
+    public void buildSold() {
+        this.variantEntity.setSold(0);
     }
 
-    public void buildState(ProductState state) {
-        this.variantEntity.setState(state);
+    public void buildState() {
+        this.variantEntity.setState(ProductState.ON_SALE);
     }
 
-    public void buildDiscount(double discount) {
-        this.variantEntity.setDiscount(discount);
+    public void buildDiscount() {
+        this.variantEntity.setDiscount(this.variant.getDiscount());
     }
 
-    public void buildProduct(Long productID) {
-        ProductEntity productEntity = this.productRepository.findByProductID(productID);
-        this.variantEntity.setProduct(productEntity);
+    public void buildProduct() {
+        this.variantEntity.setProduct(this.product);
+        this.product.getVariants().add(this.variantEntity);
+        this.productRepository.save(this.product);
     }
 
     @Override
-    public void build() {
-        this.buildState(ProductState.ON_SALE);
-        this.buildSold(0);
+    public void build(){
+        this.buildPrice();
+        this.buildColor();
+        this.buildWeight();
+        this.buildLength();
+        this.buildSize();
+        this.buildStock();
+        this.buildSold();
+        this.buildState();
+        this.buildDiscount();
+        this.buildProduct();
     }
 
     @Override

@@ -2,7 +2,6 @@ package edu.alexu.cse.dripmeup.component;
 
 import java.util.List;
 
-import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -12,6 +11,8 @@ import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import edu.alexu.cse.dripmeup.exception.ProductCreationException;
+import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ItemRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
@@ -31,6 +32,9 @@ public class ShopManager {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ImageRepository imageRepository;
     
     public ProductRepository getProductRepository() {
         return productRepository;
@@ -62,8 +66,22 @@ public class ShopManager {
         return new Product(new ProductService().getProduct(this.productRepository, productID), this);
     }
 
-    public void createProduct(Product product) {
-        // TODO Auto-generated method stub
-        
+    public Product createProduct(Product product) {
+        return new Product(new ProductService().createProduct(this.productRepository, product), this);
+    }
+
+    public Variant crateVariant(Variant variant, Long productID) throws ProductCreationException {
+        ProductEntity product = this.productRepository.findByProductID(productID);
+        if ( product == null )
+            throw new ProductCreationException("There is no product with id " + productID);
+
+        return new ProductMapper().toVariantDTO(new ProductService().crateVariant(this.variantRepository, variant, product));
+    }
+
+    public void addImageToVariant(Long variantID, String imagePath) {
+        VariantEntity variant = this.variantRepository.findByVariantID(variantID);
+        if ( variant == null )
+            throw new IllegalArgumentException("There is no variant with id " + variantID);
+        new ProductService().addImage(this.imageRepository, imagePath, variant);
     }
 }
