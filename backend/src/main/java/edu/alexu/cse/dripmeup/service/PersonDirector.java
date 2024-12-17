@@ -1,11 +1,11 @@
 package edu.alexu.cse.dripmeup.service;
 
 import edu.alexu.cse.dripmeup.entity.Person;
-import edu.alexu.cse.dripmeup.service.builder.Builder;
+import edu.alexu.cse.dripmeup.service.builder.PersonBuilder;
 
 public class PersonDirector {
-    public Person construct(Builder builder) {
-        builder.build();
-        return builder.getResult();
+    public Person construct(PersonBuilder personBuilder) {
+        personBuilder.build();
+        return personBuilder.getResult();
     }
 }

@@ -4,7 +4,7 @@ import edu.alexu.cse.dripmeup.entity.UserEntity;
 import edu.alexu.cse.dripmeup.repository.UserRepository;
 import edu.alexu.cse.dripmeup.enumeration.Role;
 
-public class UserPersonBuilder extends Builder {
+public class UserPersonBuilder extends PersonBuilder {
 
     private final UserRepository userRepository;
 
