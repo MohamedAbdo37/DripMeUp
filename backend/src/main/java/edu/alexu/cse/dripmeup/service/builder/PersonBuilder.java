@@ -9,7 +9,7 @@ import edu.alexu.cse.dripmeup.enumeration.Gender;
 import edu.alexu.cse.dripmeup.enumeration.Role;
 import edu.alexu.cse.dripmeup.enumeration.Theme;
 
-public abstract class PersonBuilder{
+public abstract class PersonBuilder {
     private final Person person;
 
     protected PersonBuilder() {
@@ -26,7 +26,6 @@ public abstract class PersonBuilder{
     public void buildUserName(String userName) {
         this.person.setUsername(userName);
     }
-
 
     public void buildName(String name) {
         this.person.setUsername(name);
@@ -82,4 +81,5 @@ public abstract class PersonBuilder{
 
     }
 
+    public abstract void build();
 }
