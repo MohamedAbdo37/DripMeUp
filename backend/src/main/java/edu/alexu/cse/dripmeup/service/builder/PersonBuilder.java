@@ -9,7 +9,7 @@ import edu.alexu.cse.dripmeup.enumeration.Gender;
 import edu.alexu.cse.dripmeup.enumeration.Role;
 import edu.alexu.cse.dripmeup.enumeration.Theme;
 
-public abstract class PersonBuilder implements BuilderIF{
+public abstract class PersonBuilder{
     private final Person person;
 
     protected PersonBuilder() {

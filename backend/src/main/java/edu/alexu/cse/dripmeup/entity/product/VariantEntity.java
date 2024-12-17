@@ -2,6 +2,7 @@ package edu.alexu.cse.dripmeup.entity.product;
 
 import java.util.List;
 
+import edu.alexu.cse.dripmeup.entity.EntityIF;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 
-public class VariantEntity {
+public class VariantEntity implements EntityIF{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "variantID")
@@ -37,9 +38,6 @@ public class VariantEntity {
 
     @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
     private List<VariantImageEntity> variantImages ;
-
-    @OneToMany
-    private List<ItemEntity> items ;
 
     @Column(name = "Color")
     private String color ;
@@ -64,4 +62,13 @@ public class VariantEntity {
 
     @Column(name = "State")
     private ProductState state ;
+
+    @Column(name = "Discount")
+    private double discount;
+    
+
+    public void addVariantImage(VariantImageEntity variantImageEntity) {
+        variantImageEntity.setVariant(this);
+        this.variantImages.add(variantImageEntity);
+    }
 }

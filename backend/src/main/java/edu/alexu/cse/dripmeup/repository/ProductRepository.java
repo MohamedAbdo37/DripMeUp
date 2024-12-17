@@ -9,5 +9,9 @@ import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     
+    @SuppressWarnings("null")
+    @Override
     Page<ProductEntity> findAll(Pageable pageable);
+
+    ProductEntity findByProductID(long productID);
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 
-public abstract class ProductBuilder implements BuilderIF{
+public class ProductBuilder implements ProductBuilderIF{
     private final ProductEntity product;
 
     public ProductBuilder() {
@@ -17,15 +17,21 @@ public abstract class ProductBuilder implements BuilderIF{
     }
 
     public void buildTime(){
-        this.product.setTime(localDateTime.now());
+        this.product.setTime(LocalDateTime.now());
     }
 
     public void buildState(ProductState state) {
         this.product.setState(state);
     }
     
+    @Override
     public ProductEntity getResult() {
         return this.product;
+    }
+
+    @Override
+    public void build() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
