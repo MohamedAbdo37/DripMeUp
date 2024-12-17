@@ -1,0 +1,218 @@
+/* Container */
+.admin-container {
+  margin: 0 auto;
+  max-width: 700px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Header Section */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-button:hover {
+  background-color: #0056b3;
+}
+
+/* Category Form Section */
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.category-form label {
+  font-weight: bold;
+}
+
+.category-form input, .category-form textarea {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.category-form button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.category-form button:hover {
+  background-color: #218838;
+}
+
+/* Subcategory Form Section */
+.subcategory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.subcategory-form label {
+  font-weight: bold;
+}
+
+.subcategory-form input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.subcategory-form button {
+  background-color: #ffc107;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.subcategory-form button:hover {
+  background-color: #e0a800;
+}
+
+/* Category Item Layout */
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.category-item strong {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Action Labels (Edit/Delete) */
+.action-labels {
+  display: flex;
+  gap: 15px; /* Space between the buttons */
+  align-items: center;
+}
+
+.action-labels span {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.3s ease;
+  display: inline-block;
+}
+
+.action-labels .edit {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.action-labels .edit:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.action-labels .edit:active {
+  transform: translateY(2px);
+}
+
+.action-labels .delete {
+  background-color: #dc3545;
+  color: white;
+  border: 1px solid #dc3545;
+}
+
+.action-labels .delete:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.action-labels .delete:active {
+  transform: translateY(2px);
+}
+
+/* Categories List Section */
+.categories-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.categories-list li {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.categories-list li button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.categories-list li button:hover {
+  color: #007bff;
+}
+
+/* Arrow for Collapsible Subcategories */
+.subcategory-arrow {
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.subcategory-arrow.collapsed {
+  transform: rotate(90deg);
+}
+
+/* Subcategory List */
+.subcategories-list {
+  display: none;
+  margin-left: 20px;
+  padding-left: 10px;
+  list-style-type: none;
+}
+
+.subcategories-list li {
+  margin: 5px 0;
+}
+
+/* Feedback Messages */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}

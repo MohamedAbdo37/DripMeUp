@@ -24,7 +24,7 @@ const AdminLoginBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/admin/profile')
+            navigate('/adminSession')
          })
         .catch(error=>{
             setErrorMessage('Wrong username or password');
