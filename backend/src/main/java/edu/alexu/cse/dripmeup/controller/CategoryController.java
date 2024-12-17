@@ -4,6 +4,7 @@ import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.service.CategoryService;
 import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createCategory(@RequestParam String categoryName, @RequestParam String categoryDescription, @RequestParam Optional<Long> parentID) {
         try {
@@ -40,6 +42,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryByName(categoryName));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> deleteCategory(@RequestParam String categoryName) {
         try {
@@ -52,6 +55,7 @@ public class CategoryController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<Map<String, String>> updateCategory(@PathVariable Long id, @RequestParam Optional<String> newCategoryName, @RequestParam Optional<String> newCategoryDescription) {
         try {
