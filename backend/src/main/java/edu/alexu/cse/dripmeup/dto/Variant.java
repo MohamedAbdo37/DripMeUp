@@ -9,14 +9,16 @@ public class Variant {
     public Variant(VariantEntity variantEntity) {
         this.variantID = variantEntity.getVariantID();
         this.color = variantEntity.getColor();
+        this.price = variantEntity.getPrice();
         this.weight = variantEntity.getWeight();
         this.length = variantEntity.getLength();
         this.size = variantEntity.getSize();
         this.stock = variantEntity.getStock();
         this.sold = variantEntity.getSold();
         this.state = variantEntity.getState();
+        this.discount = variantEntity.getDiscount();
     }
-
+    
     private final @Getter Long variantID;
     private final @Getter String color;
     private final @Getter String weight;
@@ -25,4 +27,6 @@ public class Variant {
     private final @Getter int stock;
     private final @Getter int sold;
     private final @Getter ProductState state;
+    private final @Getter double price;
+    private final @Getter double discount;
 }

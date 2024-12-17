@@ -17,6 +17,8 @@ public class Product {
         this.description = productEntity.getDescription();
         this.dateOfCreation = productEntity.getTime().toString();
         this.variants = shopManager.getVariantsOfProduct(productEntity);
+        this.rate = 5.0;
+        this.numberOfFeedback = 1;
     }
 
     private final @Getter Long productID;
@@ -24,4 +26,7 @@ public class Product {
     private final @Getter String description;
     private final @Getter String dateOfCreation;
     private final @Getter List<Variant> variants;
+    private final @Getter double rate;
+    private final @Getter int numberOfFeedback;
+
 }

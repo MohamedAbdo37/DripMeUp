@@ -3,6 +3,7 @@ package edu.alexu.cse.dripmeup.entity.product;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.alexu.cse.dripmeup.entity.EntityIF;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity {
+public class ProductEntity implements EntityIF {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -37,9 +38,6 @@ public class ProductEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<VariantEntity> variants;
-
-    @OneToMany
-    private List<ItemEntity> items;
 
     @Column(name = "State")
     private ProductState state;
