@@ -36,6 +36,7 @@ public class AdminSessionController {
         }
     }
 
+    @GetMapping("/login")
     public ResponseEntity<String> login(@RequestHeader("UserName") String userName,
                                         @RequestHeader("Password") String password) {
         String superAdminPassword = env.getProperty("super.admin.password");

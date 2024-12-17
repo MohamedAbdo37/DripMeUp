@@ -1,8 +1,11 @@
 package edu.alexu.cse.dripmeup.controller;
 
+import edu.alexu.cse.dripmeup.dto.Category;
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;
+import edu.alexu.cse.dripmeup.manager.CategoryManager;
 import edu.alexu.cse.dripmeup.service.CategoryService;
 import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +18,20 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/api/7/categories")
 public class CategoryController {
-    private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    @Autowired
+    private CategoryManager categoryManager;
 
     @GetMapping("/")
-    public ResponseEntity<List<CategoryEntity>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
+    public ResponseEntity<List<Category>> getAllCategories() {
+        return ResponseEntity.ok(categoryManager.getAllCategories());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createCategory(@RequestParam String categoryName, @RequestParam String categoryDescription, @RequestParam Optional<Long> parentID) {
         try {
-            categoryService.createCategory(categoryName, categoryDescription, parentID);
+            categoryManager.createCategory(categoryName, categoryDescription, parentID);
             return ResponseEntity.ok(ResponseBodyMessage.message("Category created successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
@@ -38,16 +39,16 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryName}")
-    ResponseEntity<CategoryEntity> getCategoryByName(@PathVariable String categoryName) {
-        return ResponseEntity.ok(categoryService.getCategoryByName(categoryName));
+    ResponseEntity<Category> getCategoryByName(@PathVariable String categoryName) {
+        return ResponseEntity.ok(categoryManager.getCategoryByName(categoryName));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, String>> deleteCategory(@RequestParam String categoryName) {
         try {
-            CategoryEntity category = categoryService.getCategoryByName(categoryName);
-            categoryService.deleteCategory(category.getId());
+            Category category = categoryManager.getCategoryByName(categoryName);
+            categoryManager.deleteCategory(category.getId());
             return ResponseEntity.ok(ResponseBodyMessage.message("Category deleted successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
@@ -59,36 +60,10 @@ public class CategoryController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<Map<String, String>> updateCategory(@PathVariable Long id, @RequestParam Optional<String> newCategoryName, @RequestParam Optional<String> newCategoryDescription) {
         try {
-            categoryService.updateCategory(id, newCategoryName, newCategoryDescription);
+            categoryManager.updateCategory(id, newCategoryName, newCategoryDescription);
             return ResponseEntity.ok(ResponseBodyMessage.message("Category updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
         }
     }
-
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CategoryEntity> getCategoryById(@PathVariable Long id) {
-//        return ResponseEntity.ok(categoryService.getCategoryById(id));
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Map<String, String>> updateCategory(@PathVariable Long id, @RequestBody CategoryEntity category) {
-//        try {
-//            categoryService.updateCategory(id, category);
-//            return ResponseEntity.ok(ResponseBodyMessage.message("Category updated successfully"));
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
-//        }
-//    }
-//
-//    @DeleteMapping("/category/{id}")
-//    public ResponseEntity<Map<String, String>> deleteCategory(@PathVariable Long id) {
-//        try {
-//            categoryService.deleteCategory(id);
-//            return ResponseEntity.ok(ResponseBodyMessage.message("Category deleted successfully"));
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
-//        }
-//    }
 }

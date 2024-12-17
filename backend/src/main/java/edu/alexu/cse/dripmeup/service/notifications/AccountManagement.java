@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 
 import java.io.IOException;
+import edu.alexu.cse.dripmeup.service.notifications.NotificationService;
+
 
 @Service
-public class AccountManagement extends edu.alexu.cse.dripmeup.service.notifications.NotificationService {
+public class AccountManagement extends NotificationService {
 
     // specific attribute for this class
     private int code ;

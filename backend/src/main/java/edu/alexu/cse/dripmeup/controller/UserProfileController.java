@@ -24,6 +24,7 @@ public class UserProfileController {
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/")
     public ResponseEntity<?> getUserInfo(){
         try{
             Long USER_ID = SecurityService.getIdFromSecurityContext();
