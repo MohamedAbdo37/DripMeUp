@@ -38,17 +38,8 @@ public class ProductEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<VariantEntity> variants;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany
     private List<ItemEntity> items;
-
-    @Column(name = "Price")
-    private double price;
-
-    @Column(name = "Stock")
-    private int stock;
-
-    @Column(name = "Sold")
-    private int sold;
 
     @Column(name = "State")
     private ProductState state;

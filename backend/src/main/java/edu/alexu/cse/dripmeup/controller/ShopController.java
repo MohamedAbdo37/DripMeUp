@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.alexu.cse.dripmeup.component.ShopManager;
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @CrossOrigin
@@ -22,9 +24,8 @@ public class ShopController {
     private ShopManager shopManager;
 
     @GetMapping("/products")
-    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam("page") int page,
+    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam(name = "page") int page,
             @RequestParam("size") int size) {
-        System.out.println("page: " + page + ",size: " + size);
         Page<ProductSnapshot> products = shopManager.getAllProducts(page, size);
         if (products == null || products.isEmpty()) {
             return ResponseEntity.notFound().build();
