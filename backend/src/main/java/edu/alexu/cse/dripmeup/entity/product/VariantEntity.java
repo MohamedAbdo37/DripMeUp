@@ -53,6 +53,9 @@ public class VariantEntity {
     @Column(name = "Size")
     private String size ;
 
+    @Column(name = "Price")
+    private double price ;
+
     @Column(name = "Stock")
     private int stock ;
 

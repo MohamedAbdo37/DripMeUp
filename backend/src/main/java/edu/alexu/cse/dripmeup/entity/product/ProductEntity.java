@@ -29,6 +29,7 @@ public class ProductEntity {
     @Column(name = "productID")
     private Long productID;
 
+    
 
     @Column(name = "Description")
     private String description ;
@@ -41,15 +42,6 @@ public class ProductEntity {
 
     @OneToMany
     private List<ItemEntity> items ;
-
-    @Column(name = "Price")
-    private double price ;
-
-    @Column(name = "Stock")
-    private int stock ;
-
-    @Column(name = "Sold")
-    private int sold ;
 
     @Column(name = "State")
     private ProductState state ;
