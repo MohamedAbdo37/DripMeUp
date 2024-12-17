@@ -12,14 +12,13 @@ public class VariantImageEntity implements EntityIF{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ImageID")
-    private Long ImageID;
+    private Long imageID;
 
     @ManyToOne
     @JoinColumn(name = "variantID")
     private VariantEntity variant;
 
     @Column(name = "Image")
-    private String ImagePath;
-
+    private String imagePath;
 
 }
