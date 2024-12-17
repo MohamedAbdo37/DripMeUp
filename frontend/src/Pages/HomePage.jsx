@@ -17,12 +17,12 @@ const HomePage = () => {
 
   // Function to fetch all products (for default category)
   const fetchAllProducts = async (page = 1) => {
-    const response = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}`, {
+    const response = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}&size=10`, {
       method:'GET',
-      // headers:{
-      //   'Content-Type': 'application/json',
-      //   'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-      // }
+      headers:{
+        'Content-Type': 'application/json',
+        // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+      }
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{

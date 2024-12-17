@@ -9,20 +9,20 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const ProductPage = () =>{
-    const {id} = useParams();
+    const {productID} = useParams();
     const [product, setProduct] = useState();
-    // useEffect(async ()=>{
-    //     const getProducts = await fetch(`http://localhost:8081/api/5/getProduct`,{
-    //         method:'GET',
-    //         headers:{
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-    //             }
-    //     })
-    //     .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
-    //     .then(data=>setProduct(data))
-    //     .catch(e=>console.log(e));
-    // },[]);
+    useEffect(async ()=>{
+        const getProducts = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                }
+        })
+        .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
+        .then(data=>setProduct(data))
+        .catch(e=>console.log(e));
+    },[]);
 
     const notifyAddToCart = () => {
         toast.success(`Product added to cart successfully`);

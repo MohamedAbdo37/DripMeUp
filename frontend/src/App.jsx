@@ -29,7 +29,7 @@ function App() {
         <Route path='/forgotpassword' element={<ForgotPasswordPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/userSession' element={<NavBar/>} errorElement= {<EmptyPage/>}>
           <Route index element={<HomePage/>} errorElement= {<EmptyPage/>}/>
-          <Route path='product/:id' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='product/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='profile' element={<UserProfilePage/>} errorElement= {<EmptyPage/>}/>
           <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='cart' element={<CartPage/>} errorElement= {<EmptyPage/>}/>
