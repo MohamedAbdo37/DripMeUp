@@ -3,6 +3,7 @@ package edu.alexu.cse.dripmeup.controller;
 import edu.alexu.cse.dripmeup.enumeration.Status;
 import edu.alexu.cse.dripmeup.exception.AuthorizationException;
 import edu.alexu.cse.dripmeup.exception.BadInputException;
+import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import edu.alexu.cse.dripmeup.service.OrderService;
 import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 import edu.alexu.cse.dripmeup.service.SecurityService;
@@ -73,5 +74,54 @@ private OrderService orderService;
             return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching order details"));
         }
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/approve/{orderId}")
+    public ResponseEntity<?> approveOrder(@PathVariable Long orderId) {
+        try {
+            return ResponseEntity.ok(orderService.approveOrder(orderId));
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (FailedToSendMailException e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while approving order"));
+        }
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/deliver/{orderId}")
+    public ResponseEntity<?> deliverOrder(@PathVariable Long orderId) {
+        try {
+            return ResponseEntity.ok(orderService.deliverOrder(orderId));
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (FailedToSendMailException e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while changing order status to delivery"));
+        }
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/confirm/{orderId}")
+    public ResponseEntity<?> confirmOrder(@PathVariable Long orderId) {
+        try {
+            return ResponseEntity.ok(orderService.confirmOrder(orderId));
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (FailedToSendMailException e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while changing order status to confirmed"));
+        }
+    }
+
 
 }
