@@ -66,7 +66,7 @@ public class ShopController {
     @PostMapping("/c/image")
     public ResponseEntity<Void> addImageToVariant(@RequestParam("variantID") long variantID ,@RequestBody byte[] image) {
 
-        String imagePath = "";
+        String imagePath ;
         try{
             imagePath = this.shopManager.getImagePath(image);
             shopManager.addImageToVariant(variantID, imagePath);

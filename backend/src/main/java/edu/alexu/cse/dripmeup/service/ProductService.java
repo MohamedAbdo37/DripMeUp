@@ -42,10 +42,8 @@ public class ProductService {
     }
 
     public ProductEntity createProduct(ProductRepository productRepository, Product product) {
-        System.out.println("#"+3);
         ProductDirector director = new ProductDirector(productRepository);
         director.construct(new ProductBuilder(product));
-        System.out.println("#"+6);
         return director.getProduct();
     }
 
