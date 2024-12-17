@@ -73,6 +73,10 @@ public class CategoryEntity {
     }
 
     public void addChild(CategoryEntity child) {
+        if (this.subcategories == null) {
+            this.subcategories = List.of(child);
+            return;
+        }
         this.subcategories.add(child);
     }
 

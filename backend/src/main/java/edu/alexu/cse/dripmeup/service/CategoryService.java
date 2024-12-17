@@ -61,7 +61,10 @@ public class CategoryService {
     }
 
     public void addChildren(CategoryEntity parent, CategoryEntity child) {
+        if (!categoryRepository.findById(parent.getId()).isPresent()) {
+            throw new RuntimeException("Parent category not found");
+        }
         parent.addChild(child);
-        this.categoryRepository.save(parent);
+        categoryRepository.save(parent);
     }
 }
