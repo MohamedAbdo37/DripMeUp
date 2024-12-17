@@ -2,17 +2,11 @@ package edu.alexu.cse.dripmeup.entity.product;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +47,14 @@ public class ProductEntity {
 
     @Column(name = "State")
     private ProductState state ;
+
+    @ManyToMany
+    @JoinTable(
+            name = "PRODUCT_CATEGORY",
+            joinColumns = @JoinColumn(name = "productID"),
+            inverseJoinColumns = @JoinColumn(name = "categoryID")
+    )
+    private Set<CategoryEntity> categories;
 
     @PrePersist
     protected void onCreate (){

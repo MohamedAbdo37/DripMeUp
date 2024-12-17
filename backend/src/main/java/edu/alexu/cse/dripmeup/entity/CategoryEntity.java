@@ -1,4 +1,5 @@
 package edu.alexu.cse.dripmeup.entity;
+import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORY")
@@ -33,6 +35,9 @@ public class CategoryEntity {
 
     @OneToMany(mappedBy = "parentID", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CategoryEntity> subcategories;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<ProductEntity> products;
 
     @PrePersist
     protected void onCreate (){
