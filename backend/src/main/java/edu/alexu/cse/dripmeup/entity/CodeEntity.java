@@ -22,7 +22,7 @@ public class CodeEntity implements EntityIF {
 
     @Id
     @Column(name = "codeId")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long codeID;
 
     @Column(name = "code")
