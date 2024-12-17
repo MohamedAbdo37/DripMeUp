@@ -1,26 +1,23 @@
 package edu.alexu.cse.dripmeup.service.builder;
 
-import edu.alexu.cse.dripmeup.entity.EntityIF;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
-import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
-import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
 
-public class ProductVariantBuilder implements ProductBuilderIF {
+public class VariantBuilder implements ProductBuilderIF {
     
     private ProductRepository productRepository;
 
 
     private final VariantEntity variantEntity;
 
-    public ProductVariantBuilder() {
+    public VariantBuilder() {
         this.variantEntity = new VariantEntity();
     }
 
-    public ProductVariantBuilder(ProductRepository productRepository, VariantRepository variantRepository, Long variantID) {
+    public VariantBuilder(ProductRepository productRepository, VariantRepository variantRepository, Long variantID) {
         this.variantEntity = variantRepository.findByVariantID(variantID);
         this.productRepository = productRepository;
     }
@@ -57,6 +54,10 @@ public class ProductVariantBuilder implements ProductBuilderIF {
         this.variantEntity.setState(state);
     }
 
+    public void buildDiscount(double discount) {
+        this.variantEntity.setDiscount(discount);
+    }
+
     public void buildProduct(Long productID) {
         ProductEntity productEntity = this.productRepository.findByProductID(productID);
         this.variantEntity.setProduct(productEntity);
@@ -68,9 +69,8 @@ public class ProductVariantBuilder implements ProductBuilderIF {
         this.buildSold(0);
     }
 
-
     @Override
-    public EntityIF getResult() {
+    public VariantEntity getResult() {
         return this.variantEntity;
     }
 }
