@@ -36,10 +36,10 @@ public class ProductEntity {
     @Column(name = "DateOfCreation")
     private LocalDateTime time ;
 
-    @OneToMany(mappedBy= "Product", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy= "product", cascade = CascadeType.ALL)
     private List<VariantEntity> variants ;
 
-    @OneToMany(mappedBy= "Product")
+    @OneToMany(mappedBy= "product")
     private List<ItemEntity> items ;
 
     @Column(name = "Price")

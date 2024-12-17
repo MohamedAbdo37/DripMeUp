@@ -13,7 +13,7 @@ public class VariantImageEntity {
     @Column(name = "ImageID")
     private Long ImageID;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "variantID")
     private VariantEntity variant;
 
