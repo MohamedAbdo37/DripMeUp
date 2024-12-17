@@ -34,12 +34,12 @@ public class SecurityConfig {
                 .cors(cors -> cors
                         .configurationSource(request -> {
                             var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                            corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080")); // Add your frontend URL here
+                            corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080")); // Add your frontend
+                                                                                                   // URL here
                             corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                             corsConfiguration.setAllowedHeaders(List.of("*"));
                             return corsConfiguration;
-                        })
-                )
+                        }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/5/users/login",
@@ -53,8 +53,10 @@ public class SecurityConfig {
                                 "/api/5/users/checkCode",
                                 "/api/5/users/signup",
                                 "/api/5/users/signup",
-                                "/api/6/admin/login"
-                        ).permitAll()
+                                "/api/6/admin/login",
+                                "/api/1000/shop/products",
+                                "/api/1000/shop/product")
+                        .permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
                 .sessionManagement(sess -> sess

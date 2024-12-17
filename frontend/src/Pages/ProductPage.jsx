@@ -32,38 +32,7 @@ const ProductPage = () =>{
         toast.error(`Error adding to cart`);
     };
     const person = 'user';
-    setProduct({
-        description:"Description goes here",
-        rate: 2,
-        photo: null,
-        name: "Name",
-        price: 100,
-        salePercentage: 0.5,
-        category: "summerSherts",
-        amountInStock: 5,
-        color: "red",
-        size: "XL",
-        weight: "50 gm",
-        length: "",
-        feedbacks: [
-            {
-                user: {
-                    name: "Ibrahim",
-                    photo: null
-                },
-                feedback: "Good",
-                time: "11AM 25/12/2020"
-            },
-            {
-                user: {
-                    name: "Mohamed",
-                    photo: null
-                },
-                feedback: "Good",
-                time: "11AM 25/12/2021"
-            }
-        ]
-    });
+    
     const buy = ()=>{
 
     }
@@ -103,14 +72,14 @@ const ProductPage = () =>{
             <div className="productImg">
                 <div className="ratingBox">
                     <p>{product.description}</p>
-                    <div className="rating">
+                    {/* <div className="rating">
                         {Array.from({length: product.rate}, (_, i)=>(<img src={filledStar} alt="yellowStar" className="yellowStar"/>))}
                         {Array.from({length: 5-product.rate}, (_, i)=>(<img src={star} alt="emptyStar" className="emptyStar"/>))}
                         {product.rate}/5
-                    </div>
+                    </div> */}
                 </div>
                 <div className="Img">
-                    <img src={product.photo || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
+                    <img src={product.productImage || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
                 </div>
                 <div className="share-favouriteButtons">
                     <img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>
@@ -120,13 +89,13 @@ const ProductPage = () =>{
             <div className="controller">
                 <div className="controllerLeft">
                     <div>
-                        <p style={{fontSize: "3rem", margin: "0"}}>{product.name}</p>
-                        <p style={{fontSize: "2rem", margin: "0"}}>{product.price * product.salePercentage} LE</p>
+                        {/* <p style={{fontSize: "3rem", margin: "0"}}>{product.name}</p> */}
+                        {/* <p style={{fontSize: "2rem", margin: "0"}}>{product.price-(product.price * product.salePercentage)} LE</p> */}
                     </div>
                     <div className="saleData">
                         <p style={{textDecoration: 'line-through', margin: "0", marginRight:"1rem"}}>old: {product.price} LE</p>
                         <div className="sale">
-                            SALE {product.salePercentage * 100} %
+                            {/* SALE {product.salePercentage * 100} % */}
                         </div>
                     </div>
                 </div>
@@ -144,12 +113,12 @@ const ProductPage = () =>{
                         </div>
                     }
                     <div className="controllerRightDescription">
-                        <p>Category: {product.category}</p>
-                        <p>No. of remaining items: {product.amountInStock}</p>
+                        {/* <p>Category: {product.category}</p> */}
+                        {/* <p>No. of remaining items: {product.amountInStock}</p> */}
                     </div>
                 </div>
             </div>
-            <table className="styled-table">
+            {/* <table className="styled-table">
                 <tbody>
                     <tr>
                         <td style={{width: "0", fontWeight:"bold"}}>Color</td>
@@ -164,12 +133,12 @@ const ProductPage = () =>{
                         <td>{product.length}</td>
                     </tr>
                 </tbody>
-            </table>
-            <div className="feedbacks">
+            </table> */}
+            {/* <div className="feedbacks">
                 {product.feedbacks.map((feedback, i)=>(
                     <FeedbackBox key={i} feedback={feedback}/>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

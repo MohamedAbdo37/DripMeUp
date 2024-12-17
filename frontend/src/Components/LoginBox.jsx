@@ -27,6 +27,7 @@ const LoginBox = () =>{
             navigate('/userSession');
         })
         .catch(async (error)=>{
+            console.log(error);
             setErrorMessage('Email does not exist in the system');
             setErrorTrigger('googleEmailError');
         });

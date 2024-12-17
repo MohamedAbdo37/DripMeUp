@@ -1,20 +1,20 @@
 package edu.alexu.cse.dripmeup.dto;
 
-
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import lombok.Getter;
 
 public class ProductSnapshot {
-    
 
     public ProductSnapshot(ProductEntity productEntity) {
         this.productID = productEntity.getProductID();
-        this.price = productEntity.getPrice();
+        this.price = 100;
         this.state = productEntity.getState();
         this.description = productEntity.getDescription();
         this.dateOfCreation = productEntity.getTime().toString();
-        this.productImage = productEntity.getVariants().get(0).getVariantImages().get(0).getImagePath();
+        // this.productImage =
+        // productEntity.getVariants().get(0).getVariantImages().get(0).getImagePath();
+        this.productImage = "";
     }
 
     private final @Getter Long productID;

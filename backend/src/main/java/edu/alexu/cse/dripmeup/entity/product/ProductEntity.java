@@ -29,34 +29,33 @@ public class ProductEntity {
     @Column(name = "productID")
     private Long productID;
 
-
     @Column(name = "Description")
-    private String description ;
+    private String description;
 
     @Column(name = "DateOfCreation")
-    private LocalDateTime time ;
+    private LocalDateTime time;
 
-    @OneToMany(mappedBy= "Product", cascade = CascadeType.ALL)
-    private List<VariantEntity> variants ;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<VariantEntity> variants;
 
-    @OneToMany(mappedBy= "Product")
-    private List<ItemEntity> items ;
+    @OneToMany(mappedBy = "product")
+    private List<ItemEntity> items;
 
     @Column(name = "Price")
-    private double price ;
+    private double price;
 
     @Column(name = "Stock")
-    private int stock ;
+    private int stock;
 
     @Column(name = "Sold")
-    private int sold ;
+    private int sold;
 
     @Column(name = "State")
-    private ProductState state ;
+    private ProductState state;
 
     @PrePersist
-    protected void onCreate (){
-        this.time = LocalDateTime.now() ;
+    protected void onCreate() {
+        this.time = LocalDateTime.now();
     }
 
 }

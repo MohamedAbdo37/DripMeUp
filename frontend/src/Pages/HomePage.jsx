@@ -17,7 +17,7 @@ const HomePage = () => {
 
   // Function to fetch all products (for default category)
   const fetchAllProducts = async (page = 1) => {
-    const response = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}&size=10`, {
+    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page}&size=1`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ const HomePage = () => {
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
-      setProducts(data.products);
-      setTotalPages(data.totalPages);
+      setProducts(data);
+      setTotalPages(Math.ceil(data.length/10));
     })
     .catch(e=>console.log(e));
     
@@ -39,13 +39,13 @@ const HomePage = () => {
         method: 'GET',
         headers:{
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+          // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
         }
       })
       .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
       .then(data=>{
-        setProducts(data.products);
-        setTotalPages(data.totalPages);
+        setProducts(data);
+        setTotalPages(Math.ceil(data.length/10));
       })
       .catch(e=>console.error(`Error fetching products for category ${category}:`, e));
     
@@ -118,16 +118,16 @@ const HomePage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.id} className="product-card">
-              <Link to={`userSession/product/${product.id}`}>
+            <div key={product.productID} className="product-card">
+              <Link to={`userSession/product/${product.productID}`}>
                 {/* Display image */}
-                <img src={product.image} alt={product.name} className="product-image" />
+                <img src={product.productImage} alt="productImage" className="product-image" />
               </Link>
               <div className="product-details">
                 {/* Display price */}
                 <p className="price">{product.price}</p>
                 {/* Display product name */}
-                <p>{product.name}</p>
+                <p>{product.description}</p>
               </div>
             </div>
           ))}
