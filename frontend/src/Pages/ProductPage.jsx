@@ -9,9 +9,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
 const ProductPage = () =>{
-    const { productID } = useParams();
+    const { productID, person } = useParams();
     const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
-    const person = 'user';
     const [currentVariant, setCurrentVariant] = useState(0); 
     const feedbacks = [
         {

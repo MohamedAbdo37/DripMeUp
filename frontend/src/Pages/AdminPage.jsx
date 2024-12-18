@@ -24,6 +24,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
+    console.log("sdkfj");
     fetchCategories();
   }, []);
 
@@ -70,19 +71,6 @@ const AdminPage = () => {
 
   return (
     <div className="admin-container">
-      {/* Header */}
-      <div className="admin-header">
-        <button
-          className="profile-button"
-          onClick={() =>
-            navigate("/admin/profile", {
-              state: { admin: { username: "", email: "", photo: "" } },
-            })
-          }
-        >
-          Go to Profile
-        </button>
-      </div>
 
       {/* Add Subcategory Form */}
       <div className="subcategory-form">
@@ -149,4 +137,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminPage;

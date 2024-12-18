@@ -10,8 +10,10 @@ import AdminProfilePage from './Pages/AdminProfilePage';
 import WelcomePage from './Pages/WelcomePage';
 import HomePage from './Pages/HomePage';
 import ProductPage from './Pages/ProductPage';
-import NavBar from './Layouts/NavBar';
+import UserNavBar from './Layouts/UserNavBar';
+import AdminNavBar from './Layouts/AdminNavBar';
 import FavouritesPage from './Pages/FavouritesPage';
+import AddAdminPage from './Pages/AddAdminPage';
 import CartPage from './Pages/CartPage';
 import SettingsPage from './Pages/SettingsPage';
 import AdminPage from "./Pages/AdminPage";
@@ -29,17 +31,22 @@ function App() {
         <Route path='/admin/login' element={<AdminLoginPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/signup' element={<SignupPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/forgotpassword' element={<ForgotPasswordPage/>} errorElement= {<EmptyPage/>}/>
-        <Route path='userSession' element={<NavBar/>} errorElement= {<EmptyPage/>}>
+        <Route path='userSession' element={<UserNavBar/>} errorElement= {<EmptyPage/>}>
           <Route index element={<HomePage/>} errorElement= {<EmptyPage/>}/>
           <Route path='profile' element={<UserProfilePage/>} errorElement= {<EmptyPage/>}/>
-          <Route path='product/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='product/:person/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='cart' element={<CartPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='favourites' element={<FavouritesPage/>} errorElement= {<EmptyPage/>}/>
         </Route>
+        <Route path='adminSession' element={<AdminNavBar/>} errorElement= {<EmptyPage/>}>
+          <Route index element={<AdminPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='product/:person/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='profile' element={<AdminProfilePage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='addAdmin' element={<AddAdminPage/>} errorElement= {<EmptyPage/>}/>
+        </Route>
         
-        <Route path='/admin/profile' element={<AdminProfilePage/>} errorElement= {<EmptyPage/>}/>
-        <Route path='/adminSession' element={<AdminPage/>} errorElement= {<EmptyPage/>}/>
 
         
         <Route path='*' element={<EmptyPage/>}/>
