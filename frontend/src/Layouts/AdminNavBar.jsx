@@ -18,13 +18,10 @@ const AdminNavBar = ()=>{
                 <img src={add} alt='addProductIcon' onClick={ ()=>{}}/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={category} alt='addCategoryIcon' style={{scale:"1.9"}} onClick={ ()=>{}}/>
-                </div>
-                <div className='navBarButtons'>
                 <img src={settings} alt='settingsIcon' onClick={ ()=>navigate('/adminSession/settings') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={addAdmin} alt='profileIcon' style={{length: "10rem", height: "10rem"}} onClick={ ()=>navigate('/adminSession/profile') }/>
+                <img src={addAdmin} alt='profileIcon' style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>
                 </div>
             </div>
             <Outlet/>

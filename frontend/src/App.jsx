@@ -6,7 +6,6 @@ import EmptyPage from './Pages/EmptyPage';
 import SignupPage from './Pages/SignupPage';
 import ForgotPasswordPage from './Pages/ForgotPasswordPage';
 import UserProfilePage from './Pages/UserProfilePage';
-import AdminProfilePage from './Pages/AdminProfilePage';
 import WelcomePage from './Pages/WelcomePage';
 import HomePage from './Pages/HomePage';
 import ProductPage from './Pages/ProductPage';
@@ -25,7 +24,6 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        
         <Route path='/' element={<WelcomePage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/login' element={<LoginPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/admin/login' element={<AdminLoginPage/>} errorElement= {<EmptyPage/>}/>
@@ -42,12 +40,9 @@ function App() {
         <Route path='adminSession' element={<AdminNavBar/>} errorElement= {<EmptyPage/>}>
           <Route index element={<AdminPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='product/:person/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
-          <Route path='profile' element={<AdminProfilePage/>} errorElement= {<EmptyPage/>}/>
-          <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='addAdmin' element={<AddAdminPage/>} errorElement= {<EmptyPage/>}/>
+          <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
         </Route>
-        
-
         
         <Route path='*' element={<EmptyPage/>}/>
       </>

@@ -8,6 +8,21 @@
   gap: 1rem;
 }
 
+.addButton{
+  padding-right: 1rem;
+  padding-left: 1rem;
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+  font-size: 2.5rem;
+  border-radius: 20px;
+  /* transform: translate(500%, -120%); */
+}
+
+.addButton:hover{
+  background-color: rgba(250, 235, 215, 0.354);
+}
+
 /* Sidebar */
 .sidebar {
   width: 20%;

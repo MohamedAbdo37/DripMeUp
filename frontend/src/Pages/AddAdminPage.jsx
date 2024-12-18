@@ -1,12 +1,11 @@
-import AddAdminBox from "../Components/AddAdminBox"
-import "../style.css"
+import AddAdminBox from "../Components/AddAdminBox";
 
-const AdminLoginPage = () =>{
-
-    return(
-        <div className="loginPage" style={{height: '100vh'}}>
-            <AddAdminBox/>
+const AddAdminPage = () => {
+    return (
+        <div className="profilePage" style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <AddAdminBox />
         </div>
     );
 };
+
 export default AddAdminPage;
