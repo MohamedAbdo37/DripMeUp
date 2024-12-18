@@ -27,27 +27,28 @@ const AdminPage = () => {
 
   // Handle creating a subcategory
   const handleCreateSubcategory = async () => {
+    console.log("add catigory request...")
     if (!subcategoryName || !subcategoryDescription || !parentId) {
       setErrorMessage("All fields are required to add a subcategory.");
       return;
     }
 
-    const requestBody = {
-      name: subcategoryName,
-      slug: subcategoryName.toLowerCase().replace(/\s+/g, "-"),
-      description: subcategoryDescription,
-      parent_id: parentId,
-    };
+    const params = new URLSearchParams({
+      categoryName: subcategoryName,
+      categoryDescription: subcategoryDescription,
+      parentID: parentId,
+    });
+
 
     try {
-      const response = await fetch("http://localhost:8081/api/7/categories/create", {
+      console.log("try add catigory request...")
+      const token = localStorage.getItem('drip_me_up_jwt');
+      const response = await fetch(`http://localhost:8081/api/7/categories/create?${params.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
-          Cookie: "AdminID=12345", // Replace with the actual admin ID cookie
+         'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -71,7 +72,7 @@ const AdminPage = () => {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
       }
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
@@ -186,18 +187,14 @@ const AdminPage = () => {
         />
 
         <label htmlFor="parentId">Parent Category:</label>
-        <select
+        <input
           id="parentId"
           value={parentId}
           onChange={(e) => setParentId(e.target.value)}
         >
-          <option value="">Select Parent Category</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+
+          
+        </input>
 
         <button onClick={handleCreateSubcategory}>+ Add Subcategory</button>
       </div>

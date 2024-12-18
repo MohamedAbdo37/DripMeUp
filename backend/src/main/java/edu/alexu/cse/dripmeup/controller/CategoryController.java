@@ -80,10 +80,10 @@ public class CategoryController {
 
             // Define Subcategories
             List<Map<String, Object>> subcategories = List.of(
-                Map.of("name", "Shirts", "description", "Casual and formal shirts", "parentId", menId),
-                Map.of("name", "Pants", "description", "Trousers and jeans", "parentId", menId),
+                Map.of("name", "Shirts", "description", "Casual and formal shirts", "parentCategoryid", menId),
+                Map.of("name", "Pants", "description", "Trousers and jeans", "parentCategoryid", menId),
                 Map.of("name", "Suits", "description", "Formal suits", "parentId", menId),
-                Map.of("name", "Tops", "description", "Blouses and casual tops", "parentId", womenId),
+                Map.of("name", "Tops", "description", "Blouses and casual tops", "parentId", 1),
                 Map.of("name", "Dresses", "description", "Formal and casual dresses", "parentId", womenId),
                 Map.of("name", "Skirts", "description", "Different styles of skirts", "parentId", womenId),
                 Map.of("name", "T-shirts", "description", "Casual T-shirts", "parentId", childrenId),
@@ -91,7 +91,7 @@ public class CategoryController {
                 Map.of("name", "Outerwear", "description", "Jackets and coats", "parentId", childrenId),
                 Map.of("name", "Sleepwear", "description", "Nightwear for kids", "parentId", childrenId)
             );
-    
+            System.out.println(menId);
             // Create Subcategories
             for (Map<String, Object> subcategory : subcategories) {
                 String name = (String) subcategory.get("name");
