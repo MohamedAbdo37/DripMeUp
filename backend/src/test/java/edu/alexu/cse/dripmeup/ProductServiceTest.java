@@ -2,6 +2,7 @@ package edu.alexu.cse.dripmeup;
 
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.Variant;
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
@@ -43,6 +44,9 @@ public class ProductServiceTest {
 
     @Mock
     private ImageRepository imageRepository;
+
+    @Mock
+    private CategoryEntity categoryEntity;
 
     @InjectMocks
     private ProductService productService;
@@ -138,6 +142,7 @@ public class ProductServiceTest {
 
     @Test
     public void testCreateProduct() {
+        CategoryEntity category = new CategoryEntity();
         // Arrange
         Product productDto = new Product();
         productDto = new Product();
@@ -145,11 +150,9 @@ public class ProductServiceTest {
         productDto.setDateOfCreation("2022-11-21 00:00");
         productDto.setState(ProductState.ON_SALE); // Simulate DTO
         when(productRepository.save(any(ProductEntity.class))).thenReturn(null);
-
+        // when(categoryEntity.addProduct(any(ProductEntity.class))).thenReturn(null);
         // Act
-        ProductEntity result = productService.createProduct(productRepository, productDto);
-
-        // Assert
+        ProductEntity result = productService.createProduct(productRepository, productDto,List.of(category));
         assertNotNull(result);
         verify(productRepository, times(1)).save(any(ProductEntity.class));
     }
