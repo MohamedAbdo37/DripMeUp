@@ -32,6 +32,10 @@ public class CategoryManager {
         return new Category(categoryEntity);
     }
 
+    public CategoryEntity getCategoryEntityByName(String categoryName) {
+        return categoryService.getCategoryByName(categoryName);
+    }
+
     public void createCategory(String name, String description, Optional<Long> parentID) {
         categoryService.createCategory(name, description, parentID);
     }

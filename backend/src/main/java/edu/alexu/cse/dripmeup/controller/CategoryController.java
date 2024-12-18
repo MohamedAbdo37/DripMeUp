@@ -3,6 +3,7 @@ package edu.alexu.cse.dripmeup.controller;
 import edu.alexu.cse.dripmeup.component.CategoryManager;
 import edu.alexu.cse.dripmeup.dto.Category;
 import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,5 +64,46 @@ public class CategoryController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ResponseBodyMessage.error(e.getMessage()));
         }
+    }
+
+    @PostMapping("/random")
+    public ResponseEntity<?> randomCategories() {
+        try {
+            // Create Parent Categories
+            categoryManager.createCategory("Men", "Men's clothing", Optional.empty());
+            categoryManager.createCategory("Women", "Women's clothing", Optional.empty());
+            categoryManager.createCategory("Children", "Children's clothing", Optional.empty());
+            
+            Long menId = categoryManager.getCategoryByName("Men").getId();
+            Long womenId = categoryManager.getCategoryByName("Women").getId();
+            Long childrenId = categoryManager.getCategoryByName("Children").getId();
+
+            // Define Subcategories
+            List<Map<String, Object>> subcategories = List.of(
+                Map.of("name", "Shirts", "description", "Casual and formal shirts", "parentId", menId),
+                Map.of("name", "Pants", "description", "Trousers and jeans", "parentId", menId),
+                Map.of("name", "Suits", "description", "Formal suits", "parentId", menId),
+                Map.of("name", "Tops", "description", "Blouses and casual tops", "parentId", womenId),
+                Map.of("name", "Dresses", "description", "Formal and casual dresses", "parentId", womenId),
+                Map.of("name", "Skirts", "description", "Different styles of skirts", "parentId", womenId),
+                Map.of("name", "T-shirts", "description", "Casual T-shirts", "parentId", childrenId),
+                Map.of("name", "Shorts", "description", "Summer wear shorts", "parentId", childrenId),
+                Map.of("name", "Outerwear", "description", "Jackets and coats", "parentId", childrenId),
+                Map.of("name", "Sleepwear", "description", "Nightwear for kids", "parentId", childrenId)
+            );
+    
+            // Create Subcategories
+            for (Map<String, Object> subcategory : subcategories) {
+                String name = (String) subcategory.get("name");
+                String description = (String) subcategory.get("description");
+                Long parentId = (Long) subcategory.get("parentId");
+                categoryManager.createCategory(name, description, Optional.of(parentId));
+                categoryManager.getCategoryByName(name).getId();
+            }
+    
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.ok("done");
     }
 }

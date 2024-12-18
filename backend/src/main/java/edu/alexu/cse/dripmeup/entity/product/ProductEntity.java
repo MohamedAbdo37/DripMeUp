@@ -7,28 +7,17 @@ import java.util.Set;
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.*;
-
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
 import edu.alexu.cse.dripmeup.entity.EntityIF;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PRODUCT")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ProductEntity implements EntityIF {
 
     @Id
@@ -42,11 +31,11 @@ public class ProductEntity implements EntityIF {
     @Column(name = "DateOfCreation")
     private LocalDateTime time ;
 
-    @OneToMany(mappedBy= "Product")
-    private List<ItemEntity> items ;
-
     @Column(name = "State")
     private ProductState state ;
+
+    @OneToMany(mappedBy= "product", cascade = CascadeType.ALL)
+    private List<VariantEntity> variants;
 
     @ManyToMany
     @JoinTable(
@@ -59,6 +48,10 @@ public class ProductEntity implements EntityIF {
     @PrePersist
     protected void onCreate (){
         this.time = LocalDateTime.now() ;
+    }
+
+    public void addCategory(CategoryEntity c) {
+        this.categories.add(c);
     }
 
 }

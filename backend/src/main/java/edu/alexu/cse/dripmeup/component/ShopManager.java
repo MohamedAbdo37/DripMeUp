@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.CloudinaryUploader;
@@ -18,11 +19,13 @@ import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
+import edu.alexu.cse.dripmeup.repository.CategoryRepository;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ItemRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
 import edu.alexu.cse.dripmeup.service.ProductService;
+import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 
 @Component
 public class ShopManager {
@@ -47,6 +50,9 @@ public class ShopManager {
 
     @Autowired
     private CategoryManager categoryManager;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
     
     public ProductRepository getProductRepository() {
         return productRepository;
@@ -62,7 +68,13 @@ public class ShopManager {
 
     public Page<ProductSnapshot> getAllProducts(int page, int size) {
         Page<ProductEntity> products = new ProductService().getAllProducts(this.productRepository, page, size);
-        return products.map(this.productMapper::toPSDTO);
+        return products.map((product -> this.productMapper.toPSDTO(product, this)));
+    }
+
+    public Page<ProductSnapshot> getProductsByCategory(String category,int page, int size) {
+        CategoryEntity categoryEntity = this.categoryManager.getCategoryEntityByName(category);
+        Page<ProductEntity> products = new ProductService().getProductsByCategory(this.productRepository, categoryEntity, page, size);
+        return products.map((product -> this.productMapper.toPSDTO(product, this)));
     }
 
     public List<Variant> getVariantsOfProduct(ProductEntity product) {
@@ -73,7 +85,12 @@ public class ShopManager {
     }
 
     public String getImageOfProduct(ProductEntity product) {
-        return new ProductService().getImageOfProduct(product, this.variantRepository);
+        VariantEntity variant = this.minimumPrice(product);
+        if(variant == null)
+            return "";
+        if (variant.getVariantImages().isEmpty())
+            return "";
+        return variant.getVariantImages().get(0).getImagePath();
     }
 
     public Product getProduct(long productID) {
@@ -81,7 +98,21 @@ public class ShopManager {
     }
 
     public Product createProduct(Product product) {
-        return new Product(new ProductService().createProduct(this.productRepository, product), this);
+        List<CategoryEntity> categoryEntities = new ArrayList<>();
+
+        for(Category c: product.getCategories()){
+            CategoryEntity ce = this.categoryManager.getCategoryEntityByName(c.getName());
+            if (ce == null)
+                throw new RuntimeException("There is no with name " + c.getName());
+            categoryEntities.add(ce);
+        }
+        Product newProduct = new Product(new ProductService().createProduct(this.productRepository, product, categoryEntities), this);
+
+        for(CategoryEntity c: categoryEntities){
+            this.categoryRepository.save(c);
+        }
+
+        return newProduct;
     }
 
     public Variant crateVariant(Variant variant, Long productID) throws ProductCreationException {
@@ -120,6 +151,10 @@ public class ShopManager {
         return paths;
     }
 
+    private VariantEntity minimumPrice(ProductEntity product){
+        return new ProductService().minimumPrice(product);
+    }
+
     public List<Category> getProductCategories(ProductEntity product){
         List<Category> categories = new ArrayList<>();
         for(CategoryEntity c: product.getCategories()){
@@ -127,4 +162,20 @@ public class ShopManager {
         }
         return categories;
     }
+
+    public double getPriceOfProduct(ProductEntity productEntity) {
+        VariantEntity variant = this.minimumPrice(productEntity);
+        if(variant == null)
+            return 0;
+        return variant.getPrice();
+    }
+
+    public double getDicountOfProduct(ProductEntity productEntity) {
+        VariantEntity variant = this.minimumPrice(productEntity);
+        if(variant == null)
+            return 0;
+        return variant.getDiscount();
+    }
+
 }
+

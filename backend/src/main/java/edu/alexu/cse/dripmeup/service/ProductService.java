@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.Variant;
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
@@ -44,9 +45,9 @@ public class ProductService {
         return productRepository.findByProductID(productID);
     }
 
-    public ProductEntity createProduct(ProductRepository productRepository, Product product) {
+    public ProductEntity createProduct(ProductRepository productRepository, Product product, List<CategoryEntity> categories) {
         ProductDirector director = new ProductDirector(productRepository);
-        director.construct(new ProductBuilder(product));
+        director.construct(new ProductBuilder(product, categories));
         return director.getProduct();
     }
 
@@ -64,6 +65,26 @@ public class ProductService {
 
     public List<VariantImageEntity> getImagesOfVariant(VariantEntity variant) {
         return variant.getVariantImages();
+    }
+
+    public VariantEntity minimumPrice(ProductEntity product) {
+        VariantEntity variantEntity = null;
+        double minimumPrice = Double.MAX_VALUE;
+
+        for(VariantEntity v: product.getVariants()){
+            double value = v.getPrice() * v.getDiscount();
+            if(variantEntity == null || value < minimumPrice){
+                variantEntity = v;
+                minimumPrice = value;
+            }
+        }
+        return variantEntity;
+    }
+
+    public Page<ProductEntity> getProductsByCategory(ProductRepository productRepository, CategoryEntity categoryEntity,
+            int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategories(categoryEntity, pageable);
     }
 
 }

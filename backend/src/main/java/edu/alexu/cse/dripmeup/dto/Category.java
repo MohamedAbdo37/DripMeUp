@@ -7,17 +7,16 @@ import java.util.stream.Collectors;
 
 public class Category {
 
-    private CategoryEntity categoryEntity;
+    private Long id;
     private String name;
     private String description;
     private List<String> subcategoryNames;
-
     public Category() {
     }
 
     public Category(CategoryEntity categoryEntity) {
 
-        this.categoryEntity = categoryEntity;
+        this.id = categoryEntity.getId();
         this.name = categoryEntity.getName();
         this.description = categoryEntity.getDescription();
         this.subcategoryNames = categoryEntity.getSubcategories().stream()
@@ -50,6 +49,6 @@ public class Category {
     }
 
     public Long getId() {
-        return this.categoryEntity.getId();
+        return this.id;
     }
 }

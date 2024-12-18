@@ -87,4 +87,8 @@ public class CategoryEntity {
     public void setParentId(Optional<Long> parentID) {
         this.parentID = parentID.orElse(null);
     }
+
+    public void addProduct(ProductEntity productEntity) {
+        this.products.add(productEntity);
+    }
 }
