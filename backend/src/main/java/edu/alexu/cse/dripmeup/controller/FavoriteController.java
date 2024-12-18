@@ -69,7 +69,7 @@ public class FavoriteController {
 
         try{
             return ResponseEntity.status(200).body(ResponseBodyMessage
-                    .messaage(favoriteService.deleteElement(USER_ID , variantId)));
+                    .message(favoriteService.deleteElement(USER_ID , variantId)));
         }
         catch (FavoriteException e){
             return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;
