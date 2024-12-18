@@ -41,11 +41,10 @@ public class ProductDirector {
         this.builder.build();
     }
 
-    // public void edit(ProductBuilderIF builder) {
-    //     if(builder instanceof ProductBuilder) {
-            
-    //     }
-    // }
+    public void reconstruct(ProductBuilderIF builder) {
+        this.builder = builder;
+        this.builder.build();
+    }
 
     public ProductEntity getProduct(){
         ProductBuilder productBuilder = (ProductBuilder) this.builder;

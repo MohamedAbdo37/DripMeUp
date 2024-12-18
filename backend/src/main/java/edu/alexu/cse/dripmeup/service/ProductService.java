@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.Variant;
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
+import edu.alexu.cse.dripmeup.exception.EODException;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
@@ -22,12 +25,14 @@ import edu.alexu.cse.dripmeup.service.builder.VariantImageBuilder;
 public class ProductService {
 
     public Page<ProductEntity> getAllProducts(ProductRepository productRepository, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size); // page starts from 0
+        Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
 
     public String getImageOfProduct(ProductEntity product, VariantRepository variantRepository) {
         List<VariantEntity> variants = variantRepository.findByProduct(product);
+        if(variants == null || variants.isEmpty())
+            throw new EODException("there is no data available");
         return variants.get(0).getVariantImages().get(0).getImagePath();
     }
 
@@ -35,13 +40,14 @@ public class ProductService {
         return product.getVariants();
     }
 
-    public ProductEntity getProduct(ProductRepository productRepository, long productID) {
-        return productRepository.findById(productID).get();
+
+    public ProductEntity getProduct(ProductRepository productRepository,long productID) {
+        return productRepository.findByProductID(productID);
     }
 
-    public ProductEntity createProduct(ProductRepository productRepository, Product product) {
+    public ProductEntity createProduct(ProductRepository productRepository, Product product, List<CategoryEntity> categories) {
         ProductDirector director = new ProductDirector(productRepository);
-        director.construct(new ProductBuilder(product));
+        director.construct(new ProductBuilder(product, categories));
         return director.getProduct();
     }
 
@@ -55,6 +61,30 @@ public class ProductService {
         ProductDirector director = new ProductDirector(imageRepository);
         director.construct(new VariantImageBuilder(path, variant));
         director.getImage();
+    }
+
+    public List<VariantImageEntity> getImagesOfVariant(VariantEntity variant) {
+        return variant.getVariantImages();
+    }
+
+    public VariantEntity minimumPrice(ProductEntity product) {
+        VariantEntity variantEntity = null;
+        double minimumPrice = Double.MAX_VALUE;
+
+        for(VariantEntity v: product.getVariants()){
+            double value = v.getPrice() * v.getDiscount();
+            if(variantEntity == null || value < minimumPrice){
+                variantEntity = v;
+                minimumPrice = value;
+            }
+        }
+        return variantEntity;
+    }
+
+    public Page<ProductEntity> getProductsByCategory(ProductRepository productRepository, CategoryEntity categoryEntity,
+            int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategories(categoryEntity, pageable);
     }
 
 }

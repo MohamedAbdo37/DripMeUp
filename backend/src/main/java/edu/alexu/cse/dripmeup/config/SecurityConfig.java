@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.config;
 
-import edu.alexu.cse.dripmeup.JwtAuthFilter;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
+import edu.alexu.cse.dripmeup.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -54,9 +53,10 @@ public class SecurityConfig {
                                 "/api/5/users/signup",
                                 "/api/5/users/signup",
                                 "/api/6/admin/login",
-                                "/api/1000/shop/products",
-                                "/api/1000/shop/product")
-                        .permitAll()
+                                "/api/7/categories/",
+                                "/api/7/categories/{categoryName}"
+
+                        ).permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
                 .sessionManagement(sess -> sess

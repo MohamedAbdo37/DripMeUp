@@ -9,11 +9,11 @@ import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 
 @Component
 public class ProductMapper {
-    public ProductSnapshot toPSDTO(ProductEntity productEntity) {
-        return new ProductSnapshot(productEntity);
+    public ProductSnapshot toPSDTO(ProductEntity productEntity, ShopManager shop) {
+        return new ProductSnapshot(productEntity, shop);
     }
 
-    public Variant toVariantDTO(VariantEntity variantEntity) {
-        return new Variant(variantEntity);
+    public Variant toVariantDTO(VariantEntity variantEntity, ShopManager shopManager) {
+        return new Variant(variantEntity, shopManager);
     }
 }
