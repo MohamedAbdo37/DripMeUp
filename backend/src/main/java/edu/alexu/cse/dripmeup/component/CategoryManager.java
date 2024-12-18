@@ -1,5 +1,5 @@
 // src/main/java/edu/alexu/cse/dripmeup/manager/CategoryManager.java
-package edu.alexu.cse.dripmeup.manager;
+package edu.alexu.cse.dripmeup.component;
 
 import edu.alexu.cse.dripmeup.dto.Category;
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;

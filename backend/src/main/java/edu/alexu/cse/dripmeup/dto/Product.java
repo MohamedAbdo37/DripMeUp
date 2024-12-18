@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,6 +29,7 @@ public class Product {
         this.variants = shopManager.getVariantsOfProduct(productEntity);
         this.rate = 5.0;
         this.numberOfFeedback = 1;
+        this.categories = shopManager.getProductCategories(productEntity);
     }
     
     private @Setter @Getter Long productID;
@@ -37,5 +39,6 @@ public class Product {
     private @Setter @Getter List<Variant> variants;
     private @Setter @Getter double rate;
     private @Setter @Getter int numberOfFeedback;
+    private @Setter @Getter List<Category> categories;
     
 }

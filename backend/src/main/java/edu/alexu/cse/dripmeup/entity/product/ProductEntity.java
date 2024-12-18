@@ -50,9 +50,9 @@ public class ProductEntity implements EntityIF {
 
     @ManyToMany
     @JoinTable(
-            name = "PRODUCT_CATEGORY",
-            joinColumns = @JoinColumn(name = "productID"),
-            inverseJoinColumns = @JoinColumn(name = "categoryID")
+        name = "PRODUCT_CATEGORY",
+        joinColumns = @JoinColumn(name = "productID"),
+        inverseJoinColumns = @JoinColumn(name = "categoryID")
     )
     private Set<CategoryEntity> categories;
 

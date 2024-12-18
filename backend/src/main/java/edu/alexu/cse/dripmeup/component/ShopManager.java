@@ -9,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.CloudinaryUploader;
+import edu.alexu.cse.dripmeup.dto.Category;
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
@@ -42,6 +44,9 @@ public class ShopManager {
 
     @Autowired
     private CloudinaryUploader cloudinaryUploader;
+
+    @Autowired
+    private CategoryManager categoryManager;
     
     public ProductRepository getProductRepository() {
         return productRepository;
@@ -113,5 +118,13 @@ public class ShopManager {
             
         }
         return paths;
+    }
+
+    public List<Category> getProductCategories(ProductEntity product){
+        List<Category> categories = new ArrayList<>();
+        for(CategoryEntity c: product.getCategories()){
+            categories.add(this.categoryManager.getCategoryByName(c.getName()));
+        }
+        return categories;
     }
 }

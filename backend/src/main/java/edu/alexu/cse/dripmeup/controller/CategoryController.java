@@ -1,9 +1,7 @@
 package edu.alexu.cse.dripmeup.controller;
 
+import edu.alexu.cse.dripmeup.component.CategoryManager;
 import edu.alexu.cse.dripmeup.dto.Category;
-import edu.alexu.cse.dripmeup.entity.CategoryEntity;
-import edu.alexu.cse.dripmeup.manager.CategoryManager;
-import edu.alexu.cse.dripmeup.service.CategoryService;
 import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
