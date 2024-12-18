@@ -1,0 +1,282 @@
+package edu.alexu.cse.dripmeup;
+
+import edu.alexu.cse.dripmeup.entity.FavoriteEntity;
+import edu.alexu.cse.dripmeup.entity.UserEntity;
+import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
+import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import edu.alexu.cse.dripmeup.exception.CartException.CartException;
+import edu.alexu.cse.dripmeup.exception.FavoriteException;
+import edu.alexu.cse.dripmeup.repository.FavoriteRepository;
+import edu.alexu.cse.dripmeup.repository.UserRepository;
+import edu.alexu.cse.dripmeup.repository.VariantRepository;
+import edu.alexu.cse.dripmeup.service.FavoriteService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+public class FavoriteTest {
+    @Mock
+    @Autowired
+    private VariantRepository variantRepository ;
+
+    @Mock
+    @Autowired
+    private UserRepository userRepository ;
+
+    @Mock
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+
+    @InjectMocks
+    @Autowired
+    private FavoriteService favoriteService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this); // Initialize mocks
+    }
+
+    @Test
+    void testAddElementWithNullUser() {
+        try {
+            // return null with user
+            when(userRepository.findByUserID(1L)).thenReturn(null);
+            favoriteService.addElement(1L , 1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("user doesn't exist." , e.getMessage());
+        }
+    }
+
+    @Test
+    void testAddElementWithNullVariant() {
+        try {
+            UserEntity mockUser = new UserEntity() ;
+            mockUser.setEmail("ni254828@gmail.com");
+            mockUser.setUserID(1L);
+
+            // return non null user
+            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+            //return null with variant
+            when(variantRepository.findByVariantID(1L)).thenReturn(null);
+
+            favoriteService.addElement(1L , 1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("variant doesn't exist.", e.getMessage());
+        }
+    }
+
+    @Test
+    void testAddElementNotPreviouslyExisting() {
+        // not null user
+        UserEntity mockUser = new UserEntity() ;
+        mockUser.setEmail("ni254828@gmail.com");
+        mockUser.setUserID(1L);
+
+        // mock getting user
+        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+        // not null variant
+        VariantEntity mockVariant = new VariantEntity() ;
+        mockVariant.setVariantID(1L);
+        mockVariant.setStock(1);
+
+        // mock getting variant
+        when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+
+        when(favoriteRepository.findByUserAndVariant(mockUser , mockVariant)).thenReturn(null);
+
+        when(favoriteRepository.save(new FavoriteEntity(mockUser , mockVariant))).thenReturn(null);
+
+        assertEquals("Element has been added successfully." , favoriteService.addElement(1L , 1L));
+    }
+
+
+    @Test
+    void testAddElementPreviouslyExisting() {
+        // not null user
+        UserEntity mockUser = new UserEntity() ;
+        mockUser.setEmail("ni254828@gmail.com");
+        mockUser.setUserID(1L);
+
+        // mock getting user
+        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+        // not null variant
+        VariantEntity mockVariant = new VariantEntity() ;
+        mockVariant.setVariantID(1L);
+        mockVariant.setStock(3);
+
+        // mock getting variant
+        when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+
+        when(favoriteRepository.findByUserAndVariant(mockUser , mockVariant)).thenReturn(new FavoriteEntity(mockUser , mockVariant));
+
+        assertEquals("Element exists already." , favoriteService.addElement(1L , 1L));
+    }
+    @Test
+    void testDeleteElementWithNullUser() {
+        try {
+            // return null with user
+            when(userRepository.findByUserID(1L)).thenReturn(null);
+            favoriteService.deleteElement(1L , 1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("user doesn't exist." , e.getMessage());
+        }
+    }
+
+    @Test
+    void testDeleteElementWithNullVariant() {
+        try {
+            UserEntity mockUser = new UserEntity() ;
+            mockUser.setEmail("ni254828@gmail.com");
+            mockUser.setUserID(1L);
+
+            // return non null user
+            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+            //return null with variant
+            when(variantRepository.findByVariantID(1L)).thenReturn(null);
+
+            favoriteService.deleteElement(1L , 1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("variant doesn't exist.", e.getMessage());
+        }
+    }
+
+    @Test
+    void testDeleteElementPreviouslyNotExisting() {
+        try {
+            UserEntity mockUser = new UserEntity() ;
+            mockUser.setEmail("ni254828@gmail.com");
+            mockUser.setUserID(1L);
+            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+
+            VariantEntity mockVariant = new VariantEntity() ;
+            mockVariant.setVariantID(1L);
+            mockVariant.setStock(1);
+            when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+
+            when(favoriteRepository.deleteByUserAndVariant(mockUser , mockVariant)).thenReturn(0L) ;
+            favoriteService.deleteElement(1L , 1L) ;
+        }
+        catch (FavoriteException e){
+            assertEquals("element doesn't exist in favorites of user.", e.getMessage());
+        }
+    }
+
+    @Test
+    void testDeleteElementPreviouslyExisting() throws FavoriteException{
+        UserEntity mockUser = new UserEntity() ;
+        mockUser.setEmail("ni254828@gmail.com");
+        mockUser.setUserID(1L);
+
+        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+
+        VariantEntity mockVariant = new VariantEntity() ;
+        mockVariant.setVariantID(1L);
+        mockVariant.setStock(1);
+        when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+
+        when(favoriteRepository.deleteByUserAndVariant(mockUser , mockVariant)).thenReturn(1L) ;
+
+        assertEquals(favoriteService.deleteElement(1L , 1L) , "Element has been deleted successfully.") ;
+    }
+
+    @Test
+    void testEmptyCartWithNullUser() {
+        try {
+            // return null with user
+            when(userRepository.findByUserID(1L)).thenReturn(null);
+            favoriteService.clearFavorite(1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("user doesn't exist." , e.getMessage());
+        }
+    }
+
+    @Test
+    void testEmptyCartPreviouslyNotExisting() {
+        try {
+            UserEntity mockUser = new UserEntity() ;
+            mockUser.setEmail("ni254828@gmail.com");
+            mockUser.setUserID(1L);
+
+            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+            when(favoriteRepository.deleteAllByUser(mockUser)).thenReturn(0L) ;
+
+            favoriteService.clearFavorite(1L) ;
+        }
+        catch (FavoriteException e){
+            assertEquals("No elements to be deleted from favorites." , e.getMessage());
+        }
+    }
+
+    @Test
+    void testEmptyCartPreviouslyExisting() throws CartException{
+        UserEntity mockUser = new UserEntity() ;
+        mockUser.setEmail("ni254828@gmail.com");
+        mockUser.setUserID(1L);
+
+        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+        when(favoriteRepository.deleteAllByUser(mockUser)).thenReturn(5L) ;
+
+        assertEquals(favoriteService.clearFavorite(1L) , "5 elements have been deleted.") ;
+    }
+
+    @Test
+    void testGetCartWithNullUser() {
+        try {
+            // return null with user
+            when(userRepository.findByUserID(1L)).thenReturn(null);
+            favoriteService.getFavorites(1L);
+        }
+        catch (FavoriteException e){
+            assertEquals("user doesn't exist." , e.getMessage());
+        }
+    }
+    @Test
+    void testGetCart() {
+        UserEntity mockUser = new UserEntity() ;
+        mockUser.setEmail("ni254828@gmail.com");
+        mockUser.setUserID(1L);
+
+        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+        VariantEntity var = new VariantEntity() ;
+        var.setVariantID(1L);
+        var.setStock(1);
+        var.setProduct(new ProductEntity());
+        var.setVariantImages(new LinkedList<>()) ;
+
+        List<FavoriteEntity> mockFavorite = new ArrayList<>() ;
+        mockFavorite.add(new FavoriteEntity(mockUser , var));
+
+        when(favoriteRepository.findAllByUserOrderByTimeDesc(mockUser)).thenReturn(mockFavorite) ;
+
+        favoriteService.getFavorites(1L) ;
+    }
+
+}
