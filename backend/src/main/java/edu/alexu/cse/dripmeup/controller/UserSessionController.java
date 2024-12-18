@@ -54,7 +54,7 @@ public class UserSessionController {
 
         }
     }
-    
+
 
     @GetMapping("/g/login")
     public ResponseEntity<String> googleLogIn(@RequestHeader("IDToken") String token) {
@@ -89,7 +89,7 @@ public class UserSessionController {
 
     @GetMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
-            @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
+                                                 @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
 
         if (!this.sessionID.equals(Long.valueOf(sessionID)))
             return ResponseEntity.status(400).body("Not Authorized");
@@ -106,7 +106,7 @@ public class UserSessionController {
 
     @GetMapping("signup/code")
     public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email,
-            @RequestHeader("UserName") String userName) {
+                                                 @RequestHeader("UserName") String userName) {
         try {
             String code = sessionManager.generateCodeSignUp(email, userName);
             return ResponseEntity.ok(code);
@@ -119,7 +119,7 @@ public class UserSessionController {
 
     @GetMapping("/forgotPassword/code")
     public ResponseEntity<String> sendCodeForgetPassword(@RequestHeader("Email") String email,
-            @RequestHeader("UserName") String userName) {
+                                                         @RequestHeader("UserName") String userName) {
         System.out.println("userName" + userName);
         try {
             String code = sessionManager.generateCodeForgetPassword(email, userName);
@@ -133,7 +133,7 @@ public class UserSessionController {
 
     @GetMapping("/checkCode")
     public ResponseEntity<Long> checkCodeForgetPassword(@RequestHeader("CodeID") String codeID,
-            @RequestHeader("Code") String code) {
+                                                        @RequestHeader("Code") String code) {
         if (this.sessionManager.checkCode(codeID, code))
             return ResponseEntity.ok(this.sessionID);
         else

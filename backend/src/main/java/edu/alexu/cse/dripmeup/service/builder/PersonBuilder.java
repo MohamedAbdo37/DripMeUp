@@ -3,22 +3,21 @@ package edu.alexu.cse.dripmeup.service.builder;
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
 import edu.alexu.cse.dripmeup.entity.Person;
 import edu.alexu.cse.dripmeup.entity.UserEntity;
+import edu.alexu.cse.dripmeup.exception.PersonException;
 import edu.alexu.cse.dripmeup.service.DatabaseService;
 import edu.alexu.cse.dripmeup.enumeration.Gender;
 import edu.alexu.cse.dripmeup.enumeration.Role;
 import edu.alexu.cse.dripmeup.enumeration.Theme;
 
-public abstract class Builder {
+public abstract class PersonBuilder{
     private final Person person;
 
-    protected Builder() {
+    protected PersonBuilder() {
         this.person = new Person();
         this.person.setPhoto(null);
         this.person.setDescription(null);
         this.person.setTheme(Theme.LIGHT);
     }
-
-    public abstract void build();
 
     public void buildRole(Role role) {
         this.person.setRole(role);
@@ -83,12 +82,6 @@ public abstract class Builder {
 
     }
 
-}
-
-class PersonException extends RuntimeException {
-
-    public PersonException(String message) {
-        super(message);
-    }
+    public abstract void build();
 
 }
