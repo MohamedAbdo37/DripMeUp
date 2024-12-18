@@ -21,7 +21,7 @@ import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
 import edu.alexu.cse.dripmeup.repository.CategoryRepository;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
-import edu.alexu.cse.dripmeup.repository.ItemRepository;
+//import edu.alexu.cse.dripmeup.repository.ItemRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
 import edu.alexu.cse.dripmeup.service.ProductService;
@@ -36,8 +36,8 @@ public class ShopManager {
     @Autowired
     private VariantRepository variantRepository;
 
-    @Autowired
-    private ItemRepository itemRepository;
+//    @Autowired
+//    private ItemRepository itemRepository;
 
     @Autowired
     private ProductMapper productMapper;
@@ -62,9 +62,9 @@ public class ShopManager {
         return variantRepository;
     }
 
-    public ItemRepository getItemRepository() {
-        return itemRepository;
-    }
+//    public ItemRepository getItemRepository() {
+//        return itemRepository;
+//    }
 
     public Page<ProductSnapshot> getAllProducts(int page, int size) {
         Page<ProductEntity> products = new ProductService().getAllProducts(this.productRepository, page, size);

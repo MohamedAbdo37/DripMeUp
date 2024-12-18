@@ -37,8 +37,6 @@ public class ProductEntity implements EntityIF {
     @Column(name = "State")
     private ProductState state;
 
-    @OneToMany(mappedBy= "product", cascade = CascadeType.ALL)
-    private List<VariantEntity> variants;
 
     @ManyToMany
     @JoinTable(
