@@ -81,14 +81,113 @@ const HomePage = () => {
     ]
   }); // Category structure from API
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-
+  const mapCategoryTree = (categories) => {
+    const categoryMap = {};
+  
+    // Create a map of categories by name
+    categories.forEach(category => {
+      categoryMap[category.name] = {
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        subcategories: []
+      };
+    });
+  
+    // Build the tree structure
+    categories.forEach(category => {
+      category.subcategoryNames.forEach(subcategoryName => {
+        if (categoryMap[subcategoryName]) {
+          categoryMap[category.name].subcategories.push(categoryMap[subcategoryName]);
+        }
+      });
+    });
+  
+    // Find the root categories (those that are not subcategories of any other category)
+    const rootCategories = categories.filter(category => {
+      return !categories.some(cat => cat.subcategoryNames.includes(category.name));
+    });
+  
+    // Create the "All Categories" wrapper
+    const allCategoriesWrapper = {
+      id: 0,
+      name: "All Categories",
+      subcategories: rootCategories.map(category => categoryMap[category.name])
+    };
+  
+    // Return the tree structure with the "All Categories" wrapper
+    return allCategoriesWrapper;
+  };
+  
+  // Example usage
+  const backendCategories = [
+    {
+      "id": 1,
+      "name": "Men",
+      "description": "Men's clothing",
+      "subcategoryNames": [
+        "pants",
+        "cravats"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Women",
+      "description": "Women's clothing",
+      "subcategoryNames": [
+        "dress"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Children",
+      "description": "Children's clothing",
+      "subcategoryNames": [
+        "glasses"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "pants",
+      "description": "description",
+      "subcategoryNames": [
+        "jeans"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "cravats",
+      "description": "description",
+      "subcategoryNames": []
+    },
+    {
+      "id": 6,
+      "name": "dress",
+      "description": "description",
+      "subcategoryNames": []
+    },
+    {
+      "id": 7,
+      "name": "glasses",
+      "description": "description",
+      "subcategoryNames": []
+    },
+    {
+      "id": 8,
+      "name": "jeans",
+      "description": "description",
+      "subcategoryNames": []
+    }
+  ];
+  
+  console.log(categoryTree);
   // Function to fetch all products
   const fetchAllProducts = async (page = 1) => {
     const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=20`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
       }
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
@@ -131,15 +230,27 @@ const HomePage = () => {
   const fetchCategories = async () => {
     try {
       setIsLoadingCategories(true);
-      const response = await fetch("http://localhost:8081/api/7/categories/");
+      const response = await fetch("http://localhost:8081/api/7/categories/", {
+        method:'GET',
+        headers:{
+          'Content-Type': 'application/json',
+           'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+        }
+      });
       if (!response.ok) throw new Error("Failed to fetch categories");
 
       const data = await response.json();
 
       // Extract the category tree from the response
-      const tree = data.tree || {}; // Assuming `tree` is the key containing the category tree
-      setCategoryTree(tree);
-
+      const nodeTree = data || {}; // Assuming `tree` is the key containing the category tree
+      console.log("waiting for the tree...1");
+      console.log(nodeTree);
+      const nestedTree = mapCategoryTree(nodeTree)
+      console.log("waiting for the tree...2");
+      console.log(nestedTree);
+      setCategoryTree(nestedTree);
+      console.log("waiting for the tree...3");
+      console.log(nestedTree);
       setActiveCategory("All"); // Default to "All" products
     } catch (error) {
       console.error("Error fetching category data:", error);
@@ -214,15 +325,17 @@ const HomePage = () => {
   };
 
   const handleRenderStaticTree = () => {
-    setCategoryTree(staticTree);
-    expandAllCategories(staticTree);
+    const treee = mapCategoryTree(backendCategories);
+    console.log(treee);
+    setCategoryTree(treee);
+    //expandAllCategories(staticTree);
   };
   return (
     <div className="homepage">
       {/* Sidebar for Categories */}
       <div className="sidebar">
         <h3>Categories</h3>
-        <button onClick={handleRenderStaticTree}>Render Static Tree</button>
+        {/* <button onClick={handleRenderStaticTree}>Render Static Tree</button> */}
         <li
           className={`category ${activeCategory === "All" ? "active" : ""}`}
           onClick={() => {

@@ -19,11 +19,13 @@ const AddAdminBox = () =>{
     };
     const add = async (e)=>{
         e.preventDefault()
+        const token = localStorage.getItem('drip_me_up_jwt');
         const adminAdder = await fetch(`http://localhost:8081/api/6/admin/signup`, {
             method: "POST",
             headers:{
                 'UserName': username,
-                'Password': password
+                'Password': password,
+                'Authorization': `Bearer ${token}`
             }
         })
         .then(response=>response.status==200 || response.status==201?(() => { notifyAddedAdmin() })():(() => { throw new Error('Something went wrong'); })())
@@ -35,7 +37,7 @@ const AddAdminBox = () =>{
     return(
         <div className="formBox">
             <form id="loginForm" onSubmit={add}>
-                <header>Admin Login</header>
+                <header>Create Admin </header>
                 <label htmlFor='username'><b>Username</b></label>
                 <input type="text" name='username' placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required></input>
                 <label htmlFor="password"><b>Password</b></label>
