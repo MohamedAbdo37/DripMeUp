@@ -5,6 +5,8 @@ import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.service.builder.CategoryBuilder;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -18,7 +20,7 @@ public class CategoryBuilderTest {
         CategoryBuilder builder = new CategoryBuilder(categoryEntity);
 
         // Act
-        builder.build("Test Category", "Test Description", null);
+        builder.build("Test Category", "Test Description", Optional.empty());
         CategoryEntity result = builder.getResult();
 
         // Assert
@@ -35,7 +37,7 @@ public class CategoryBuilderTest {
         CategoryBuilder builder = new CategoryBuilder(categoryEntity);
 
         // Act
-        builder.build("Test Category", null, null);
+        builder.build("Test Category", null, Optional.empty());
         CategoryEntity result = builder.getResult();
 
         // Assert
@@ -52,7 +54,7 @@ public class CategoryBuilderTest {
         CategoryBuilder builder = new CategoryBuilder(categoryEntity);
 
         // Act
-        builder.build("", "Test Description", null);
+        builder.build("", "Test Description", Optional.empty());
         CategoryEntity result = builder.getResult();
 
         // Assert
