@@ -1,12 +1,8 @@
 package edu.alexu.cse.dripmeup.dto;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.alexu.cse.dripmeup.component.ShopManager;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
