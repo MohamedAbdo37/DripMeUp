@@ -187,7 +187,7 @@ const HomePage = () => {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
       }
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())

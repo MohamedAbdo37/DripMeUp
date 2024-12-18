@@ -59,7 +59,7 @@ const ProductPage = () =>{
             method:'GET',
             headers:{
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                 //'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
                 }
         })
         .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
