@@ -11,10 +11,7 @@ import HomePage from './Pages/HomePage';
 import ProductPage from './Pages/ProductPage';
 import UserNavBar from './Layouts/UserNavBar';
 import AdminNavBar from './Layouts/AdminNavBar';
-import UserNavBar from './Layouts/UserNavBar';
-import AdminNavBar from './Layouts/AdminNavBar';
 import FavouritesPage from './Pages/FavouritesPage';
-import AddAdminPage from './Pages/AddAdminPage';
 import AddAdminPage from './Pages/AddAdminPage';
 import CartPage from './Pages/CartPage';
 import SettingsPage from './Pages/SettingsPage';
@@ -33,10 +30,8 @@ function App() {
         <Route path='/signup' element={<SignupPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='/forgotpassword' element={<ForgotPasswordPage/>} errorElement= {<EmptyPage/>}/>
         <Route path='userSession' element={<UserNavBar/>} errorElement= {<EmptyPage/>}>
-        <Route path='userSession' element={<UserNavBar/>} errorElement= {<EmptyPage/>}>
           <Route index element={<HomePage/>} errorElement= {<EmptyPage/>}/>
           <Route path='profile' element={<UserProfilePage/>} errorElement= {<EmptyPage/>}/>
-          <Route path='product/:person/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='product/:person/:productID' element={<ProductPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='settings' element={<SettingsPage/>} errorElement= {<EmptyPage/>}/>
           <Route path='cart' element={<CartPage/>} errorElement= {<EmptyPage/>}/>
