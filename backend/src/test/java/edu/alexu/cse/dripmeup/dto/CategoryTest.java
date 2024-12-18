@@ -9,7 +9,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CategoryDTOTest {
+public class CategoryTest {
 
     @Test
     public void testMappingWithValidData() {
