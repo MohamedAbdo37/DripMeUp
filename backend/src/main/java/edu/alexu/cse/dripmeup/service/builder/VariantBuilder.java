@@ -78,6 +78,7 @@ public class VariantBuilder implements ProductBuilderIF {
 
     @Override
     public VariantEntity getResult() {
+        System.out.println(this.variantEntity);
         return this.variantEntity;
     }
 }

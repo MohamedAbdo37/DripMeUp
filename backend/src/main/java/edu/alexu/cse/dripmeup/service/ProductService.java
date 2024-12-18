@@ -13,6 +13,7 @@ import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
+import edu.alexu.cse.dripmeup.exception.EODException;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
@@ -24,12 +25,14 @@ import edu.alexu.cse.dripmeup.service.builder.VariantImageBuilder;
 public class ProductService {
 
     public Page<ProductEntity> getAllProducts(ProductRepository productRepository, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size); // page starts from 0
+        Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
 
     public String getImageOfProduct(ProductEntity product, VariantRepository variantRepository) {
         List<VariantEntity> variants = variantRepository.findByProduct(product);
+        if(variants == null || variants.isEmpty())
+            throw new EODException("there is no data available");
         return variants.get(0).getVariantImages().get(0).getImagePath();
     }
 
@@ -38,7 +41,7 @@ public class ProductService {
     }
 
     public ProductEntity getProduct(ProductRepository productRepository,long productID) {
-        return productRepository.findById(productID).get();
+        return productRepository.findByProductID(productID);
     }
 
     public ProductEntity createProduct(ProductRepository productRepository, Product product) {
