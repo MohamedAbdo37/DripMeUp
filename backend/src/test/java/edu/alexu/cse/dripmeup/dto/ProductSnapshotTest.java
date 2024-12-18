@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup.dto;
 
+import edu.alexu.cse.dripmeup.component.ShopManager;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class ProductSnapshotTest {
 
@@ -19,8 +21,11 @@ class ProductSnapshotTest {
         productEntity.setDescription("Test Product");
         productEntity.setTime(LocalDateTime.of(2024, 5, 20, 10, 30));
 
+        // Mock ShopManager
+         ShopManager shop = mock(ShopManager.class);
+
         // Create ProductSnapshot
-        ProductSnapshot snapshot = new ProductSnapshot(productEntity);
+        ProductSnapshot snapshot = new ProductSnapshot(productEntity, shop);
 
         assertEquals(1L, snapshot.getProductID(), "Product ID should match");
         assertEquals(100, snapshot.getPrice(), "Default price should be 100");

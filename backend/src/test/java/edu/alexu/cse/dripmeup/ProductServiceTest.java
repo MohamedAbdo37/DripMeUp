@@ -147,7 +147,7 @@ public class ProductServiceTest {
         when(productRepository.save(any(ProductEntity.class))).thenReturn(null);
 
         // Act
-        ProductEntity result = productService.createProduct(productRepository, productDto);
+        ProductEntity result = productService.createProduct(productRepository, productDto, null);
 
         // Assert
         assertNotNull(result);
