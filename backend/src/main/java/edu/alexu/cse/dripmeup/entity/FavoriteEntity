@@ -1,0 +1,69 @@
+package edu.alexu.cse.dripmeup.entity;
+
+import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+@Entity
+@Table(name = "FAVORITE")
+@Data
+public class FavoriteEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "favoriteID")
+    private Long favoriteID;
+
+
+    // many cart records reference single user
+    @ManyToOne
+    private UserEntity user ;
+
+    @ManyToOne
+    private VariantEntity variant ;
+
+    @Column(name = "time")
+    private LocalDateTime time ;
+
+    public FavoriteEntity() {
+    }
+
+
+    public FavoriteEntity(UserEntity user, VariantEntity variant) {
+        this.user = user;
+        this.variant = variant;
+    }
+
+
+    public UserEntity getUser() {
+        return this.user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public VariantEntity getVariant() {
+        return this.variant;
+    }
+
+    public void setVariant(VariantEntity variant) {
+        this.variant = variant;
+    }
+
+    @PrePersist
+    protected void onCreate (){
+        this.time = LocalDateTime.now() ;
+    }
+
+    public void onUpdate (){
+        this.time = LocalDateTime.now() ;
+    }
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+}
