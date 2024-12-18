@@ -34,7 +34,7 @@ public class CartService {
     public CartEntity validate(Long userID , Long variantID , int amount){
 
         VariantEntity variant = variantRepository.findByVariantID(variantID) ;
-        UserEntity user = userRepository.findByUserID(userID) ;
+        UserEntity user = userRepository.findById(userID).orElse(null) ;
 
         // check if user doesn't exist
         if(user == null)
@@ -99,7 +99,7 @@ public class CartService {
 
         // get user and variant records from database
         VariantEntity variant = variantRepository.findByVariantID(variantID) ;
-        UserEntity user = userRepository.findByUserID(userID) ;
+        UserEntity user = userRepository.findById(userID).orElse(null) ;
 
         // if user doesn't exist throw exception
         if(user == null)
@@ -122,7 +122,7 @@ public class CartService {
     public Long emptyCart(Long userid){
 
         // get user records from database
-        UserEntity user = userRepository.findByUserID(userid) ;
+        UserEntity user = userRepository.findById(userid).orElse(null) ;
         // if user doesn't exist throw exception
         if(user == null)
             throw new CartNotFoundException("user doesn't exist.");
@@ -141,7 +141,7 @@ public class CartService {
     public List<CartDTO> getCart(Long userID){
 
         // get user records from database
-        UserEntity user = userRepository.findByUserID(userID) ;
+        UserEntity user = userRepository.findById(userID).orElse(null) ;
         // if user doesn't exist throw exception
         if(user == null)
             throw new CartNotFoundException("user doesn't exist.");
