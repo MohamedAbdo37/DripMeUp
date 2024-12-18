@@ -2,11 +2,16 @@ import settings from '../assets/settings.png';
 import add from '../assets/add.png';
 import addAdmin from '../assets/addAdmin.png';
 import home from '../assets/home.png';
-import category from '../assets/category.png';
+import logout from '../assets/logout.png';
 import '../style.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 const AdminNavBar = ()=>{
     const navigate = useNavigate();
+    const handleLogout = ()=>{
+        localStorage.removeItem('drip_me_up_jwt');
+        navigate('/');
+    }
+
     return(
         <>
             <div className="navBar">
@@ -22,6 +27,9 @@ const AdminNavBar = ()=>{
                 </div>
                 <div className='navBarButtons'>
                 <img src={addAdmin} alt='profileIcon' style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>
+                </div>
+                <div className='navBarButtons'>
+                <img src={logout} alt='logoutIcon' onClick={ handleLogout }/>
                 </div>
             </div>
             <Outlet/>
