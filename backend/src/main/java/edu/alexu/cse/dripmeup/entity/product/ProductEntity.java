@@ -51,4 +51,24 @@ public class ProductEntity {
         this.time = LocalDateTime.now() ;
     }
 
+    public Long getProductID() {
+        return this.productID ;
+    }
+
+
+    public ProductState getState() {
+        return this.state ;
+    }
+
+    public String getDescription() {
+        return this.description ;
+    }
+
+    public Object getTime() {
+        return this.time ;
+    }
+
+    public void setProductID(Long productID) {
+        this.productID = productID;
+    }
 }

@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.entity.product;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import jakarta.persistence.CascadeType;
@@ -64,4 +65,64 @@ public class VariantEntity {
 
     @Column(name = "State")
     private ProductState state ;
+
+    public int getStock() {
+        return this.stock ;
+    }
+
+    public Long getVariantID() {
+        return this.variantID ;
+    }
+
+    public String getColor() {
+        return this.color ;
+    }
+
+    public String getWeight() {
+        return this.weight ;
+    }
+
+    public String getLength() {
+        return this.length ;
+    }
+
+    public String getSize() {
+        return this.size ;
+    }
+
+    public int getSold() {
+        return this.sold ;
+    }
+
+    public ProductState getState() {
+        return this.state ;
+    }
+
+    public ProductEntity getProduct(){
+        return this.product ;
+    }
+
+    public List<VariantImageEntity> getVariantImages(){
+        return this.variantImages ;
+    }
+
+    public double getPrice(){
+        return this.price ;
+    }
+
+    public void setVariantID(Long variantID) {
+        this.variantID = variantID;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public void setVariantImages(List<VariantImageEntity> variantImages) {
+        this.variantImages = variantImages;
+    }
 }

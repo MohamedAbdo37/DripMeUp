@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "USER")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class UserEntity implements EntityIF {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -85,6 +85,36 @@ public class UserEntity implements EntityIF {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Long getUserID() {
+        return  this.userID ;
+    }
+
+    public String getDescription() {
+        return this.description ;
+    }
+
+    public String getPhoto() {
+        return this.photo ;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo ;
+    }
+
+
+    public void setDescription(String description) {
+        this.description = description ;
+    }
+
+
+    public void setTheme(Theme theme) {
+        this.theme = theme ;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
 }

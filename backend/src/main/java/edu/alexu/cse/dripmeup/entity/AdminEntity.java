@@ -31,4 +31,24 @@ public class AdminEntity implements EntityIF {
 
     @Column(name = "theme")
     private Theme theme;
+
+    public void setUserName(String userName) {
+        this.userName = userName ;
+    }
+
+    public void setPassword(String password) {
+        this.password = password ;
+    }
+
+    public String getUserName() {
+        return this.userName ;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme ;
+    }
+
+    public String getPassword() {
+        return this.password ;
+    }
 }

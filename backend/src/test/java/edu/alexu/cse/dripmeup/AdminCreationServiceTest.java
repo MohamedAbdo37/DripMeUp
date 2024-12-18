@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
 import edu.alexu.cse.dripmeup.entity.Person;
-import edu.alexu.cse.dripmeup.Excpetion.HandlerException;
+import edu.alexu.cse.dripmeup.excpetion.HandlerException;
 import edu.alexu.cse.dripmeup.repository.AdminRepository;
 import edu.alexu.cse.dripmeup.service.AdminService;
 import edu.alexu.cse.dripmeup.service.handler.CreatorIsAdminHandler;

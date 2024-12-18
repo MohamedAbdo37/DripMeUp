@@ -20,5 +20,11 @@ public class VariantImageEntity {
     @Column(name = "Image")
     private String ImagePath;
 
+    public String getImagePath(){
+        return this.ImagePath ;
+    }
 
+    public void setImageID(Long imageID) {
+        ImageID = imageID;
+    }
 }

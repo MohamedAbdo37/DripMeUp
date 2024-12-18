@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.entity;
 
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -37,4 +38,33 @@ public class CodeEntity implements EntityIF {
     @Column(name = "expiredDate")
     private LocalDateTime expiredDate;
 
+    public Integer getCode() {
+        return this.code ;
+    }
+
+
+    public void setCode(int code) {
+        this.code = code ;
+    }
+
+    public void setEmail(String email) {
+        this.email = email ;
+    }
+
+
+    public LocalDateTime getExpiredDate() {
+        return this.expiredDate ;
+    }
+
+    public void setExpiredDate(LocalDateTime localDateTime) {
+        this.expiredDate = localDateTime ;
+    }
+
+    public void setCreatedDate(LocalDateTime now) {
+        this.createdDate = now ;
+    }
+
+    public Long getCodeID() {
+        return this.codeID ;
+    }
 }
