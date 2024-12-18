@@ -11,7 +11,61 @@ const HomePage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [openCategories, setOpenCategories] = useState({});
   const [products, setProducts] = useState([]);
-  const [categoryTree, setCategoryTree] = useState({}); // Category structure from API
+  const [categoryTree, setCategoryTree] = useState({
+    "id": 1,
+    "name": "All Categories",
+    "subcategories": [
+      {
+        "id": 2,
+        "name": "Men",
+        "subcategories": [
+          {
+            "id": 3,
+            "name": "Shirts",
+            "subcategories": []
+          },
+          {
+            "id": 4,
+            "name": "Pants",
+            "subcategories": [
+              {
+                "id": 5,
+                "name": "Jeans",
+                "subcategories": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Women",
+        "subcategories": [
+          {
+            "id": 7,
+            "name": "Dresses",
+            "subcategories": []
+          },
+          {
+            "id": 8,
+            "name": "Skirts",
+            "subcategories": [
+              {
+                "id": 9,
+                "name": "Mini Skirts",
+                "subcategories": []
+              },
+              {
+                "id": 10,
+                "name": "Long Skirts",
+                "subcategories": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }); // Category structure from API
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
   // Function to fetch all products
@@ -109,49 +163,67 @@ const HomePage = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  const expandAllCategories = (category) => {
+    const openCategories = {};
+    const traverse = (node) => {
+      openCategories[node.id] = true;
+      if (node.subcategories) {
+        node.subcategories.forEach(traverse);
+      }
+    };
+    traverse(category);
+    setOpenCategories(openCategories);
+  };
 
+  const renderCategoryTree = (category, level = 0) => {
+    if (!category) return null;
+
+    return (
+      <ul key={category.id} className={`level-${level}`}>
+        <li>
+          <div className="category-item" onClick={() => handleCategoryClick(category.name)}>
+            <span>{category.name}</span>
+            {category.subcategories && category.subcategories.length > 0 && (
+              <span className="toggle" onClick={(e) => { e.stopPropagation(); toggleCategory(category.id); }}>
+                {openCategories[category.id] ? "-" : "+"}
+              </span>
+            )}
+          </div>
+          {openCategories[category.id] && (
+            <ul>
+              {category.subcategories.map((subcategory) => renderCategoryTree(subcategory, level + 1))}
+            </ul>
+          )}
+        </li>
+      </ul>
+    );
+  };
+
+  const handleRenderStaticTree = () => {
+    setCategoryTree(staticTree);
+    expandAllCategories(staticTree);
+  };
   return (
     <div className="homepage">
       {/* Sidebar for Categories */}
       <div className="sidebar">
         <h3>Categories</h3>
-        {isLoadingCategories ? (
-          <p>Loading categories...</p>
-        ) : (
-          Object.keys(categoryTree).map((mainCategory) => (
-            <div key={mainCategory} className="category-group">
-              <h4
-                className="collapsible-header"
-                onClick={() => toggleCategory(mainCategory)}
-              >
-                {mainCategory} {openCategories[mainCategory] ? "-" : "+"}
-              </h4>
-              {openCategories[mainCategory] && (
-                <ul>
-                  {categoryTree[mainCategory].map((subcategory) => (
-                    <li
-                      key={subcategory}
-                      className={`category ${
-                        activeCategory === subcategory ? "active" : ""
-                      }`}
-                      onClick={() => handleCategoryClick(subcategory)}
-                    >
-                      {subcategory}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))
-        )}
+        <button onClick={handleRenderStaticTree}>Render Static Tree</button>
         <li
           className={`category ${activeCategory === "All" ? "active" : ""}`}
-          onClick={() => handleCategoryClick("All")}
+          onClick={() => {
+            handleCategoryClick("All");
+            expandAllCategories(categoryTree);
+          }}
         >
           Show All
         </li>
+        {isLoadingCategories ? (
+          <p>Loading categories...</p>
+        ) : (
+          categoryTree && renderCategoryTree(categoryTree)
+        )}
       </div>
-
       {/* Product Grid */}
       <div className="content">
         <div className="product-grid">
