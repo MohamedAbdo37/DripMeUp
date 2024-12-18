@@ -28,9 +28,7 @@ const HomePage = () => {
       console.log(data.content)
       setProducts(data.content);
       setTotalPages(Math.ceil(data.totalItems / ITEMS_PER_PAGE));
-    } catch (error) {
-      console.error("Error fetching all products:", error);
-    }
+    })
   };
 
   // Function to fetch products for a specific category
@@ -158,7 +156,7 @@ const HomePage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/${product.productID}`)}>
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/user/${product.productID}`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />
               <div className="product-details">
