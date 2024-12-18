@@ -10,7 +10,21 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [openCategories, setOpenCategories] = useState({});
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([
+    {
+      "productID": 1,
+      "productImage": "https://example.com/image1.jpg",
+      "price": "$19.99",
+      "description": "Product 1 description"
+    },
+    {
+      "productID": 2,
+      "productImage": "https://example.com/image2.jpg",
+      "price": "$29.99",
+      "description": "Product 2 description"
+    },
+    // More products...
+  ]);
   const [categoryTree, setCategoryTree] = useState({
     "id": 1,
     "name": "All Categories",
