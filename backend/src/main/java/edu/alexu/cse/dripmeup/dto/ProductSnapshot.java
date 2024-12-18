@@ -1,13 +1,11 @@
 package edu.alexu.cse.dripmeup.dto;
 
-
 import edu.alexu.cse.dripmeup.component.ShopManager;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import lombok.Getter;
 
 public class ProductSnapshot {
-    
 
     public ProductSnapshot(ProductEntity productEntity, ShopManager shop) {
         this.productID = productEntity.getProductID();

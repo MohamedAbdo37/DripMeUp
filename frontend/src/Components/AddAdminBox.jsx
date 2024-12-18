@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
+import { toast } from "react-toastify";
+
 import '../style.css';
-import {jwtDecode} from 'jwt-decode';
 
 const AddAdminBox = () =>{
     const [username, setUsername] = useState('');
@@ -9,40 +10,38 @@ const AddAdminBox = () =>{
     const [errorMessage, setErrorMessage] = useState('');
     const [errorTrigger, setErrorTrigger] = useState('');
     const navigate = useNavigate();
-    const location = useLocation();
-    const { superID } = location.state || {};
-
-    const addAdmin = async (e)=>{
+    
+    const notifyAddedAdmin = () => {
+      toast.success(`New admin added successfully`);
+    };
+    const notifyFailAddedAdmin = () => {
+      toast.success(`Failed to add a new admin`);
+    };
+    const add = async (e)=>{
         e.preventDefault()
-        console.log({
-            'UserName': username,
-            'Password': password,
-            'SuperID': 12345
-        });
-        const loginUser = await fetch(`http://localhost:8081/api/6/admin/signup`, {
+        const adminAdder = await fetch(`http://localhost:8081/api/6/admin/signup`, {
             method: "POST",
             headers:{
                 'UserName': username,
-                'Password': password,
-                'SuperID': 12345
+                'Password': password
             }
         })
-        .then(response=>{response.status==200 || response.status==201?(() => { setErrorMessage('');alert("Admin added successfully"); })():(() => { throw new Error('Something went wrong'); })()})
-        .catch(async (error)=>{
-            setErrorMessage('Username already exists in the system');
-            setErrorTrigger('usernameError');
+        .then(response=>response.status==200 || response.status==201?(() => { notifyAddedAdmin() })():(() => { throw new Error('Something went wrong'); })())
+        .catch(error=>{
+            notifyFailAddedAdmin();
+            console.log(e);
         });
     }
     return(
         <div className="formBox">
-            <form id="loginForm" onSubmit={addAdmin}>
-                <header>Add Admin</header>
+            <form id="loginForm" onSubmit={add}>
+                <header>Admin Login</header>
                 <label htmlFor='username'><b>Username</b></label>
                 <input type="text" name='username' placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required></input>
                 <label htmlFor="password"><b>Password</b></label>
                 <input type="password" name='password' placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required></input>
                 {errorTrigger == "usernameError"?<p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>:<></>}
-                <button className="loginButton" form="loginForm" type="submit">Add Admin</button>
+                <button className="loginButton" form="loginForm" type="submit">Add</button>
             </form>
         </div>
     );

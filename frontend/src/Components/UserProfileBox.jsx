@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import unknownPhoto from '../assets/unknown.jpg'; // Adjust the path as necessary
 import UploadPhoto from './UploadPhoto';
 import ChangePassword from './ChangePassword';
-
+import SignupPage from '../Pages/SignupPage';
+import { useNavigate } from 'react-router-dom';
+import edit from '../assets/edit.png'
+import '../style.css';
 const UserProfileBox = () => {
-  const location = useLocation();
-  const { user: initialUser } = location.state || {};
-  const [user, setUser] = useState(initialUser);
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadPhotoOpen, setIsUploadPhotoOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
@@ -19,7 +19,7 @@ const UserProfileBox = () => {
     phoneNumber: ''
   });
   const [profilePhoto, setProfilePhoto] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('drip_me_up_jwt');
@@ -129,8 +129,17 @@ const UserProfileBox = () => {
     setUser({ ...user, profilePhoto: newPhoto });
   };
 
+  const handleLogout = () =>{
+    localStorage.removeItem('drip_me_up_jwt');
+    navigate('/');
+  };
+
   if (!user) {
-    return <div>Loading...</div>;
+    return(
+      <center>
+        <h1>You are a Guest</h1>
+        <button className='backButton' onClick={()=>navigate('/signup')}>Signup First</button>
+      </center>);
   }
 
   return (
@@ -178,9 +187,10 @@ const UserProfileBox = () => {
               <ProfileButton type="button" onClick={handleCancelClick}>
                 Cancel
               </ProfileButton>
-              <ProfileButton type="button" onClick={handleUploadPhotoOpen}>
-                Upload Photo
-              </ProfileButton>
+              {/* <ProfileButton type="button" onClick={handleUploadPhotoOpen}>
+                <img src={edit} style={{scale:"0.6"}}/>
+              </ProfileButton> */}
+              <img src={edit} style={{width: "2rem", height: "2rem", cursor: "pointer", transform: "translate(200%, -850%)", margin: "0"}} onClick={handleUploadPhotoOpen}/>
               <ProfileButton type="button" onClick={handleChangePasswordOpen}>
                 Change Password
               </ProfileButton>
@@ -194,6 +204,7 @@ const UserProfileBox = () => {
           <ProfileInfo>Gender: {user.gender}</ProfileInfo>
           <ProfileInfo>Phone Number: {user.phoneNumber}</ProfileInfo>
           <ProfileButton onClick={handleEditClick}>Edit Profile</ProfileButton>
+          <ProfileButton onClick={handleLogout}>Log out</ProfileButton>
         </ProfileDetails>
       )}
       {isUploadPhotoOpen && (
@@ -218,7 +229,8 @@ const ProfileContainer = styled.div`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  margin: 0 auto;
+  margin: 3rem auto;
+
 `;
 
 const ProfileImage = styled.img`
@@ -261,14 +273,13 @@ const ProfileSelect = styled.select`
 `;
 
 const ProfileButton = styled.button`
-  padding: 10px 20px;
+  padding: 1rem;
   margin: 10px;
   border: none;
-  border-radius: 5px;
-  background-color: #007bff;
+  border-radius: 20px;
+  background-color: #5bb4c1;
   color: white;
   cursor: pointer;
-
   &:hover {
     background-color: #0056b3;
   }

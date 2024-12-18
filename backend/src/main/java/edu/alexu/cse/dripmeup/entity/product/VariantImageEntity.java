@@ -7,8 +7,7 @@ import lombok.Data;
 @Entity
 @Table(name = "VARIANT_IMAGE")
 @Data
-
-public class VariantImageEntity implements EntityIF{
+public class VariantImageEntity implements EntityIF {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

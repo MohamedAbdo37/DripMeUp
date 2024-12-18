@@ -26,13 +26,16 @@ public class ProductEntity implements EntityIF {
     private Long productID;
 
     @Column(name = "Description")
-    private String description ;
+    private String description;
 
     @Column(name = "DateOfCreation")
-    private LocalDateTime time ;
+    private LocalDateTime time;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<VariantEntity> variants;
 
     @Column(name = "State")
-    private ProductState state ;
+    private ProductState state;
 
     @OneToMany(mappedBy= "product", cascade = CascadeType.ALL)
     private List<VariantEntity> variants;
@@ -46,8 +49,8 @@ public class ProductEntity implements EntityIF {
     private Set<CategoryEntity> categories;
 
     @PrePersist
-    protected void onCreate (){
-        this.time = LocalDateTime.now() ;
+    protected void onCreate() {
+        this.time = LocalDateTime.now();
     }
 
     public void addCategory(CategoryEntity c) {

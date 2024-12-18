@@ -3,9 +3,7 @@ import {useLocation} from 'react-router-dom';
 import adminPhoto from '../assets/admin.png'; // Adjust the path as necessary
 
 const AdminProfileBox = () => {
-  const location = useLocation();
-  const { admin } = location.state || {};
-  
+  const [admin, setAdmin] = useState({username: "", email: "", photo: ""});
   const [isEditingName, setIsEditingName] = useState(false);
 
   const handleInputChange = (e) => {
@@ -15,9 +13,34 @@ const AdminProfileBox = () => {
   const handlePhotoChange = (e) => {
   };
 
-  useEffect(()=>{
-    console.log(admin);
-  },[]);
+  useEffect(() => {
+      const fetchUserData = async () => {
+        const token = localStorage.getItem('drip_me_up_jwt');
+        console.log(token.length)
+        try {
+          const response = await fetch('http://localhost:8081/admin/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+  
+          if (response.ok) {
+            const adminData = await response.json();
+            setAdmin(adminData);
+          } else if (response.status === 401) {
+            console.error('Unauthorized');
+          }  else if (response.status === 403) {
+            console.error('Forbidden');
+          } else {
+            console.error('Failed to fetch user data');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditingName(false);

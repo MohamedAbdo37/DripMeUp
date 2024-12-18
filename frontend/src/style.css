@@ -1,7 +1,32 @@
+/* Style the scrollbar */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+  }
+  
+  /* Style the track (background of the scrollbar) */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f114;
+    border-radius: 10px;
+  }
+  
+  /* Style the handle (scroll thumb) */
+  ::-webkit-scrollbar-thumb {
+    background: #c15b65;
+    border-radius: 10px;
+  }
+  
+  /* Style the handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00c8ff;
+  }
+  
 html, body{
     margin: 0;
     padding: 0;
     height: 100vh;
+    background: linear-gradient(0deg, rgba(91,180,193,1) 0%, rgba(193,91,101,1) 55%);
+    background-attachment: fixed;
+
 }
 .formBox{
     background-color:aliceblue;
@@ -236,3 +261,206 @@ center{
     color: #ea3b98;
 }
 
+/* .productImg{
+    width: 100%;
+} */
+
+.ratingBox, .Img, .controller, .controllerRightDescription{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: inherit;
+    margin: 1rem;
+}
+
+
+
+.Img{
+    justify-content: center;
+}
+
+.share-favouriteButtons img{
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.controllerButtons button{
+    width: 15rem;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    background-color: #c15b65;
+    color: white;
+    text-decoration: none;
+    margin: 1rem;
+    font-size: large;
+}
+
+.controllerButtons button:hover{
+    background-color: #eda7b0;
+    color: black;
+}
+
+.sale{
+    display: flex;
+    background-color: yellow;
+    border-radius: 20px;
+    justify-content: center;
+    padding: 0.2rem;
+    font-size: 1rem;
+}
+
+.saleData{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.descriptionTable{
+    width: 100%;
+}
+
+.controllerButtons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controllerRightDescription{
+    margin: 0;
+    /* color: #ccc; */
+}
+
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+    font-size: 1em;
+    text-align: left;
+    background-color: #ffffff45;
+  }
+  
+.styled-table thead tr {
+  background-color: #00987a45;
+  color: white;
+}
+ 
+.styled-table th, .styled-table td {
+  border: 1px solid #dddddd4e;
+  padding: 8px 12px;
+}
+ 
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f3f3f343;
+}
+
+.reviewPhoto{
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  margin: 1rem;
+}
+
+.feedbacks{
+  /* background-color: #b5eff2; */
+  padding: 0.2rem;
+}
+
+.feedbackBox{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 20px;
+  background-color: #5bb4c1;
+  margin: 1rem;
+  cursor: pointer;
+}
+ 
+.feedbackBox:hover{
+  background-color: #98f5f9;
+}
+
+.yellowStar{
+  width: 2rem;
+  height: 2rem;
+}
+
+.emptyStar{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+ 
+.rating{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #cccccc6b;
+  border-radius: 20px;
+  padding: 0.5rem;
+}
+
+.navBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #c15b65;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    
+}
+
+.navBarButtons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: 25%; */
+    cursor: pointer;
+    margin-right: 0.2rem;
+    margin-left: 0.2em;
+}
+
+.navBar input[type="text"]{
+    margin: 0;
+    width: 75%;
+}
+
+
+
+.navBarButtons:hover{
+    background-color: #cccccc67;
+}
+
+.variants{
+    display: flex;
+    align-items: center;
+    /* background-color: #cccccc; */
+    overflow-x: scroll;
+}
+.variantCard{
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #c15b6542;
+    border: 0.5px solid;
+}
+.variantCard:hover{
+    background-color: rgb(248, 221, 180);
+    transform: translate(-5%, -5%);
+}
+
+.selectedVariantCard{
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: rgb(248, 221, 180);
+}

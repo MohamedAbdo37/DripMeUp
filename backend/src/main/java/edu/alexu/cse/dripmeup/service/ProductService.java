@@ -1,6 +1,5 @@
 package edu.alexu.cse.dripmeup.service;
 
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -40,6 +39,7 @@ public class ProductService {
     public List<VariantEntity> getVariantsOfProduct(ProductEntity product) {
         return product.getVariants();
     }
+
 
     public ProductEntity getProduct(ProductRepository productRepository,long productID) {
         return productRepository.findByProductID(productID);

@@ -5,6 +5,8 @@ import 'react-phone-number-input/style.css'
 import PhoneInput, {isValidPhoneNumber} from 'react-phone-number-input'
 import {jwtDecode} from 'jwt-decode';
 import { toast } from "react-toastify";
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 
 const SignupBox = () =>{
     const [username, setUsername] = useState('');
@@ -20,10 +22,12 @@ const SignupBox = () =>{
     const [trueCodeID, setTrueCodeID] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
     const [timer, setTimer] = useState(0);
+    const [shouldShowObject, setShouldShowObject] = useState(false);
 
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(()=>{
+    
         if (timer < 59 && !isDisabled){
             const interval = setInterval(() => {
                 setTimer((prev) =>prev+1);
@@ -31,8 +35,20 @@ const SignupBox = () =>{
             return ()=>clearInterval(interval);
         }
         else if (!isDisabled)
-            sendCode(new Event("Resend code"));            
-      }, [timer, isDisabled]);
+            sendCode(new Event("Resend code")); 
+
+        google.accounts.id.initialize({
+          client_id: "717049175258-p8ir5a7n56utrq80bc4o2roi8oaf1ulh.apps.googleusercontent.com", 
+          callback: handleCallbackResponse
+        });
+    
+        google.accounts.id.renderButton(
+          document.getElementById("signupGoogleButton"),
+          {theme: "outline", size: "larg"}
+        );
+    
+        google.accounts.id.prompt();
+      }, [[timer, isDisabled, shouldShowObject]]);
 
     const resetTimer=()=>{
         setTimer(0);
@@ -47,6 +63,7 @@ const SignupBox = () =>{
     };
 
     const handleCallbackResponse = async (response)=>{
+        setShouldShowObject(()=>true);
         var user = jwtDecode(response.credential);
         console.log(user);
         const register = await fetch(`http://localhost:8081/api/5/users/g/signup`,{
@@ -72,28 +89,15 @@ const SignupBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/profile')
+            navigate('/userSession')
         })
         .catch(error=>{
+            setShouldShowObject(()=>false);
             console.log(error);
             setErrorMessage('Email already exists in the system');
             setErrorTrigger('googleEmailError');
         });
       } 
-      useEffect(()=>{
-    
-        google.accounts.id.initialize({
-          client_id: "717049175258-p8ir5a7n56utrq80bc4o2roi8oaf1ulh.apps.googleusercontent.com", 
-          callback: handleCallbackResponse
-        });
-    
-        google.accounts.id.renderButton(
-          document.getElementById("signupGoogleButton"),
-          {theme: "outline", size: "larg"}
-        );
-    
-        google.accounts.id.prompt();
-      }, []);
       
     const generateCode = ()=>{
         let generatedCode = '';
@@ -105,6 +109,7 @@ const SignupBox = () =>{
     }
 
     const sendCode = async (e)=>{
+        setShouldShowObject(()=>true);
         e.preventDefault();
         setPhase(2);
         setIsDisabled(true);
@@ -118,6 +123,7 @@ const SignupBox = () =>{
             })
             .then(response=>response.status == 200 || response.status == 201? (()=>{return response.json()})() : (()=>{throw Error("Error sending code")})())
             .then(codeID=>{
+                setShouldShowObject(()=>false);
                 setTrueCodeID(codeID);
                 console.log('Email sent successfully!');
                 setIsDisabled(false);
@@ -125,11 +131,13 @@ const SignupBox = () =>{
                 resetTimer();
             })
             .catch(e=>{
+                setShouldShowObject(()=>false);
                 notifyFailSentCode();
                 console.log(e);
             });
            
         }else{
+            setShouldShowObject(()=>false);
             setErrorMessage("Phone number is not correct");
             setErrorTrigger("phoneError");
         }
@@ -137,6 +145,7 @@ const SignupBox = () =>{
 
     const checkCode = async(e)=>{
         e.preventDefault()
+        setShouldShowObject(()=>true);
         const checkCode = await fetch(`http://localhost:8081/api/5/users/checkCode`,{
             method:'GET',
             headers:{
@@ -149,7 +158,7 @@ const SignupBox = () =>{
             setErrorMessage("");
             signup();
         })() : (()=>{setErrorMessage("Wrong Code, Try again or click resend");})())
-        .catch(e=>console.log(e));
+        .catch(e=>{console.log(e);setShouldShowObject(()=>false);});
     }
 
 
@@ -178,7 +187,7 @@ const SignupBox = () =>{
             localStorage.setItem('drip_me_up_jwt', data);
             console.log(data)
             setErrorMessage('');
-            navigate('/profile')
+            navigate('/userSession')
         })
         .catch(error=>{
             setErrorMessage("Email already exists");
@@ -187,6 +196,10 @@ const SignupBox = () =>{
     }
     
     return(
+        shouldShowObject ?
+        <AnimatePresence>
+            <ObjectToAppear />
+        </AnimatePresence>:
         <div className="formBox">
             {phase==1 &&(
                 <form id="signupForm" onSubmit={sendCode}>
@@ -259,6 +272,7 @@ const SignupBox = () =>{
                         <p style={{color:'red', fontSize:'1rem'}}>{errorMessage}</p>
                         <button className="resendCodeLink" onClick={sendCode}>Resend code</button>
                     </div>
+                    <p style={{fontSize:"1rem"}}>Email will expire and automatically resent again after 1 min: {timer} sec</p>
                     <button className="loginButton" form="codeForm" type="submit" disabled={isDisabled}>Conferm Code</button>
                 </form>
             )

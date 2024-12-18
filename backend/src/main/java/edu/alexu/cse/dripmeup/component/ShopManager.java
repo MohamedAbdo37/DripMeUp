@@ -29,13 +29,13 @@ import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 
 @Component
 public class ShopManager {
-    
+
     @Autowired
     private ProductRepository productRepository;
-    
+
     @Autowired
     private VariantRepository variantRepository;
-    
+
     @Autowired
     private ItemRepository itemRepository;
 
@@ -57,11 +57,11 @@ public class ShopManager {
     public ProductRepository getProductRepository() {
         return productRepository;
     }
-    
+
     public VariantRepository getVariantRepository() {
         return variantRepository;
     }
-    
+
     public ItemRepository getItemRepository() {
         return itemRepository;
     }
@@ -117,15 +117,16 @@ public class ShopManager {
 
     public Variant crateVariant(Variant variant, Long productID) throws ProductCreationException {
         ProductEntity product = this.productRepository.findByProductID(productID);
-        if ( product == null )
+        if (product == null)
             throw new ProductCreationException("There is no product with id " + productID);
+
         this.productRepository.save(product);
         return new ProductMapper().toVariantDTO(new ProductService().crateVariant(this.variantRepository, variant, product), this);
     }
 
     public void addImageToVariant(Long variantID, String imagePath) {
         VariantEntity variant = this.variantRepository.findByVariantID(variantID);
-        if ( variant == null )
+        if (variant == null)
             throw new IllegalArgumentException("There is no variant with id " + variantID);
         new ProductService().addImage(this.imageRepository, imagePath, variant);
     }

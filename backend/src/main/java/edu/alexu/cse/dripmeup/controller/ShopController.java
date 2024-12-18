@@ -27,19 +27,19 @@ import java.util.List;
 import edu.alexu.cse.dripmeup.component.CategoryManager;
 
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/api/1000/shop")
 public class ShopController {
-    
+
     @Autowired
     private ShopManager shopManager;
-    
+
     @GetMapping("/products")
-    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam(name= "page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<Page<ProductSnapshot>> getProducts(@RequestParam(name = "page") int page,
+            @RequestParam("size") int size) {
         Page<ProductSnapshot> products = shopManager.getAllProducts(page, size);
-        if ( products == null || products.isEmpty()) {
+        if (products == null || products.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(products);
@@ -58,7 +58,7 @@ public class ShopController {
     @GetMapping("/product")
     public ResponseEntity<Product> getProduct(@RequestParam("productID") long productID) {
         Product product = shopManager.getProduct(productID);
-        if ( product == null ) {
+        if (product == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
@@ -196,4 +196,3 @@ public class ShopController {
         return variants;
     }
 }
-

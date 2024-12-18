@@ -3,7 +3,7 @@ import UserProfileBox from "../Components/UserProfileBox";
 const UserProfilePage = () => {
     return (
         <div className="profilePage">
-            <UserProfileBox />
+            <UserProfileBox/>
         </div>
     );
 };

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 
+
 @NoArgsConstructor
 @Data
 public class Product {
