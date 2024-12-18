@@ -14,4 +14,10 @@ import java.util.List;
 public class OrderDTO {
     private List<ItemDTO> items;
     private OrderMetaDTO meta;
+
+//public OrderDTO(List<ItemDTO> items , OrderMetaDTO meta){
+//        this.items = items ;
+//        this.meta = meta ;
+//    }
+    
 }
