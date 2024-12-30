@@ -1,23 +1,20 @@
 package edu.alexu.cse.dripmeup.service.notifications;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 
 import java.io.IOException;
-import edu.alexu.cse.dripmeup.service.notifications.NotificationService;
 
 
 @Service
+@Setter
+@Getter
 public class AccountManagement extends NotificationService {
 
     // specific attribute for this class
     private int code ;
-    public int getCode() {
-        return this.code;
-    }
-    public void setCode(int code) {
-        this.code = code;
-    }
 
     // IF there is an error with reading file return error else try to send message if there is an error return error
     // else return that email has been sent
