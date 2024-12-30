@@ -12,7 +12,7 @@ const ProductPage = () =>{
     const { productID, person } = useParams();
     const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
     const [currentVariant, setCurrentVariant] = useState(0); 
-    const feedbacks = [
+    const [feedbacks, setFeedbacks] = useState([
         {
             user:{
                 name: "User Name",
@@ -45,7 +45,7 @@ const ProductPage = () =>{
             feedback: "Feedback",
             time: "Time"
         }
-    ];
+    ]);
     useEffect(()=>{
         if (!productID) {
             console.error("Product ID is undefined");
@@ -66,12 +66,12 @@ const ProductPage = () =>{
         .then(data=>{setProduct(()=>data);console.log(data)})
         .catch(e=>console.log(e));
     }
-    const notifyAddToCart = () => {
-        toast.success(`Product added to cart successfully`);
+    const notifySuccess = (message) => {
+        toast.success(message);
     };
 
-    const notifyFailAddToCart = () => {
-        toast.error(`Error adding to cart`);
+    const notifyFailier = (message) => {
+        toast.error(message);
     };
     const selectVariant = (index, event)=>{
         let target = event.target;
@@ -117,6 +117,9 @@ const ProductPage = () =>{
     }
     const addToFavourites = ()=>{
 
+    }
+    const addFeedback = ()=>{
+        
     }
     return (
         <div style={{fontSize: "1.5rem"}}>
