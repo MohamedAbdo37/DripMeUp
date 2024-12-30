@@ -26,6 +26,7 @@ const ProductPage = () =>{
             return;
         }
         fetchFeedbackForProduct(productID);
+        getProdect();
 
     },[productID]);
 
@@ -94,18 +95,18 @@ const ProductPage = () =>{
                 const feedbackData = await response.json();
                 setFeedbacks([...feedbacks, feedbackData]); // Add new feedback to the list
                 setNewFeedback(""); // Clear input field
-                toast.success("Feedback added successfully!");
+                notifySuccess("Feedback added successfully!");
             } else {
-                toast.error("Failed to add feedback.");
+                notifyFailier("Failed to add feedback.");
             }
         } catch (error) {
             console.error("Error adding feedback:", error);
-            toast.error("An error occurred while adding your feedback.");
+            notifyFailier("An error occurred while adding your feedback.");
         }
     };
       
-    const notifyAddToCart = () => {
-        toast.success(`Product added to cart successfully`);
+    const notifySuccess = (message) => {
+        toast.success(message);
     };
 
     const notifyFailier = (message) => {
@@ -260,7 +261,7 @@ const ProductPage = () =>{
                         rows="4" 
                         style={{width: "100%", marginBottom: "10px"}} 
                     />
-                    <button onClick={handleAddFeedback}>
+                    <button className="backButton" onClick={handleAddFeedback}>
                         Add Feedback
                     </button>
                 </div>
