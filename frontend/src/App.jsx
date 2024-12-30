@@ -17,7 +17,7 @@ import CartPage from './Pages/CartPage';
 import SettingsPage from './Pages/SettingsPage';
 import AdminPage from "./Pages/AdminPage";
 import "react-toastify/dist/ReactToastify.css";
-
+import Modal from 'react-modal';
 
 function App() {
   
@@ -67,3 +67,4 @@ function App() {
 }
 
 export default App
+Modal.setAppElement('#root');
