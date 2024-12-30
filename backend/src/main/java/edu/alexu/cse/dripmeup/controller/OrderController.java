@@ -21,24 +21,24 @@ public class OrderController {
 @Autowired
 private OrderService orderService;
 
-    //@PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/my-orders")
     public ResponseEntity<?> getMyOrders(@RequestParam(required=false) Integer page,
                                          @RequestParam(required=false) Integer size,
                                          @RequestParam(required=false) Status status) {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
         try {
-            return ResponseEntity.ok(orderService.getOrders(50L, page, size, status));
+            return ResponseEntity.ok(orderService.getOrders(USER_ID, page, size, status));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching orders"));
         }
     }
-    //@PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/my-order-details/{orderId}")
     public ResponseEntity<?> getMyOrderDetails(@PathVariable Long orderId) {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
         try {
-            return ResponseEntity.ok(orderService.getOrderDetails(50L, orderId));
+            return ResponseEntity.ok(orderService.getOrderDetails(USER_ID, orderId));
         }
         catch (AuthorizationException e){
             return ResponseEntity.status(401).body(ResponseBodyMessage.error(e.getMessage()));

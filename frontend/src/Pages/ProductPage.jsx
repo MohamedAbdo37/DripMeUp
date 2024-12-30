@@ -8,51 +8,25 @@ import shareImage from '../assets/share.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
+
+
 const ProductPage = () =>{
     const { productID, person } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState({ dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, images: [""]}]});
     const [currentVariant, setCurrentVariant] = useState(0); 
-    const feedbacks = [
-        {
-            user:{
-                name: "User Name",
-                photo: ""
-            },
-            feedback: "Feedback",
-            time: "Time"
-        },
-        {
-            user:{
-                name: "User Name",
-                photo: ""
-            },
-            feedback: "Feedback",
-            time: "Time"
-        },
-        {
-            user:{
-                name: "User Name",
-                photo: ""
-            },
-            feedback: "Feedback",
-            time: "Time"
-        },
-        {
-            user:{
-                name: "User Name",
-                photo: ""
-            },
-            feedback: "Feedback",
-            time: "Time"
-        }
-    ];
+    const [feedbacks, setFeedbacks] = useState([]);
+    const [newFeedback, setNewFeedback] = useState("");
+
+
+
     useEffect(()=>{
         if (!productID) {
             console.error("Product ID is undefined");
             return;
         }
-        getProdect();
+        fetchFeedbackForProduct(productID);
+
     },[productID]);
 
     const getProdect = async()=>{
@@ -67,8 +41,71 @@ const ProductPage = () =>{
         .then(data=>{setProduct(()=>data);console.log("product: ",data)})
         .catch(e=>console.log(e));
     }
-    const notifySuccess = (message) => {
-        toast.success(message);
+
+    const fetchFeedbackForProduct = async (productID) => {
+        try {
+          const response = await fetch(`http://localhost:8081/api/feedback/product/${productID}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("drip_me_up_jwt")}`,
+            },
+          });
+      
+          if (!response.ok) throw new Error("Failed to fetch feedback");
+      
+          const data = await response.json();
+          setFeedbacks(data); // Assuming the response is a list of feedback
+          console.log(data);
+        } catch (error) {
+          console.error("Error fetching feedback:", error);
+        }
+      };
+      
+
+      const handleAddFeedback = async () => {
+        if (!newFeedback.trim()) return; // Don't submit if feedback is empty
+    
+        try {
+            // Decode the JWT to get the user info
+            const token = localStorage.getItem('drip_me_up_jwt');
+    
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));
+            const userId = decodedToken.userId || decodedToken.id || decodedToken.sub; // Adjust if the userId is stored under a different key
+            if (!userId) {
+                throw new Error("User ID not found in token");
+            }
+            
+
+            const response = await fetch(`http://localhost:8081/api/feedback`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    feedback: newFeedback,
+                    productId: productID,
+                    userId: userId // Use the decoded userId
+                })
+            });
+    
+            if (response.ok) {
+                const feedbackData = await response.json();
+                setFeedbacks([...feedbacks, feedbackData]); // Add new feedback to the list
+                setNewFeedback(""); // Clear input field
+                toast.success("Feedback added successfully!");
+            } else {
+                toast.error("Failed to add feedback.");
+            }
+        } catch (error) {
+            console.error("Error adding feedback:", error);
+            toast.error("An error occurred while adding your feedback.");
+        }
+    };
+      
+    const notifyAddToCart = () => {
+        toast.success(`Product added to cart successfully`);
     };
 
     const notifyFailier = (message) => {
@@ -213,7 +250,24 @@ const ProductPage = () =>{
                     <FeedbackBox key={i} feedback={feedback}/>
                 ))}
             </div>
+
+            {person === 'user' && (
+                <div className="addFeedback">
+                    <textarea 
+                        value={newFeedback} 
+                        onChange={(e) => setNewFeedback(e.target.value)} 
+                        placeholder="Add your feedback here..."
+                        rows="4" 
+                        style={{width: "100%", marginBottom: "10px"}} 
+                    />
+                    <button onClick={handleAddFeedback}>
+                        Add Feedback
+                    </button>
+                </div>
+            )}
+            
         </div>
+        
     );
 };
 export default ProductPage;
