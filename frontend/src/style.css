@@ -508,3 +508,15 @@ center{
     min-width: 20rem;
     max-width: 20rem;
 }
+
+.productCard{
+    display: flex;
+    justify-content: left; 
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 20px;
+    background-color: rgba(245, 245, 245, 0.671);
+    cursor: pointer;
+}

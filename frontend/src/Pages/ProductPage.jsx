@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import unknownPhoto from '../assets/pic.png'; // Adjust the path as necessary
 import FeedbackBox from '../Components/FeedbackBox';
 import favouriteImage from '../assets/favourite.png';
@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 import '../style.css';
 const ProductPage = () =>{
     const { productID, person } = useParams();
-    const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
+    const navigate = useNavigate();
+    const [product, setProduct] = useState({ dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, images: [""]}]});
     const [currentVariant, setCurrentVariant] = useState(0); 
-    const [feedbacks, setFeedbacks] = useState([
+    const feedbacks = [
         {
             user:{
                 name: "User Name",
@@ -45,7 +46,7 @@ const ProductPage = () =>{
             feedback: "Feedback",
             time: "Time"
         }
-    ]);
+    ];
     useEffect(()=>{
         if (!productID) {
             console.error("Product ID is undefined");
@@ -55,15 +56,15 @@ const ProductPage = () =>{
     },[productID]);
 
     const getProdect = async()=>{
-        const productsFetch = await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
+        await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
             method:'GET',
             headers:{
                 'Content-Type': 'application/json',
-                 //'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
                 }
         })
         .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
-        .then(data=>{setProduct(()=>data);console.log(data)})
+        .then(data=>{setProduct(()=>data);console.log("product: ",data)})
         .catch(e=>console.log(e));
     }
     const notifySuccess = (message) => {
@@ -84,42 +85,45 @@ const ProductPage = () =>{
         target.className = "selectedVariantCard";
         setCurrentVariant(index);
     }
-    const buy = ()=>{
-
-    }
+   
     const addToCart = async()=>{
-        // const addCart = await fetch(`http://localhost:8081/cart/${id}`,{
-        //     method: 'POST',
-        //     headers:{
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-        //     }
-        // })
-        // .then(response=>response.status == 200 || response.status == 201? notifyAddToCart(): notifyFailAddToCart())
-        // .catch(e=>console.log(e));
+        await fetch(`http://localhost:8081/cart/${productID}`,{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+            }
+        })
+        .then(response=>response.status == 200 || response.status == 201? notifySuccess("Added to cart succeffully"): notifyFailier("Failed to add to cart"))
+        .catch(e=>{console.log(e);notifyFailier("Failed to add to cart");});
     }
     const edit = ()=>{
 
     }
-    const deleteProduct = ()=>{
-        // const addCart = await fetch(`http://localhost:8081/products/${id}`,{
-        //     method: 'DELETE',
-        //     headers:{
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
-        //     }
-        // })
-        // .then(response=>response.status == 200 || response.status == 201? notifyDelete(): notifyFailDelete())
-        // .catch(e=>console.log(e));
+    const deleteProduct = async()=>{
+        await fetch(`http://localhost:8081/products/${productID}`,{
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+            }
+        })
+        .then(response=>response.status == 200 || response.status == 201? (()=>{notifySuccess("Product deleted successfully"); navigate(location.pathname.split('/').slice(0, 2).join('/'))})(): notifyFailier("Failed to delete the product"))
+        .catch(e=>{console.log(e);notifyFailier("Failed to delete the product")});
     }
     const share = ()=>{
 
     }
-    const addToFavourites = ()=>{
-
-    }
-    const addFeedback = ()=>{
-        
+    const addToFavourites = async()=>{
+        await fetch(`http://localhost:8081/addToFav/${productID}`, {
+            method:"POST",
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+            }
+        })
+        .then(response=>response.status == 200 || response.status == 201? notifySuccess("Product added to favourits successfully"): notifyFailier("Failed to add to favourits"))
+        .catch(e=>{console.log(e);notifyFailier("Failed to add to favourits")});
     }
     return (
         <div style={{fontSize: "1.5rem"}}>
@@ -133,10 +137,10 @@ const ProductPage = () =>{
                     </div>
                 </div>
                 <div className="Img">
-                    <img src={product.productImage || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
+                    <img src={product.variants[0].images[0] || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
                 </div>
                 <div className="share-favouriteButtons">
-                    <img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>
+                    {person=="user"&&<img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>}
                     <img src={shareImage} alt="FavouritePhoto" onClick={share}/>
                 </div>
             </div>
@@ -165,7 +169,6 @@ const ProductPage = () =>{
                 <div className="controllerRight">
                     {person == 'user' &&
                         <div className="controllerButtons">
-                            <button onClick={buy}>Buy</button>
                             <button onClick={addToCart} style={{backgroundColor: "#3cdc66"}}>Add to Cart</button>
                         </div>
                     }

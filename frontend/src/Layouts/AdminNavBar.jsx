@@ -21,15 +21,12 @@ const AdminNavBar = ()=>{
     return(
         <>
             <div className="navBar">
-                <input type="text" placeholder="Search" />
+                {/* <input type="text" placeholder="Search" /> */}
                 <div className='navBarButtons'>
                 <img src={home} alt='homeIcon' title='Go to home' onClick={ ()=>navigate('/adminSession') }/>
                 </div>
                 <div className='navBarButtons'>
                 <img src={add} alt='addProductIcon' title='Add product' onClick={ ()=>{setShowAddProductForm(true)}}/>
-                </div>
-                <div className='navBarButtons'>
-                <img src={settings} alt='settingsIcon' title='Go to settings' onClick={ ()=>navigate('/adminSession/settings') }/>
                 </div>
                 <div className='navBarButtons'>
                 <img src={addAdmin} alt='profileIcon' title='Add admin' style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>

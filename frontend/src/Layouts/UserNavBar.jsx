@@ -10,7 +10,7 @@ const UserNavBar = ()=>{
     return(
         <>
             <div className="navBar">
-                <input type="text" placeholder="Search" />
+                {/* <input type="text" placeholder="Search" /> */}
                 <div className='navBarButtons'>
                 <img src={home} alt='homeIcon' onClick={ ()=>navigate('/userSession') }/>
                 </div>
@@ -19,9 +19,6 @@ const UserNavBar = ()=>{
                 </div>
                 <div className='navBarButtons'>
                 <img src={cart} alt='cartIcon' onClick={ ()=>navigate('/userSession/cart') }/>
-                </div>
-                <div className='navBarButtons'>
-                <img src={settings} alt='settingsIcon' onClick={ ()=>navigate('/userSession/settings') }/>
                 </div>
                 <div className='navBarButtons'>
                 <img src={profile} alt='profileIcon' onClick={ ()=>navigate('/userSession/profile') }/>

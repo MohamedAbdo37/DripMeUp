@@ -139,7 +139,7 @@ const AddProductForm = () =>{
                         <input type="text" name="price" value={variants[number-1].price?variants[number-1].price:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
                         <label htmlFor="images">Images</label>
-                        <input type="file" name="images" value={variants[number-1].images?variants[number-1].images[0]:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.value]; return prev});handleChange(event, true);}} required/>
+                        <input type="file" name="images" onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.files[0]]; return prev});handleChange(event, true);}} required/>
                     
                         {number!=1 && <center><button className="backButton" onClick={(e)=>{e.preventDefault();handleClearVariant(number-1);}}>Remove</button></center>}
                     </div>
