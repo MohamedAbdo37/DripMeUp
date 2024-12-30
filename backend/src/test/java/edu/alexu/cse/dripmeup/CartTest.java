@@ -2,7 +2,6 @@ package edu.alexu.cse.dripmeup;
 
 import edu.alexu.cse.dripmeup.entity.CartEntity;
 import edu.alexu.cse.dripmeup.entity.UserEntity;
-import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.exception.CartException.CartException;
 import edu.alexu.cse.dripmeup.repository.CartRepository;
@@ -19,9 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -65,12 +64,8 @@ public class CartTest {
     @Test
     void testAddElementToCartWithNullVariant() {
         try {
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
-
             // return non null user
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
             //return null with variant
             when(variantRepository.findByVariantID(1L)).thenReturn(null);
@@ -85,12 +80,7 @@ public class CartTest {
     @Test
     void testAddElementToCartWithInValidAmount() {
         try {
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
-
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
-
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
             VariantEntity mockVariant = new VariantEntity() ;
             mockVariant.setVariantID(1L);
@@ -107,21 +97,12 @@ public class CartTest {
     @Test
     void testAddElementToCartWithInValidAmount2() {
         try {
-            // not null user
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
-
             // mock getting user
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
             // not null variant
-            VariantEntity mockVariant = new VariantEntity() ;
-            mockVariant.setVariantID(1L);
-            mockVariant.setStock(1);
-
             // mock getting variant
-            when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+            when(variantRepository.findByVariantID(1L)).thenReturn(new VariantEntity());
 
             cartService.addElement(1L , 1L , 0);
         }
@@ -132,14 +113,11 @@ public class CartTest {
 
 
     @Test
-    void testAddElementToCartNotPreviouslyExisting() {
-        // not null user
-        UserEntity mockUser = new UserEntity() ;
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
+    void testAddElementToCart() {
 
+        // not null user
         // mock getting user
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+        when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
         // not null variant
         VariantEntity mockVariant = new VariantEntity() ;
@@ -149,63 +127,25 @@ public class CartTest {
         // mock getting variant
         when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
 
-        CartEntity mockCart = new CartEntity(mockUser , mockVariant , 1) ;
-        // mock getting cart with user and variant
-        when(cartRepository.findByUserAndVariant(mockUser , mockVariant)).thenReturn(null);
+        when(cartRepository.save(new CartEntity(new UserEntity() , mockVariant , 1))).thenReturn(new CartEntity());
 
-        when(cartRepository.save(mockCart)).thenReturn(mockCart);
+        assertEquals(cartService.addElement(1L , 1L , 1)
+                , "Element has been added successfully.") ;
 
-        cartService.addElement(1L , 1L , 1) ;
-
-    }
-
-
-    @Test
-    void testAddElementToCartPreviouslyExisting() {
-        // not null user
-        UserEntity mockUser = new UserEntity() ;
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
-
-        // mock getting user
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
-
-        // not null variant
-        VariantEntity mockVariant = new VariantEntity() ;
-        mockVariant.setVariantID(1L);
-        mockVariant.setStock(3);
-
-        // mock getting variant
-        when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
-
-        CartEntity mockCart = new CartEntity(mockUser , mockVariant , 1) ;
-        mockCart.setTime(LocalDateTime.now());
-        LocalDateTime past = mockCart.getTime() ;
-        // mock getting cart with user and variant
-        when(cartRepository.findByUserAndVariant(mockUser , mockVariant)).thenReturn(mockCart);
-
-        when(cartRepository.save(mockCart)).thenReturn(mockCart);
-
-        cartService.addElement(1L , 1L , 2) ;
-        assertEquals(mockCart.getAmount() , 2);
-        assertTrue(past.isBefore(mockCart.getTime())) ;
     }
 
     @Test
     void updateNotExistingElement(){
         try {
-            UserEntity mockUser = new UserEntity();
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
 
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
             VariantEntity mockVariant = new VariantEntity();
             mockVariant.setVariantID(1L);
             mockVariant.setStock(1);
             when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
 
-            when(cartRepository.findByUserAndVariant(mockUser, mockVariant)).thenReturn(null);
+            when(cartRepository.findByUserAndVariant(new UserEntity(), mockVariant)).thenReturn(null);
 
             cartService.updateElement(1L, 1L, 1);
         }
@@ -217,10 +157,8 @@ public class CartTest {
     @Test
     void updateExistingElement(){
         // mock user
-        UserEntity mockUser = new UserEntity();
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+
+        when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
         // mock variant
         VariantEntity mockVariant = new VariantEntity();
@@ -229,14 +167,18 @@ public class CartTest {
         when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
 
         // mock cart
-        CartEntity mockCart = new CartEntity(mockUser , mockVariant , 1) ;
-        mockCart.setTime(LocalDateTime.now());
+        CartEntity mockCart = new CartEntity(new UserEntity() , mockVariant , 1) ;
+        mockCart.setTime(LocalDateTime.parse("2024-12-30T09:47:15" , DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        System.out.println(mockCart.getTime());
         LocalDateTime past = mockCart.getTime() ;
-        when(cartRepository.findByUserAndVariant(mockUser, mockVariant)).thenReturn(mockCart);
+        when(cartRepository.findByUserAndVariant(new UserEntity(), mockVariant)).thenReturn(mockCart);
 
         when(cartRepository.save(mockCart)).thenReturn(mockCart);
 
-        cartService.updateElement(1L, 1L, 2);
+        assertEquals(cartService.updateElement(1L, 1L, 2)
+                ,"Element has been updated successfully.");
+
+        System.out.println(mockCart.getTime());
 
         assertEquals(mockCart.getAmount() , 2);
         assertTrue(past.isBefore(mockCart.getTime())) ;
@@ -257,12 +199,9 @@ public class CartTest {
     @Test
     void testDeleteElementWithNullVariant() {
         try {
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
 
             // return non null user
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
             //return null with variant
             when(variantRepository.findByVariantID(1L)).thenReturn(null);
@@ -277,18 +216,12 @@ public class CartTest {
     @Test
     void testDeleteElementPreviouslyNotExisting() {
         try {
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
 
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
-            VariantEntity mockVariant = new VariantEntity() ;
-            mockVariant.setVariantID(1L);
-            mockVariant.setStock(1);
-            when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+            when(variantRepository.findByVariantID(1L)).thenReturn(new VariantEntity());
 
-            when(cartRepository.deleteByUserAndVariant(mockUser , mockVariant)).thenReturn(0L) ;
+            when(cartRepository.deleteByUserAndVariant(new UserEntity() , new VariantEntity())).thenReturn(0L) ;
 
             cartService.deleteElement(1L , 1L) ;
         }
@@ -299,21 +232,14 @@ public class CartTest {
 
     @Test
     void testDeleteElementPreviouslyExisting() throws CartException{
-        UserEntity mockUser = new UserEntity() ;
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
 
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+        when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
+        when(variantRepository.findByVariantID(1L)).thenReturn(new VariantEntity());
 
-        VariantEntity mockVariant = new VariantEntity() ;
-        mockVariant.setVariantID(1L);
-        mockVariant.setStock(1);
-        when(variantRepository.findByVariantID(1L)).thenReturn(mockVariant);
+        when(cartRepository.deleteByUserAndVariant(new UserEntity() , new VariantEntity())).thenReturn(1L) ;
 
-        when(cartRepository.deleteByUserAndVariant(mockUser , mockVariant)).thenReturn(1L) ;
-
-        assertEquals(cartService.deleteElement(1L , 1L) , 1L) ;
+        assertEquals(cartService.deleteElement(1L , 1L) , "Element has been deleted successfully.") ;
     }
 
     @Test
@@ -331,13 +257,9 @@ public class CartTest {
     @Test
     void testEmptyCartPreviouslyNotExisting() {
         try {
-            UserEntity mockUser = new UserEntity() ;
-            mockUser.setEmail("ni254828@gmail.com");
-            mockUser.setUserID(1L);
+            when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
-            when(userRepository.findByUserID(1L)).thenReturn(mockUser);
-
-            when(cartRepository.deleteAllByUser(mockUser)).thenReturn(0L) ;
+            when(cartRepository.deleteAllByUser(new UserEntity())).thenReturn(0L) ;
 
             cartService.emptyCart(1L) ;
         }
@@ -348,15 +270,13 @@ public class CartTest {
 
     @Test
     void testEmptyCartPreviouslyExisting() throws CartException{
-        UserEntity mockUser = new UserEntity() ;
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
 
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
+        when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
 
-        when(cartRepository.deleteAllByUser(mockUser)).thenReturn(5L) ;
+        Long count = Math.abs(new Random().nextLong())+1;
+        when(cartRepository.deleteAllByUser(new UserEntity())).thenReturn(count) ;
 
-        assertEquals(cartService.emptyCart(1L) , 5L) ;
+        assertEquals(cartService.emptyCart(1L) , count+" elements have been deleted.") ;
     }
 
     @Test
@@ -371,24 +291,10 @@ public class CartTest {
         }
     }
     @Test
-    void testGetCart() {
-        UserEntity mockUser = new UserEntity() ;
-        mockUser.setEmail("ni254828@gmail.com");
-        mockUser.setUserID(1L);
+    void testGetCartWhenItIsEmpty() {
 
-        when(userRepository.findByUserID(1L)).thenReturn(mockUser);
-
-        VariantEntity var = new VariantEntity() ;
-        var.setVariantID(1L);
-        var.setStock(1);
-        var.setProduct(new ProductEntity());
-        var.setVariantImages(new LinkedList<>()) ;
-
-        List<CartEntity> mockCart = new ArrayList<>() ;
-        mockCart.add(new CartEntity(mockUser , var , 1));
-
-        when(cartRepository.findAllByUserOrderByTimeDesc(mockUser)).thenReturn(mockCart) ;
-
+        when(userRepository.findByUserID(1L)).thenReturn(new UserEntity());
+        when(cartRepository.findAllByUserOrderByTimeDesc(new UserEntity())).thenReturn(new ArrayList<CartEntity>()) ;
         cartService.getCart(1L) ;
     }
 

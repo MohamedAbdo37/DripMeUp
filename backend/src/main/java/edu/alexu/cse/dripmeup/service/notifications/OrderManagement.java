@@ -2,28 +2,20 @@ package edu.alexu.cse.dripmeup.service.notifications;
 import edu.alexu.cse.dripmeup.dto.ItemDTO;
 import edu.alexu.cse.dripmeup.dto.OrderDTO;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@Setter
+@Getter
 public class OrderManagement extends NotificationService{
 
     // specific attribute for this class
     private int orderId ;
     private OrderDTO orderDTO ;
-    public int getOrderId() {
-        return this.orderId;
-    }
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-    public OrderDTO getOrderDTO() {
-        return this.orderDTO;
-    }
-    public void setOrderDTO(OrderDTO orderDTO) {
-        this.orderDTO = orderDTO;
-    }
 
     private static String itemsListToString(List<ItemDTO> items) {
         StringBuilder itemsString = new StringBuilder();
