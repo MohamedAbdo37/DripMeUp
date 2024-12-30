@@ -1,10 +1,9 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import unknownPhoto from '../assets/pic.png'; // Adjust the path as necessary
 import FeedbackBox from '../Components/FeedbackBox';
 import favouriteImage from '../assets/favourite.png';
 import filledStar from '../assets/filledStar.png';
 import star from '../assets/star.png';
-import shareImage from '../assets/share.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
@@ -149,9 +148,6 @@ const ProductPage = () =>{
         .then(response=>response.status == 200 || response.status == 201? (()=>{notifySuccess("Product deleted successfully"); navigate(location.pathname.split('/').slice(0, 2).join('/'))})(): notifyFailier("Failed to delete the product"))
         .catch(e=>{console.log(e);notifyFailier("Failed to delete the product")});
     }
-    const share = ()=>{
-
-    }
     const addToFavourites = async()=>{
         await fetch(`http://localhost:8081/addToFav/${productID}`, {
             method:"POST",
@@ -179,7 +175,6 @@ const ProductPage = () =>{
                 </div>
                 <div className="share-favouriteButtons">
                     {person=="user"&&<img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>}
-                    <img src={shareImage} alt="FavouritePhoto" onClick={share}/>
                 </div>
             </div>
             <div className="controller">
