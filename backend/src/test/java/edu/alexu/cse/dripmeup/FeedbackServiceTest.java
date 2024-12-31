@@ -1,6 +1,9 @@
 package edu.alexu.cse.dripmeup;
 
+import edu.alexu.cse.dripmeup.dto.FeedbackDTO;
 import edu.alexu.cse.dripmeup.entity.Feedback;
+import edu.alexu.cse.dripmeup.entity.UserEntity;
+import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.repository.FeedbackRepository;
 import edu.alexu.cse.dripmeup.service.FeedbackService;
 
@@ -13,8 +16,10 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class FeedbackServiceTest {
@@ -32,87 +37,85 @@ class FeedbackServiceTest {
 
     @Test
     void testGetFeedbackByProductIdReturnsResults() {
-        Feedback feedback1 = new Feedback(1L, 1L, 1L, null, "Great product!");
-        Feedback feedback2 = new Feedback(2L, 1L, 2L, null, "Loved it!");
+        Feedback feedback1 = new Feedback();
+        feedback1.setFeedback_id(1L);
+        feedback1.setProduct(new ProductEntity(1L, null, null, null, null, null));
+        feedback1.setUser(new UserEntity(1L, null, null, null, null, null, null, null, null));
+        feedback1.setFeedback("Great product!");
 
-        when(feedbackRepository.findByProductId(1L)).thenReturn(Arrays.asList(feedback1, feedback2));
+        Feedback feedback2 = new Feedback();
+        feedback2.setFeedback_id(2L);
+        feedback2.setProduct(new ProductEntity(1L, null, null, null, null, null));
+        feedback2.setUser(new UserEntity(2L, null, null, null, null, null, null, null, null));
+        feedback2.setFeedback("Loved it!");
 
-        List<Feedback> feedbacks = feedbackService.getFeedbackByProductId(1L);
+        when(feedbackRepository.findByProduct_ProductID(1L)).thenReturn(Arrays.asList(feedback1, feedback2));
 
-        assertNotNull(feedbacks);
-        assertEquals(2, feedbacks.size());
-        assertEquals("Great product!", feedbacks.get(0).getFeedback());
-        assertEquals("Loved it!", feedbacks.get(1).getFeedback());
-
-        verify(feedbackRepository, times(1)).findByProductId(1L);
-    }
-
-    @Test
-    void testGetFeedbackByProductIdReturnsEmptyList() {
-        when(feedbackRepository.findByProductId(1L)).thenReturn(Collections.emptyList());
-
-        List<Feedback> feedbacks = feedbackService.getFeedbackByProductId(1L);
-
-        assertNotNull(feedbacks);
-        assertTrue(feedbacks.isEmpty());
-
-        verify(feedbackRepository, times(1)).findByProductId(1L);
-    }
-
-    @Test
-    void testGetFeedbackByUserIdReturnsResults() {
-        Feedback feedback1 = new Feedback(1L, 1L, 1L, null, "Great product!");
-        Feedback feedback2 = new Feedback(2L, 2L, 1L, null, "Loved it!");
-
-        when(feedbackRepository.findByUserId(1L)).thenReturn(Arrays.asList(feedback1, feedback2));
-
-        List<Feedback> feedbacks = feedbackService.getFeedbackByUserId(1L);
+        List<FeedbackDTO> feedbacks = feedbackService.getFeedbackByProductId(1L);
 
         assertNotNull(feedbacks);
         assertEquals(2, feedbacks.size());
         assertEquals("Great product!", feedbacks.get(0).getFeedback());
         assertEquals("Loved it!", feedbacks.get(1).getFeedback());
 
-        verify(feedbackRepository, times(1)).findByUserId(1L);
+        verify(feedbackRepository, times(1)).findByProduct_ProductID(1L);
     }
+
 
     @Test
     void testGetFeedbackByUserIdReturnsEmptyList() {
-        when(feedbackRepository.findByUserId(1L)).thenReturn(Collections.emptyList());
+        when(feedbackRepository.findByUser_UserID(1L)).thenReturn(Collections.emptyList());
 
-        List<Feedback> feedbacks = feedbackService.getFeedbackByUserId(1L);
+        List<FeedbackDTO> feedbacks = feedbackService.getFeedbackByUserId(1L);
 
         assertNotNull(feedbacks);
         assertTrue(feedbacks.isEmpty());
 
-        verify(feedbackRepository, times(1)).findByUserId(1L);
+        verify(feedbackRepository, times(1)).findByUser_UserID(1L);
     }
+
 
     @Test
     void testSaveFeedback() {
-        Feedback feedback = new Feedback(null, 1L, 1L, null, "Amazing product!");
-        Feedback savedFeedback = new Feedback(1L, 1L, 1L, null, "Amazing product!");
+        FeedbackDTO feedbackDTO = new FeedbackDTO(null, 1L, 1L, "Amazing product!");
+        Feedback feedback = new Feedback();
+        feedback.setFeedback_id(null);
+        feedback.setProduct(new ProductEntity(1L, null, null, null, null, null));
+        feedback.setUser(new UserEntity(1L, null, null, null, null, null, null, null, null));
+        feedback.setFeedback("Amazing product!");
 
-        when(feedbackRepository.save(feedback)).thenReturn(savedFeedback);
+        Feedback savedFeedback = new Feedback();
+        savedFeedback.setFeedback_id(1L);
+        savedFeedback.setProduct(new ProductEntity(1L, null, null, null, null, null));
+        savedFeedback.setUser(new UserEntity(1L, null, null, null, null, null, null, null, null));
+        savedFeedback.setFeedback("Amazing product!");
 
-        Feedback result = feedbackService.saveFeedback(feedback);
+        when(feedbackRepository.save(any(Feedback.class))).thenReturn(savedFeedback);
+
+        FeedbackDTO result = feedbackService.saveFeedback(feedbackDTO);
 
         assertNotNull(result);
-        assertEquals(1L, result.getFeedback_id());
+        assertEquals(1L, result.getFeedbackId());
         assertEquals("Amazing product!", result.getFeedback());
 
-        verify(feedbackRepository, times(1)).save(feedback);
+        verify(feedbackRepository, times(1)).save(any(Feedback.class));
     }
+
 
     @Test
     void testSaveFeedbackWithNullFields() {
-        Feedback feedback = new Feedback(null, null, null, null, null);
+        FeedbackDTO feedbackDTO = new FeedbackDTO(null, null, null, null);
+        Feedback feedback = new Feedback();
+        feedback.setFeedback_id(null);
+        feedback.setProduct(null);
+        feedback.setUser(null);
+        feedback.setFeedback(null);
 
-        when(feedbackRepository.save(feedback)).thenThrow(IllegalArgumentException.class);
+        when(feedbackRepository.save(any(Feedback.class))).thenThrow(IllegalArgumentException.class);
 
-        assertThrows(IllegalArgumentException.class, () -> feedbackService.saveFeedback(feedback));
+        assertThrows(IllegalArgumentException.class, () -> feedbackService.saveFeedback(feedbackDTO));
 
-        verify(feedbackRepository, times(1)).save(feedback);
+        verify(feedbackRepository, times(1)).save(any(Feedback.class));
     }
 
     @Test
@@ -126,6 +129,7 @@ class FeedbackServiceTest {
         verify(feedbackRepository, times(1)).deleteById(feedbackId);
     }
 
+
     @Test
     void testDeleteFeedbackByIdNotExists() {
         Long feedbackId = 1L;
@@ -137,5 +141,35 @@ class FeedbackServiceTest {
         assertThrows(IllegalArgumentException.class, () -> feedbackService.deleteFeedbackById(feedbackId));
 
         verify(feedbackRepository, times(1)).deleteById(feedbackId);
+    }
+
+    @Test
+    void testUpdateFeedback() {
+        Long feedbackId = 1L;
+        FeedbackDTO updatedFeedbackDTO = new FeedbackDTO(feedbackId, 2L, 2L, "Updated feedback");
+
+        Feedback existingFeedback = new Feedback();
+        existingFeedback.setFeedback_id(feedbackId);
+        existingFeedback.setProduct(new ProductEntity(1L, null, null, null, null, null));
+        existingFeedback.setUser(new UserEntity(1L, null, null, null, null, null, null, null, null));
+        existingFeedback.setFeedback("Old feedback");
+
+        Feedback updatedFeedback = new Feedback();
+        updatedFeedback.setFeedback_id(feedbackId);
+        updatedFeedback.setProduct(new ProductEntity(2L, null, null, null, null, null));
+        updatedFeedback.setUser(new UserEntity(2L, null, null, null, null, null, null, null, null));
+        updatedFeedback.setFeedback("Updated feedback");
+
+        when(feedbackRepository.findById(feedbackId)).thenReturn(Optional.of(existingFeedback));
+        when(feedbackRepository.save(any(Feedback.class))).thenReturn(updatedFeedback);
+
+        FeedbackDTO result = feedbackService.updateFeedback(feedbackId, updatedFeedbackDTO);
+
+        assertNotNull(result);
+        assertEquals(feedbackId, result.getFeedbackId());
+        assertEquals("Updated feedback", result.getFeedback());
+
+        verify(feedbackRepository, times(1)).findById(feedbackId);
+        verify(feedbackRepository, times(1)).save(any(Feedback.class));
     }
 }
