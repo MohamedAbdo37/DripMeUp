@@ -8,6 +8,7 @@ import shareImage from '../assets/share.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
+import { b, body } from "framer-motion/client";
 
 
 const ProductPage = () =>{
@@ -16,6 +17,7 @@ const ProductPage = () =>{
     const [currentVariant, setCurrentVariant] = useState(0); 
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState("");
+
 
 
 
@@ -83,11 +85,19 @@ const ProductPage = () =>{
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    feedback: newFeedback,
+                    feedback: newFeedback,                    
                     productId: productID,
                     userId: userId // Use the decoded userId
-                })
+                }),
+                
+                
+                
             });
+   
+
+
+
+
     
             if (response.ok) {
                 const feedbackData = await response.json();
@@ -102,6 +112,7 @@ const ProductPage = () =>{
             toast.error("An error occurred while adding your feedback.");
         }
     };
+    
       
     const notifyAddToCart = () => {
         toast.success(`Product added to cart successfully`);

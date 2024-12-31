@@ -1,6 +1,6 @@
 package edu.alexu.cse.dripmeup.controller;
 
-import edu.alexu.cse.dripmeup.entity.Feedback;
+import edu.alexu.cse.dripmeup.dto.FeedbackDTO;
 import edu.alexu.cse.dripmeup.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +15,28 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    @GetMapping("/product/{ProductID}")
-    public List<Feedback> getFeedbackByProductId(@PathVariable Long ProductID) {
-        return feedbackService.getFeedbackByProductId(ProductID);
+    @GetMapping("/product/{productId}")
+    public List<FeedbackDTO> getFeedbackByProductId(@PathVariable Long productId) {
+        return feedbackService.getFeedbackByProductId(productId);
     }
 
-    @GetMapping("/user/{UserID}")
-    public List<Feedback> getFeedbackByUserId(@PathVariable Long UserID) {
-        return feedbackService.getFeedbackByUserId(UserID);
+    @GetMapping("/user/{userId}")
+    public List<FeedbackDTO> getFeedbackByUserId(@PathVariable Long userId) {
+        return feedbackService.getFeedbackByUserId(userId);
     }
 
     @PostMapping
-    public Feedback addFeedback(@RequestBody Feedback feedback) {
-        return feedbackService.saveFeedback(feedback);
+    public FeedbackDTO saveFeedback(@RequestBody FeedbackDTO feedbackDTO) {
+        return feedbackService.saveFeedback(feedbackDTO);
     }
 
-    @DeleteMapping("/{feedback_id}")
-    public void deleteFeedback(@PathVariable Long feedback_id) {
-        feedbackService.deleteFeedbackById(feedback_id);
+    @PutMapping("/{feedbackId}")
+    public FeedbackDTO updateFeedback(@PathVariable Long feedbackId, @RequestBody FeedbackDTO updatedFeedbackDTO) {
+        return feedbackService.updateFeedback(feedbackId, updatedFeedbackDTO);
+    }
+
+    @DeleteMapping("/{feedbackId}")
+    public void deleteFeedback(@PathVariable Long feedbackId) {
+        feedbackService.deleteFeedbackById(feedbackId);
     }
 }

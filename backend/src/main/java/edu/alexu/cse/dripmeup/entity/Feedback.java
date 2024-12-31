@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
+
 @Entity
 @Table(name = "Feedback")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Feedback {
 
     @Id
@@ -19,11 +22,13 @@ public class Feedback {
     @Column(name = "feedback_id")
     private Long feedback_id;
 
-    @Column(name = "ProductID", nullable = false)
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "productID", nullable = false)
+    private ProductEntity product;
 
-    @Column(name = "UserID", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userID", nullable = false)
+    private UserEntity user;
 
     @Column(name = "time", nullable = false, updatable = false)
     private LocalDateTime time = LocalDateTime.now();

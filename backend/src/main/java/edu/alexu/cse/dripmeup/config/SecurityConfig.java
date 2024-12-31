@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/api/6/admin/login",
                                 "/api/7/categories/",
                                 "/api/feedback/product/{ProductID}",
-                                "/api/feedback/{feedback_id}",
+                                "/api/feedback/**",
                                 "/api/feedback",
                                 "/api/feedback/user/{UserID}",
                                 "/api/7/categories/{categoryName}",
