@@ -40,6 +40,7 @@ public class ProductBuilder implements ProductBuilderIF{
     }
 
     public void buildCategories() {
+        if (this.categories == null) return;
         for(CategoryEntity c: this.categories){
             c.addProduct(this.productEntity);
             this.productEntity.addCategory(c);

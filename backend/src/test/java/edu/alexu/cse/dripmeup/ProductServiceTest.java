@@ -144,6 +144,7 @@ public class ProductServiceTest {
     public void testCreateProduct() {
         CategoryEntity category = new CategoryEntity();
         // Arrange
+        CategoryEntity category = new CategoryEntity();
         Product productDto = new Product();
         productDto = new Product();
         productDto.setDescription("Test Product");
