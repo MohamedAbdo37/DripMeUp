@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import '../style.css';
 import { b, body } from "framer-motion/client";
 import addToCartIcon from "../assets/addToCart.png";
+import AddProductForm from "../Components/AddProductForm";
+import Modal from 'react-modal';
 
 
 const ProductPage = () =>{
@@ -18,7 +20,7 @@ const ProductPage = () =>{
     const [currentVariant, setCurrentVariant] = useState(0); 
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState("");
-
+    const [isEditing, setIsEditing] = useState(false);
 
 
 
@@ -41,7 +43,7 @@ const ProductPage = () =>{
                 }
         })
         .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
-        .then(data=>{setProduct(()=>data);console.log("product: ",data)})
+        .then(data=>{setProduct(()=>data)})
         .catch(e=>console.log(e));
     }
 
@@ -59,7 +61,6 @@ const ProductPage = () =>{
       
           const data = await response.json();
           setFeedbacks(data); // Assuming the response is a list of feedback
-          console.log(data);
         } catch (error) {
           console.error("Error fetching feedback:", error);
         }
@@ -95,11 +96,6 @@ const ProductPage = () =>{
                 
                 
             });
-   
-
-
-
-
     
             if (response.ok) {
                 const feedbackData = await response.json();
@@ -158,10 +154,9 @@ const ProductPage = () =>{
         })())
         .catch(e=>{console.log(e);notifyFailier("Failed to add to cart");});
     }
-    const edit = ()=>{
-        // to be done
-    }
-    const deleteProduct = async()=>{
+    
+
+    const deleteProduct = async(deleteFlag = false)=>{
         await fetch(`http://localhost:8081/products/${productID}`,{
             method: 'DELETE',
             headers:{
@@ -169,8 +164,20 @@ const ProductPage = () =>{
                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             }
         })
-        .then(response=>response.status == 200 || response.status == 201? (()=>{notifySuccess("Product deleted successfully"); navigate(location.pathname.split('/').slice(0, 2).join('/'))})(): notifyFailier("Failed to delete the product"))
-        .catch(e=>{console.log(e);notifyFailier("Failed to delete the product")});
+        .then(response=>response.status == 200 || response.status == 201? (()=>{if (deleteFlag) notifySuccess("Product deleted successfully"); navigate(location.pathname.split('/').slice(0, 2).join('/'))})(): (()=>{
+            if (deleteFlag)
+                notifyFailier("Failed to delete the product");
+            else 
+                throw Error("Error deleting the product");
+        })())
+        .catch(e=>{
+            if (deleteFlag){
+                console.log(e);
+                notifyFailier("Failed to delete the product")
+            }else{
+                throw e;
+            }
+        });
     }
     const addToFavourites = async()=>{
         await fetch(`http://localhost:8081/api/favorites/add/${product.variants[currentVariant].variantID}`, {
@@ -187,7 +194,7 @@ const ProductPage = () =>{
         <div style={{fontSize: "1.5rem"}}>
             <div className="productImg">
                 <div className="Img">
-                    <img src={product.variants[0].images[0] || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
+                    <img src={product.variants[currentVariant].images[0] || unknownPhoto} alt="ProductPhoto" style={{width:"25rem", height: "25rem"}}/>
                 </div>
                 <div className="share-favouriteButtons">
                     {person!="admin"&&<img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>}
@@ -221,8 +228,8 @@ const ProductPage = () =>{
                     </div>
                     {person == 'admin' &&
                         <div className="controllerButtons">
-                            <button onClick={edit}>Edit</button>
-                            <button onClick={deleteProduct}>Delete</button>
+                            <button onClick={()=>setIsEditing(true)}>Edit</button>
+                            <button onClick={()=>deleteProduct(true)}>Delete</button>
                         </div>
                     }
                     <div className="controllerRightDescription">
@@ -234,7 +241,7 @@ const ProductPage = () =>{
             <div className="variants">
                 {product.variants.map((variant, index)=>(
                     <div className={person=="other"&&variant.variantID == currentSelectedVariantId?"selectedVariantCard":(()=>{if(index==0 && person!="other") return "selectedVariantCard"; else return "variantCard";})()} key={index} onClick={(event)=>selectVariant(index, event)}>
-                        <img className="variantCardChild" src={variant.variantImage || unknownPhoto} alt="variantImage"/>
+                        <img className="variantCardChild" style={{width:"3rem", height:"3rem"}} src={variant.images[0] || unknownPhoto} alt="variantImage"/>
                         <h5 className="variantCardChild">{variant.color} | {variant.size}</h5>
                     </div>
                 ))}
@@ -275,6 +282,15 @@ const ProductPage = () =>{
                     </button>
                 </div>
             )}
+
+            <Modal 
+                isOpen={isEditing}
+                onRequestClose={()=>setIsEditing(false)}
+                style={{content:{background:"white"}}}
+            >
+                <button className="backButton" onClick={()=>setIsEditing(false)}>X</button>
+                <AddProductForm loadedProductId={productID} deleteFunction={deleteProduct}/>
+            </Modal>
             
         </div>
         

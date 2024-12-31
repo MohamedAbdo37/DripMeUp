@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const AddProductForm = () =>{
-    const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE',  rate: 0.0, numberOfFeedback: 0});
+const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
+    const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE',  rate: 0.0, numberOfFeedback: 0, dateOfCreation:""});
     const [selectedCatigory, setSelectedCatigory] = useState("");
     const [addedCatigories, setAddedCatigories] = useState([]);
     const [loadedCatigories, setLoadedCatigories] = useState([]);
     const [numberOfVariants, setNumberOfVariants] = useState(1);
     const [variants, setVariants] = useState([{variantID: 0, sold: 0, state: 'ON_SALE', discount: 0.0}]);
+    const [variantsPhotos, setVariantsPhotos] = useState([]);
     useEffect(()=>{
+        if (loadedProductId){
+            getProdect(loadedProductId)            
+        }
         getCategories();
     }, []);
 
-    function getFormattedDateTime() {
-        const now = new Date();
-      
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-      
-        return `${year}-${month}-${day} ${hours}:${minutes}`;
-      }
+    const getProdect = async(productID)=>{
+        await fetch(`http://localhost:8081/api/1000/shop/product?productID=${productID}`,{
+            method:'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                }
+        })
+        .then(responde=>responde.status==200 || responde.status==201 ? (()=>{return responde.json()})() : (()=>{throw Error("Error fetching products")})())
+        .then(data=>{prepareFormVariables(data);console.log("product 1: ",data)})
+        .catch(e=>console.log(e));
+    }
 
     const notifySuccess= (message) =>{
         toast.success(message);
@@ -30,6 +35,15 @@ const AddProductForm = () =>{
 
     const notifyFailier = (message) =>{
         toast.error(message);
+    }
+
+    const prepareFormVariables = (loadedProduct)=>{
+        console.log("loaded product 2: ", loadedProduct)
+        loadedProduct.variants.forEach((variant, i)=>{
+            setVariantsPhotos([...variantsPhotos, variant.images[0]]);
+            delete loadedProduct.variants[i].images;
+        });
+        setFormVariables(loadedProduct);
     }
 
     const getCategories = async()=>{
@@ -45,18 +59,6 @@ const AddProductForm = () =>{
           .catch(e=>console.error(e));
     }
 
-    function getFormattedDateTime() {
-        const now = new Date();
-      
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-      
-        return `${year}-${month}-${day} ${hours}:${minutes}`;
-      }
-
     const getListOfCatigories = (catigoriesNamesList)=>{
         let finalCatigoriesList = []
         catigoriesNamesList.forEach((catigoryName)=>{
@@ -71,7 +73,7 @@ const AddProductForm = () =>{
     const addProduct = async(e)=>{
         e.preventDefault();
         //adding final catigories
-        console.log(console.log({...formVariables, categories: getListOfCatigories(addedCatigories), dateOfCreation: getFormattedDateTime()}));
+        // console.log(console.log({...formVariables, categories: getListOfCatigories(addedCatigories), dateOfCreation: getFormattedDateTime()}));
 
         await fetch(`http://localhost:8081/api/1000/shop/c/product`, {
             method:"POST",
@@ -79,28 +81,58 @@ const AddProductForm = () =>{
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             },
-            body:JSON.stringify(
-                {
-                    ...formVariables, 
-                    dateOfCreation: getFormattedDateTime,
-                    categories: getListOfCatigories(addedCatigories)
+            body:(()=>{
+                if (loadedProductId){
+                    return JSON.stringify(
+                        {
+                            ...formVariables, 
+                        }
+                    )
                 }
-            )
+                else{
+                    return JSON.stringify(
+                        {
+                            ...formVariables, 
+                            categories: getListOfCatigories(addedCatigories)
+                        }
+                    )
+                }
+            })()
+            
         })
-        .then(response=>response.status==200 || response.status==201?(()=>{
-            notifySuccess("Product added successfully");
-           response.variants.json().forEach(async (variant, i)=>{
-            await fetch(`http://localhost:8081/api/1000/shop/c/image?variantID=${variant.variantID}`,{
-                method:"POST",
-                body: formVariables.variants[i].images[0]
+        .then(response=>response.status==200 || response.status==201?(()=>{return response.json();})(): (()=>{throw Error("Error adding product")})())
+        .then(data=>{
+            // console.log("variantsPhotos: ", variantsPhotos);
+            data.variants.forEach(async (variant, i)=>{
+             await fetch(`http://localhost:8081/api/1000/shop/c/image?variantID=${variant.variantID}`,{
+                 method:"POST",
+                 headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
+                 },
+                 body: variantsPhotos[i]
+             })
+             .then(imageResponse=>imageResponse.status==200 || imageResponse.status==201?(()=>{
+                console.log("Image added successfully"); 
+                })():(()=>{throw Error("Failed to add image")})())
+             .catch(e=>{console.log("Failed to add image"); throw e;});
             })
-            .then(imageResponse=>imageResponse.status==200 || imageResponse.status==201?console.log("Image added successfully"):console.log("Failed to add image"))
-            .catch(e=>console.log(e));
-           })
-           
-        })(): (()=>{throw Error("Error adding product")})())
-        .catch(e=>{console.log(e); notifyFailier("Failed to add the product")})
+        })
+        .catch(e=>{notifyFailier("Failed to add the product"); throw e;})
+
+        if (loadedProductId){
+            try{
+                deleteFunction();
+            }catch(e){
+                console.log("Product is added but not deleted");
+                throw e;
+            }
+            notifySuccess("Product is updated successfully");
+        }else{
+            notifySuccess("Product is added successfully");
+        }
     }
+    
 
     const handleChange = (event, isVariant = false)=>{
         const {name, value} = event.target;
@@ -176,7 +208,7 @@ const AddProductForm = () =>{
                         <input type="text" name="price" value={variants[number-1].price?variants[number-1].price:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
                         <label style={{color:"black"}} htmlFor="images">Images</label>
-                        <input type="file" name="images" onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.files[0]]; return prev});handleChange(event, true);}}/>
+                        <input type="file" name="images" onChange={(event)=>{setVariantsPhotos([...variantsPhotos, event.target.files[0]])}}/>
                     
                         {number!=1 && <center><button className="backButton" onClick={(e)=>{e.preventDefault();handleClearVariant(number-1);}}>Remove</button></center>}
                     </div>
@@ -184,7 +216,7 @@ const AddProductForm = () =>{
                 }
             </div>
             <button className="backButton" onClick={handleAddVariant} style={{width:"202%", backgroundColor:"#c15b658a"}}>Add variant</button><br/>
-            <button className="backButton" type="submit" style={{width:"100vh", transform:"translate(50%, 0)"}}>Add Product</button>
+            <button className="backButton" type="submit" style={{width:"100vh", transform:"translate(50%, 0)"}}>{loadedProductId? "Update Product": "Add Product"}</button>
         </form>
         </>
     );
