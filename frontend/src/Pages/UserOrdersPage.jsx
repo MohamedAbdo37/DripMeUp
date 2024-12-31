@@ -109,6 +109,10 @@ const OrdersPage = () => {
   const handleOrderClick = (orderId) => {
     navigate(`/userSession/my-orders/${orderId}`);
   };
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <div className="orders-page">
@@ -139,7 +143,7 @@ const OrdersPage = () => {
             <tr key={order.id} onClick={() => handleOrderClick(order.id)}>
               {/* <td>{order.id}</td> */}
               <td>{order.totalPrice}</td>
-              <td>{order.timeStamp}</td>
+              <td>{formatDate(order.timeStamp)}</td>
               <td>{order.address}</td>
               <td>{order.status}</td>
               {/* <td>

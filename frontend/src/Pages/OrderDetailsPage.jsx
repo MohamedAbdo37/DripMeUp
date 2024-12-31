@@ -56,6 +56,11 @@ const OrderDetailsPage = () => {
     return <div>Loading...</div>;
   }
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   let buttonText = '';
   if (orderDetails.meta.status === 'PENDING') {
     buttonText = 'APPROVE';
@@ -71,7 +76,7 @@ const OrderDetailsPage = () => {
       <div className="order-info">
         <p><strong>Total Price:</strong> {orderDetails.meta.totalPrice}</p>
         <p><strong>Status:</strong> {orderDetails.meta.status}</p>
-        <p><strong>Time:</strong> {orderDetails.meta.timeStamp}</p>
+        <p><strong>Time:</strong> {formatDate(orderDetails.meta.timeStamp)}</p>
         <p><strong>Address:</strong> {orderDetails.meta.address}</p>
         <p><strong>Customer Name:</strong> {orderDetails.meta.customerName}</p>
       </div>
