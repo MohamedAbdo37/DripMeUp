@@ -70,7 +70,7 @@ public class ShopController {
         try{
             productSaved = shopManager.createProduct(product);
         } catch(RuntimeException e){
-    
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(productSaved);
