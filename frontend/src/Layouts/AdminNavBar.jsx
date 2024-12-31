@@ -43,7 +43,7 @@ const AdminNavBar = ()=>{
             <Modal 
                 isOpen={showAddProductForm}
                 onRequestClose={()=>setShowAddProductForm(false)}
-                style={{content:{backgroundColor:"rgb(248, 221, 180)"}}}
+                style={{content:{background:"linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,221,180,1) 100%)"}}}
             >
                 <button className="backButton" onClick={()=>setShowAddProductForm(false)}>X</button>
                 <AddProductForm/>
