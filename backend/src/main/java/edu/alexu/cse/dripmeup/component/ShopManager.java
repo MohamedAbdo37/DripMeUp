@@ -96,7 +96,6 @@ public class ShopManager {
     }
 
     public Product createProduct(Product product) {
-
         List<CategoryEntity> categoryEntities = new ArrayList<>();
         for (Category c : product.getCategories()) {
             CategoryEntity ce = this.categoryManager.getCategoryEntityByName(c.getName());
@@ -104,6 +103,7 @@ public class ShopManager {
                 throw new RuntimeException("There is no with name " + c.getName());
             categoryEntities.add(ce);
         }
+        
         ProductEntity newProduct = new ProductService().createProduct(this.productRepository, product,
                 categoryEntities);
 

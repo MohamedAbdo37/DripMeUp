@@ -33,7 +33,7 @@ public class ProductBuilder implements ProductBuilderIF{
     }
 
     public void buildTime(){
-        LocalDateTime dateTime = LocalDateTime.parse(this.product.getDateOfCreation(), this.formatter);
+        LocalDateTime dateTime = LocalDateTime.now();
         this.productEntity.setTime(dateTime);
     }
 
