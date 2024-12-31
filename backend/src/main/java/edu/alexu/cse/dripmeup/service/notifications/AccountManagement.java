@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.service.notifications;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
@@ -34,20 +35,20 @@ public class AccountManagement extends NotificationService {
 
     // set body and subject of each message type
     public String VerifyAccount() throws IOException, FailedToSendMailException {
+        this.setResource(new ClassPathResource("NotificationsBody/AccountVerification.txt"));
         this.setSubject("Verify Your DripMeUp Store Account") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/AccountVerification.txt") ;
         return this.ManagingAccountMessage() ;
     }
 
     public String ChangeEmail() throws IOException, FailedToSendMailException {
+        this.setResource(new ClassPathResource("NotificationsBody/ChangingEmail.txt"));
         this.setSubject ("Confirm Your Email Change Request") ;
-        this.setFilePath ("file:src/main/resources/Notifications Body/ChangingEmail.txt") ;
         return this.ManagingAccountMessage() ;
     }
 
     public String ForgetPassword() throws IOException, FailedToSendMailException {
+        this.setResource(new ClassPathResource("NotificationsBody/ForgetPassword.txt"));
         this.setSubject("Password Change Verification Code") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/ForgetPassword.txt") ;
         return this.ManagingAccountMessage() ;
     }
 

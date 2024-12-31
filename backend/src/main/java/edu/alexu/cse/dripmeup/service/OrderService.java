@@ -13,7 +13,6 @@ import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import edu.alexu.cse.dripmeup.repository.*;
 import edu.alexu.cse.dripmeup.service.notifications.OrderManagement;
-//import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -21,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.io.IOException;
 import java.util.Optional;
 import static edu.alexu.cse.dripmeup.specification.OrderSpecification.status;
 import static edu.alexu.cse.dripmeup.specification.OrderSpecification.user;
@@ -97,6 +98,20 @@ public class OrderService {
         orderRepository.save(order) ;
         // clear cart
         cartRepository.deleteAllByUser(user) ;
+
+        try{
+            System.out.println("hi");
+            orderManagement.setEmail(user.getEmail());
+            orderManagement.setUsername(user.getUserName());
+            orderManagement.setOrderId(order.getId());
+            orderManagement.setOrderDTO(mapToOrderDTO(order));
+            System.out.println("hi");
+            System.out.println(orderManagement.SendOrder());
+            System.out.println("hi");
+        }
+        catch (FailedToSendMailException e){
+            System.out.println(e.getMessage());
+        }
 
         return "Order was added successfully" ;
     }
@@ -214,16 +229,16 @@ public class OrderService {
         if(order.getStatus() != orderStatus.APPROVED) throw new BadInputException("Order is not approved");
         order.setStatus(orderStatus.DELIVERY);
         order.onUpdate();
-//        try{
-//            orderManagement.setEmail(order.getUserEntity().getEmail());
-//            orderManagement.setUsername(order.getUserEntity().getUserName());
-//            orderManagement.setOrderId(order.getId().intValue());
-//            orderManagement.setOrderDTO(mapToOrderDTO(order));
-//            orderManagement.ShipOrder();
-//        }
-//        catch (Exception e){
-//            throw new FailedToSendMailException("Failed to send email, email might not be valid");
-//        }
+        try{
+            orderManagement.setEmail(order.getUserEntity().getEmail());
+            orderManagement.setUsername(order.getUserEntity().getUserName());
+            orderManagement.setOrderId(order.getId());
+            orderManagement.setOrderDTO(mapToOrderDTO(order));
+            orderManagement.ShipOrder();
+        }
+        catch (Exception e){
+            throw new FailedToSendMailException("Failed to send email, email might not be valid");
+        }
         orderRepository.save(order);
         return "Order in delivery";
     }
@@ -233,16 +248,16 @@ public class OrderService {
         if(order.getStatus() != orderStatus.DELIVERY) throw new BadInputException("Order is not in delivery");
         order.setStatus(orderStatus.CONFIRMED);
         order.onUpdate();
-//        try{
-//            orderManagement.setEmail(order.getUserEntity().getEmail());
-//            orderManagement.setUsername(order.getUserEntity().getUserName());
-//            orderManagement.setOrderId(order.getId().intValue());
-//            orderManagement.setOrderDTO(mapToOrderDTO(order));
-//            orderManagement.ReceiveOrder();
-//        }
-//        catch (Exception e){
-//            throw new FailedToSendMailException("Failed to send email, email might not be valid");
-//        }
+        try{
+            orderManagement.setEmail(order.getUserEntity().getEmail());
+            orderManagement.setUsername(order.getUserEntity().getUserName());
+            orderManagement.setOrderId(order.getId());
+            orderManagement.setOrderDTO(mapToOrderDTO(order));
+            orderManagement.ReceiveOrder();
+        }
+        catch (Exception e){
+            throw new FailedToSendMailException("Failed to send email, email might not be valid");
+        }
         orderRepository.save(order);
         return "Order is received";
     }

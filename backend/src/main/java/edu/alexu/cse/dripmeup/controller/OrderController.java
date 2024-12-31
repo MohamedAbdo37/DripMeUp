@@ -25,11 +25,10 @@ private OrderService orderService;
 
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @PostMapping("/create order")
+    @PostMapping("/create-order")
     public ResponseEntity<?> createOrder(@RequestBody OrderRequestBody orderBody){
         Long USER_ID = SecurityService.getIdFromSecurityContext();
-        System.out.println(USER_ID);
-        System.out.println(orderBody);
+
         try {
             LinkedList<Long> outOfStock = new LinkedList<>() ;
             String response = orderService.convertCartToOrder(USER_ID, orderBody , outOfStock);

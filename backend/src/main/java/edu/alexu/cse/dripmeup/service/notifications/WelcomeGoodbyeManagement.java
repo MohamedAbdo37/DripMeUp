@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.service.notifications;
 import java.io.IOException;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
@@ -25,14 +26,14 @@ public class WelcomeGoodbyeManagement extends NotificationService{
 
     // set body and subject of each message type
     public String WelcomeMessage() throws IOException, FailedToSendMailException {
+        this.setResource(new ClassPathResource("NotificationsBody/WelcomeMessage.txt"));
         this.setSubject("Thank You for Joining DripMeUp Store") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/WelcomeMessage.txt") ;
         return this.WelcomeGoodbyeManagementMessage() ;
     }
 
     public String GoodbyeMessage() throws IOException, FailedToSendMailException {
+        this.setResource(new ClassPathResource("NotificationsBody/DeletingAccount.txt"));
         this.setSubject ("Account Deletion Successful") ;
-        this.setFilePath ("file:src/main/resources/Notifications Body/DeletingAccount.txt") ;
         return this.WelcomeGoodbyeManagementMessage() ;
     }
 }

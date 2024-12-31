@@ -10,7 +10,6 @@ import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.exception.CartException.CartConflictException;
 import edu.alexu.cse.dripmeup.exception.CartException.CartException;
 import edu.alexu.cse.dripmeup.exception.CartException.CartNotFoundException;
-import edu.alexu.cse.dripmeup.exception.FavoriteException;
 import edu.alexu.cse.dripmeup.repository.CartRepository;
 import edu.alexu.cse.dripmeup.repository.UserRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
