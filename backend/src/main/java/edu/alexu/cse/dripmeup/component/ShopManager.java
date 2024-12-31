@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.CloudinaryUploader;
@@ -21,11 +20,9 @@ import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
 import edu.alexu.cse.dripmeup.repository.CategoryRepository;
 import edu.alexu.cse.dripmeup.repository.ImageRepository;
-//import edu.alexu.cse.dripmeup.repository.ItemRepository;
 import edu.alexu.cse.dripmeup.repository.ProductRepository;
 import edu.alexu.cse.dripmeup.repository.VariantRepository;
 import edu.alexu.cse.dripmeup.service.ProductService;
-import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
 
 @Component
 public class ShopManager {
@@ -112,7 +109,10 @@ public class ShopManager {
         for(CategoryEntity c: categoryEntities){
             this.categoryRepository.save(c);
         }
-
+        
+        for(Variant v: product.getVariants())
+            this.crateVariant(v, newProduct.getProductID());
+        
         return newProduct;
     }
 
