@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -15,8 +16,8 @@ import java.util.Date;
 public class OrderMetaDTO {
     private Long id;
     private orderStatus status;
-    private Date timeStamp;
+    private LocalDateTime timeStamp;
     private String address;
-    private float totalPrice;
+    private double totalPrice;
     private String CustomerName;
 }

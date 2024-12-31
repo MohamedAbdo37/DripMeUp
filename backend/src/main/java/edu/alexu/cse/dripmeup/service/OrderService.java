@@ -8,13 +8,22 @@ import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 import edu.alexu.cse.dripmeup.enumeration.PaymentMethod;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import edu.alexu.cse.dripmeup.enumeration.orderStatus;
+import edu.alexu.cse.dripmeup.exception.AuthorizationException;
 import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import edu.alexu.cse.dripmeup.repository.*;
 import edu.alexu.cse.dripmeup.service.notifications.OrderManagement;
-import org.hibernate.query.Page;
+//import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import java.util.Optional;
+import static edu.alexu.cse.dripmeup.specification.OrderSpecification.status;
+import static edu.alexu.cse.dripmeup.specification.OrderSpecification.user;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -176,7 +185,7 @@ public class OrderService {
     }
 
     private boolean notValid(String x){
-        return x.equals(null) | x.equals("") ;
+        return x == null || x.equals("") ;
     }
 
 
