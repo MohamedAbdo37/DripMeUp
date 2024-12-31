@@ -3,6 +3,7 @@ import profile from '../assets/profile.png';
 import favourite from '../assets/favourite.png';
 import home from '../assets/home.png';
 import cart from '../assets/shopping.png';
+import orders from '../assets/orders.png';
 import '../style.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 const UserNavBar = ()=>{
@@ -19,6 +20,9 @@ const UserNavBar = ()=>{
                 </div>
                 <div className='navBarButtons'>
                 <img src={cart} alt='cartIcon' title="Go to cart" onClick={ ()=>navigate('/userSession/cart') }/>
+                </div>
+                <div className='navBarButtons'>
+                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/userSession/my-orders') }/>
                 </div>
                 <div className='navBarButtons'>
                 <img src={profile} alt='profileIcon' title="Go to profile" onClick={ ()=>navigate('/userSession/profile') }/>

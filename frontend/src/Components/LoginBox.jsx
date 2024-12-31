@@ -81,7 +81,7 @@ const LoginBox = () =>{
     return(
         shouldShowObject ?
         <AnimatePresence>
-            <ObjectToAppear />
+            <ObjectToAppear size={100}/>
         </AnimatePresence>
         :<div className="formBox">
             <form id="loginForm" onSubmit={login}>

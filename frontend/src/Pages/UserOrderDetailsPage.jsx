@@ -58,7 +58,7 @@ const OrderDetailsPage = () => {
         </thead>
         <tbody>
           {orderDetails.items.map(item => (
-            <tr key={item.productName}>
+            <tr key={item.productName}  style={{cursor:"pointer"}}>
               <td>{item.productName}</td>
               <td>{item.itemTotalPrice}</td>
               <td>{item.productVariantColor}</td>

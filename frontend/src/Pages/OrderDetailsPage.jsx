@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './OrderDetailsPage.css'; // Assuming you have a CSS file for styling
+import { toast } from 'react-toastify';
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchOrderDetails();
@@ -28,6 +32,7 @@ const OrderDetailsPage = () => {
   };
 
   const handleChangeStatus = async () => {
+    setIsLoading(()=>true);
     let endpoint = '';
     if (orderDetails.meta.status === 'PENDING') {
       endpoint = 'approve';
@@ -46,10 +51,13 @@ const OrderDetailsPage = () => {
           Accept: 'application/json',
         },
       });
-      fetchOrderDetails();
+      toast.success(`Status of the order of id: ${orderId} changed into ${endpoint} successfully`)
     } catch (error) {
       console.error(`Error changing order status to ${endpoint}:`, error);
+      toast.success(`Failed to change the status of the order of id: ${orderId} to ${endpoint}`)
     }
+    setIsLoading(()=>false);
+    location.reload();
   };
 
   if (!orderDetails) {
@@ -94,7 +102,7 @@ const OrderDetailsPage = () => {
         </thead>
         <tbody>
           {orderDetails.items.map(item => (
-            <tr key={item.productName}>
+            <tr key={item.productName} style={{cursor:"pointer"}}>
               <td>{item.productName}</td>
               <td>{item.itemTotalPrice}</td>
               <td>{item.productVariantColor}</td>
@@ -106,9 +114,15 @@ const OrderDetailsPage = () => {
         </tbody>
       </table>
       {buttonText && (
+        <div>
         <button onClick={handleChangeStatus} className="status-button">
           {buttonText}
         </button>
+        {isLoading && 
+        <AnimatePresence>
+          <ObjectToAppear size={10}/>
+        </AnimatePresence>}
+        </div>
       )}
     </div>
   );

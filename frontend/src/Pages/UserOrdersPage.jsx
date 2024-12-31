@@ -118,7 +118,7 @@ const OrdersPage = () => {
     <div className="orders-page">
       <h1>Orders</h1>
       <div className="filter-controls">
-        <label htmlFor="status">Filter by Status:</label>
+        <label style={{color:"black", marginRight:"1rem"}} htmlFor="status">Filter by Status:</label>
         <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="ALL">ALL</option>
           <option value="PENDING">PENDING</option>
@@ -140,7 +140,7 @@ const OrdersPage = () => {
         </thead>
         <tbody>
           {orders.map(order => (
-            <tr key={order.id} onClick={() => handleOrderClick(order.id)}>
+            <tr key={order.id} onClick={() => handleOrderClick(order.id)}  style={{cursor:"pointer"}}>
               {/* <td>{order.id}</td> */}
               <td>{order.totalPrice}</td>
               <td>{formatDate(order.timeStamp)}</td>

@@ -3,6 +3,7 @@ import add from '../assets/add.png';
 import addAdmin from '../assets/addAdmin.png';
 import home from '../assets/home.png';
 import logout from '../assets/logout.png';
+import orders from '../assets/orders.png';
 import '../style.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
@@ -30,6 +31,9 @@ const AdminNavBar = ()=>{
                 </div>
                 <div className='navBarButtons'>
                 <img src={addAdmin} alt='profileIcon' title='Add admin' style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>
+                </div>
+                <div className='navBarButtons'>
+                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/orders') }/>
                 </div>
                 <div className='navBarButtons'>
                 <img src={logout} alt='logoutIcon' title='logout' onClick={ handleLogout }/>

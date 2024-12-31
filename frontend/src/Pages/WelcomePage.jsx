@@ -69,7 +69,7 @@ const WelcomePage = () =>{
     return(
         shouldShowObject ?
         <AnimatePresence>
-            <ObjectToAppear />
+            <ObjectToAppear size={100}/>
         </AnimatePresence>:
         <div className="welcomePage">
             <div className="container">
