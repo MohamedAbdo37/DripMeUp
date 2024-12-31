@@ -262,6 +262,11 @@ public class OrderService {
             orderMetaDTO.setStatus(order.getStatus());
             orderMetaDTO.setTimeStamp(order.getTimeStamp());
             orderMetaDTO.setTotalPrice(order.getTotalPrice());
+            orderMetaDTO.setCvv(order.getCVV());
+            orderMetaDTO.setCardHolder(order.getCardHolder());
+            orderMetaDTO.setCardNumber(order.getCardNumber());
+            orderMetaDTO.setExpirationDate(order.getExpirationDate());
+            orderMetaDTO.setPaymentMethod(order.getPaymentMethod());
             ordersList.add(orderMetaDTO);
         }
         ordersListDTO.setMeta(pageMetaDTO);

@@ -13,4 +13,5 @@ public class ItemDTO {
     private double ProductVariantPrice;
     private Integer ProductVariantQuantity;
     private double ItemTotalPrice;
+
 }
