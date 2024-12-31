@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
@@ -47,6 +48,12 @@ public class SessionManager {
     @Autowired
     private WelcomeGoodbyeManagement welcomeGoodbyeManagement;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AdminService adminService;
+
     private final Random random = new Random();
     private final int expiryTime = 1;
 
@@ -54,12 +61,11 @@ public class SessionManager {
         AdminEntity admin = new AdminEntity();
         admin.setUserName(userName);
         admin.setPassword(password);
-        AdminService service = new AdminService(adminRepository);
-        return service.createAdmin(admin);
+        return adminService.createAdmin(admin);
     }
 
     public Person adminLogin(String userName, String password) {
-        boolean isAuthenticated = new AdminService(adminRepository).adminLogin(userName, password);
+        boolean isAuthenticated = adminService.adminLogin(userName, password);
 
         if (isAuthenticated) {
             AdminEntity admin = adminRepository.findByUserName(userName);
@@ -70,7 +76,7 @@ public class SessionManager {
     }
 
     public Person userLogin(String email, String password) {
-        boolean isAuthenticated = new UserService(this.userRepository).login(email, password);
+        boolean isAuthenticated = userService.login(email, password);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
@@ -80,7 +86,7 @@ public class SessionManager {
 
     public Person userLogin(String token) throws AuthorizationException {
         String email = this.extractEmail(token);
-        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
+        boolean isAuthenticated = userService.isEmailPresent(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
@@ -90,7 +96,7 @@ public class SessionManager {
     }
 
     public Person userSignUp(UserEntity newUser) throws HandlerException {
-        return new UserService(this.userRepository).signup(newUser);
+        return userService.signup(newUser);
     }
 
     public Person userSignUp(UserEntity user, String token) throws AuthorizationException, HandlerException {
@@ -99,7 +105,7 @@ public class SessionManager {
         if (!email.equals(user.getEmail()))
             throw new AuthorizationException("Emails do not match");
 
-        return new UserService(this.userRepository).signup(user);
+        return userService.signup(user);
     }
 
     private String extractEmail(String token) {
@@ -122,15 +128,15 @@ public class SessionManager {
     public boolean changePassword(String email, String password) throws AuthorizationException {
         UserEntity newPassword = new UserEntity();
         newPassword.setPassword(password);
-        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
+        boolean isAuthenticated = userService.isEmailPresent(email);
         if (isAuthenticated) {
-            return new UserService(this.userRepository).changePassword(email, newPassword);
+            return userService.changePassword(email, newPassword);
         } else
             throw new AuthorizationException("Not Authorized");
     }
 
     public Person forgetPasswordPerson(String email) throws AuthorizationException {
-        boolean isAuthenticated = new UserService(this.userRepository).isEmailPresent(email);
+        boolean isAuthenticated =userService.isEmailPresent(email);
         if (isAuthenticated) {
             UserEntity user = userRepository.findByEmail(email);
             return new PersonDirector().construct(new UserPersonBuilder(user, userRepository));
@@ -140,6 +146,7 @@ public class SessionManager {
 
     public String generateCodeSignUp(String email, String userName) throws IOException, FailedToSendMailException, InvalidResendCodeException {
         int code = this.random.nextInt(100000, 1000000);
+        System.out.println(code);
         this.accountManagement.setEmail(email);
         this.accountManagement.setUsername(userName);
         this.accountManagement.setCode(code);
