@@ -1,6 +1,6 @@
 package edu.alexu.cse.dripmeup.dto;
 
-import edu.alexu.cse.dripmeup.enumeration.Status;
+import edu.alexu.cse.dripmeup.enumeration.orderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class OrderMetaDTO {
     private Long id;
-    private Status status;
+    private orderStatus status;
     private Date timeStamp;
     private String address;
     private float totalPrice;

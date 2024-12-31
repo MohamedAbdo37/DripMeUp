@@ -14,7 +14,7 @@ import java.util.List;
 public class OrderManagement extends NotificationService{
 
     // specific attribute for this class
-    private int orderId ;
+    private Long orderId ;
     private OrderDTO orderDTO ;
 
     private static String itemsListToString(List<ItemDTO> items) {
@@ -45,7 +45,7 @@ public class OrderManagement extends NotificationService{
         // making message body
         this.setBody(this.getBody().replace("[User's Name]" , this.getUsername()));
         this.setBody(this.getBody().replace("[Order Number]" ,  String.valueOf(this.getOrderId())));
-        this.setBody(this.getBody().replace("[Item Names]" ,  itemsListToString(orderDTO.getItems())));
+        this.setBody(this.getBody().replace("[OrderItem Names]" ,  itemsListToString(orderDTO.getItems())));
         this.setBody(this.getBody().replace("[Order Total]" ,  String.valueOf(orderDTO.getMeta().getTotalPrice()) + " EGP"));
         /*
         make queries to get order data

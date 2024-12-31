@@ -4,7 +4,7 @@ import edu.alexu.cse.dripmeup.dto.OrderDTO;
 import edu.alexu.cse.dripmeup.dto.OrdersListDTO;
 import edu.alexu.cse.dripmeup.entity.Order;
 import edu.alexu.cse.dripmeup.entity.UserEntity;
-import edu.alexu.cse.dripmeup.enumeration.Status;
+import edu.alexu.cse.dripmeup.enumeration.orderStatus;
 import edu.alexu.cse.dripmeup.exception.AuthorizationException;
 import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
@@ -48,7 +48,7 @@ public class OrderServiceTest {
     public void testConfirmOrder_Success() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.DELIVERY);
+        order.setStatus(orderStatus.DELIVERY);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -56,7 +56,7 @@ public class OrderServiceTest {
         String result = orderService.confirmOrder(1L);
 
         assertEquals("Order is received", result);
-        assertEquals(Status.CONFIRMED, order.getStatus());
+        assertEquals(orderStatus.CONFIRMED, order.getStatus());
         verify(orderRepository, times(1)).save(order);
         verify(orderManagement, times(1)).ReceiveOrder();
     }
@@ -76,7 +76,7 @@ public class OrderServiceTest {
     public void testConfirmOrder_OrderNotInDelivery() {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.CONFIRMED);
+        order.setStatus(orderStatus.CONFIRMED);
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
@@ -91,7 +91,7 @@ public class OrderServiceTest {
     public void testConfirmOrder_FailedToSendMail() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.DELIVERY);
+        order.setStatus(orderStatus.DELIVERY);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -108,7 +108,7 @@ public class OrderServiceTest {
     public void testApproveOrder_Success() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.PENDING);
+        order.setStatus(orderStatus.PENDING);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -116,7 +116,7 @@ public class OrderServiceTest {
         String result = orderService.approveOrder(1L);
 
         assertEquals("Order Approved", result);
-        assertEquals(Status.APPROVED, order.getStatus());
+        assertEquals(orderStatus.APPROVED, order.getStatus());
         verify(orderRepository, times(1)).save(order);
         verify(orderManagement, times(1)).ConfirmOrder();
     }
@@ -136,7 +136,7 @@ public class OrderServiceTest {
     public void testApproveOrder_OrderNotPending() {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.APPROVED);
+        order.setStatus(orderStatus.APPROVED);
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
@@ -151,7 +151,7 @@ public class OrderServiceTest {
     public void testApproveOrder_FailedToSendMail() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.PENDING);
+        order.setStatus(orderStatus.PENDING);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -168,7 +168,7 @@ public class OrderServiceTest {
     public void testDeliverOrder_Success() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.APPROVED);
+        order.setStatus(orderStatus.APPROVED);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -176,7 +176,7 @@ public class OrderServiceTest {
         String result = orderService.deliverOrder(1L);
 
         assertEquals("Order in delivery", result);
-        assertEquals(Status.DELIVERY, order.getStatus());
+        assertEquals(orderStatus.DELIVERY, order.getStatus());
         verify(orderRepository, times(1)).save(order);
         verify(orderManagement, times(1)).ShipOrder();
     }
@@ -196,7 +196,7 @@ public class OrderServiceTest {
     public void testDeliverOrder_OrderNotApproved() {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.PENDING);
+        order.setStatus(orderStatus.PENDING);
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
@@ -211,7 +211,7 @@ public class OrderServiceTest {
     public void testDeliverOrder_FailedToSendMail() throws Exception {
         Order order = new Order();
         order.setId(1L);
-        order.setStatus(Status.APPROVED);
+        order.setStatus(orderStatus.APPROVED);
         order.setUserEntity(new UserEntity());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
@@ -232,7 +232,7 @@ public class OrderServiceTest {
         Page<Order> orderPage = new PageImpl<>(orders);
         when(orderRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(orderPage);
 
-        OrdersListDTO result = orderService.getOrders(1L, 0, 10, Status.PENDING);
+        OrdersListDTO result = orderService.getOrders(1L, 0, 10, orderStatus.PENDING);
 
         assertNotNull(result);
         assertEquals(1, result.getData().size());
@@ -247,7 +247,7 @@ public class OrderServiceTest {
         Page<Order> orderPage = new PageImpl<>(orders);
         when(orderRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(orderPage);
 
-        OrdersListDTO result = orderService.getOrders(0, 10, Status.PENDING);
+        OrdersListDTO result = orderService.getOrders(0, 10, orderStatus.PENDING);
 
         assertNotNull(result);
         assertEquals(1, result.getData().size());

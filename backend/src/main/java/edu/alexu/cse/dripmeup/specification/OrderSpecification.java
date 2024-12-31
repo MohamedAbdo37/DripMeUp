@@ -1,12 +1,12 @@
 package edu.alexu.cse.dripmeup.specification;
 
 import edu.alexu.cse.dripmeup.entity.Order;
-import edu.alexu.cse.dripmeup.enumeration.Status;
+import edu.alexu.cse.dripmeup.enumeration.orderStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 public class OrderSpecification {
     private OrderSpecification() {}
-    public static Specification<Order> status(Status status) {
+    public static Specification<Order> status(orderStatus status) {
         return (root, query, builder) -> builder.equal(root.get("status"), status);
     }
     public static Specification<Order> user(Long id) {

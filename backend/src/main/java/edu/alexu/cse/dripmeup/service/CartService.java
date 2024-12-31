@@ -69,9 +69,19 @@ public class CartService {
         VariantEntity variant = validateVariant(variantID) ;
         this.validateAmount(variant , amount);
 
-        CartEntity cart = new CartEntity(user , variant , amount) ;
-        cartRepository.save(cart) ;
+        CartEntity cart = cartRepository.findByUserAndVariant(user , variant) ;
 
+        // if it exists in cart , update it
+        if(cart != null) {
+            // update amount and time
+            cart.setAmount(amount);
+            cart.onUpdate();
+            cartRepository.save(cart) ;
+            return "Element has been added successfully." ;
+
+        }
+        cart = new CartEntity(user , variant , amount) ;
+        cartRepository.save(cart) ;
         return "Element has been added successfully." ;
     }
 
