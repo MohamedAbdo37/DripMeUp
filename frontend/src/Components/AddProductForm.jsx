@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const AddProductForm = () =>{
-    const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE', dateOfCreation: new Date().toISOString(), rate: 0.0, numberOfFeedback: 0});
+    const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE',rate: 0.0, numberOfFeedback: 0});
     const [selectedCatigory, setSelectedCatigory] = useState("");
     const [addedCatigories, setAddedCatigories] = useState([]);
     const [loadedCatigories, setLoadedCatigories] = useState([]);
@@ -34,6 +34,18 @@ const AddProductForm = () =>{
           .catch(e=>console.error(e));
     }
 
+    function getFormattedDateTime() {
+        const now = new Date();
+      
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+      
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      }
+
     const getListOfCatigories = (catigoriesNamesList)=>{
         let finalCatigoriesList = []
         catigoriesNamesList.forEach((catigoryName)=>{
@@ -48,7 +60,7 @@ const AddProductForm = () =>{
     const addProduct = async(e)=>{
         e.preventDefault();
         //adding final catigories
-        console.log(console.log({...formVariables, categories: getListOfCatigories(addedCatigories)}));
+        console.log(console.log({...formVariables, dateOfCreation: getFormattedDateTime(), categories: getListOfCatigories(addedCatigories)}));
 
         await fetch(`http://localhost:8081/api/1000/shop/c/product`, {
             method:"POST",
@@ -59,6 +71,7 @@ const AddProductForm = () =>{
             body:JSON.stringify(
                 {
                     ...formVariables, 
+                    dateOfCreation: getFormattedDateTime(),
                     categories: getListOfCatigories(addedCatigories)
                 }
             )
