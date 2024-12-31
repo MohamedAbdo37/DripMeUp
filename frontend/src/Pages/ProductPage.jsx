@@ -7,12 +7,13 @@ import star from '../assets/star.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
+import addToCartIcon from "../assets/addToCart.png";
 
 
 const ProductPage = () =>{
-    const { productID, person } = useParams();
+    const { productID, person, currentSelectedVariantId } = useParams();
     const navigate = useNavigate();
-    const [product, setProduct] = useState({ dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, images: [""]}]});
+    const [product, setProduct] = useState({ dateOfCreation:"", variants: [{variantID: 0, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, images: [""]}]});
     const [currentVariant, setCurrentVariant] = useState(0); 
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState("");
@@ -124,14 +125,27 @@ const ProductPage = () =>{
     }
    
     const addToCart = async()=>{
-        await fetch(`http://localhost:8081/cart/${productID}`,{
+        let numberOfVariants = prompt("Enter number of desired variants");
+        if (numberOfVariants == null) return
+        if (numberOfVariants < 1){
+            notifyFailier("Entered amount must be 1 or more");
+            return
+        }
+        await fetch(`http://localhost:8081/api/cart/add/${product.variants[currentVariant].variantID}?amount=${numberOfVariants}`,{
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             }
         })
-        .then(response=>response.status == 200 || response.status == 201? notifySuccess("Added to cart succeffully"): notifyFailier("Failed to add to cart"))
+        .then(response=>response.status == 200 || response.status == 201? notifySuccess("Added to cart succeffully"): (()=>{
+            if(response.status == 409){
+                notifyFailier("Entered amount is out of stock");
+            }
+            else{
+                notifyFailier("Failed to add to cart");
+            }
+        })())
         .catch(e=>{console.log(e);notifyFailier("Failed to add to cart");});
     }
     const edit = ()=>{
@@ -149,7 +163,7 @@ const ProductPage = () =>{
         .catch(e=>{console.log(e);notifyFailier("Failed to delete the product")});
     }
     const addToFavourites = async()=>{
-        await fetch(`http://localhost:8081/addToFav/${productID}`, {
+        await fetch(`http://localhost:8081/api/favorites/add/${product.variants[currentVariant].variantID}`, {
             method:"POST",
             headers:{
                 'Content-Type': 'application/json',
@@ -162,19 +176,11 @@ const ProductPage = () =>{
     return (
         <div style={{fontSize: "1.5rem"}}>
             <div className="productImg">
-                <div className="ratingBox">
-                    <div className="rating">
-                        {product.numberOfFeedback}
-                        {Array.from({length: product.rate}, (_, i)=>(<img src={filledStar} alt="yellowStar" className="yellowStar"/>))}
-                        {Array.from({length: 5-product.rate}, (_, i)=>(<img src={star} alt="emptyStar" className="emptyStar"/>))}
-                        {product.rate}/5
-                    </div>
-                </div>
                 <div className="Img">
                     <img src={product.variants[0].images[0] || unknownPhoto} alt="ProductPhoto" style={{width:"15rem", height: "15rem"}}/>
                 </div>
                 <div className="share-favouriteButtons">
-                    {person=="user"&&<img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>}
+                    {person!="admin"&&<img src={favouriteImage} alt="FavouritePhoto" onClick={addToFavourites}/>}
                 </div>
             </div>
             <div className="controller">
@@ -200,11 +206,9 @@ const ProductPage = () =>{
                     }
                 </div>
                 <div className="controllerRight">
-                    {person == 'user' &&
-                        <div className="controllerButtons">
-                            <button onClick={addToCart} style={{backgroundColor: "#3cdc66"}}>Add to Cart</button>
-                        </div>
-                    }
+                    <div className="controllerButtons">
+                        {person!="admin"&&<img src={addToCartIcon} onClick={addToCart} style={{cursor:"pointer", width:"3.5rem", height:"3.5rem"}}/>}
+                    </div>
                     {person == 'admin' &&
                         <div className="controllerButtons">
                             <button onClick={edit}>Edit</button>
@@ -219,7 +223,7 @@ const ProductPage = () =>{
             </div>
             <div className="variants">
                 {product.variants.map((variant, index)=>(
-                    <div className="variantCard" key={index} onClick={(event)=>selectVariant(index, event)}>
+                    <div className={person=="fav"&&variant.variantID == currentSelectedVariantId?"selectedVariantCard":(()=>{if(index==0 && person!="fav") return "selectedVariantCard"; else return "variantCard";})()} key={index} onClick={(event)=>selectVariant(index, event)}>
                         <img className="variantCardChild" src={variant.variantImage || unknownPhoto} alt="variantImage"/>
                         <h5 className="variantCardChild">{variant.color} | {variant.size}</h5>
                     </div>
@@ -254,7 +258,7 @@ const ProductPage = () =>{
                         onChange={(e) => setNewFeedback(e.target.value)} 
                         placeholder="Add your feedback here..."
                         rows="4" 
-                        style={{width: "100%", marginBottom: "10px"}} 
+                        style={{width: "100%", marginBottom: "10px", fontSize:"2rem"}} 
                     />
                     <button className="backButton" onClick={handleAddFeedback}>
                         Add Feedback

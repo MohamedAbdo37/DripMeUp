@@ -39,6 +39,7 @@ const AdminNavBar = ()=>{
             <Modal 
                 isOpen={showAddProductForm}
                 onRequestClose={()=>setShowAddProductForm(false)}
+                style={{content:{backgroundColor:"rgb(248, 221, 180)"}}}
             >
                 <button className="backButton" onClick={()=>setShowAddProductForm(false)}>X</button>
                 <AddProductForm/>

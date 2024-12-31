@@ -97,9 +97,11 @@ const AddProductForm = () =>{
     }
 
     return(
+        <>
+        <center><h1>New Product</h1></center>
         <form onSubmit={addProduct} style={{justifyItems:"left"}}>
             <h2 style={{margin:"0"}}>Description</h2>
-            <textarea name="description" placeholder="Enter description" style={{margin:"1rem"}} rows="5" cols="100" onChange={handleChange} required/>
+            <textarea name="description" placeholder="Enter description" style={{margin:"1rem", fontSize:"2rem"}} rows="5" cols="80" onChange={handleChange} required/>
             <h2 style={{margin:"0"}}> Select Catigories</h2>
             <div className="selectedCatigoriesContainer">
                 {addedCatigories.map((catigory, key)=>(
@@ -120,25 +122,25 @@ const AddProductForm = () =>{
                 {Array.from({length: numberOfVariants}, (_, i)=>i+1).map((number)=>(
                     <div className="variantContainer" key={number-1}>
                         <center>Variant {number}</center>
-                        <label htmlFor="color">Color</label>
+                        <label style={{color:"black"}} htmlFor="color">Color</label>
                         <input type="text" name="color" value={variants[number-1].color?variants[number-1].color:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                         
-                        <label htmlFor="weight">Weight (in gm)</label>
+                        <label style={{color:"black"}} htmlFor="weight">Weight (in gm)</label>
                         <input type="text" name="weight" value={variants[number-1].weight?variants[number-1].weight:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label htmlFor="length">Length (in cm)</label>
+                        <label style={{color:"black"}} htmlFor="length">Length (in cm)</label>
                         <input type="text" name="length" value={variants[number-1].length?variants[number-1].length:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label htmlFor="size">Size</label>
+                        <label style={{color:"black"}} htmlFor="size">Size</label>
                         <input type="text" name="size" value={variants[number-1].size?variants[number-1].size:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label htmlFor="stock">Amount in Stock</label>
+                        <label style={{color:"black"}} htmlFor="stock">Amount in Stock</label>
                         <input type="text" name="stock" value={variants[number-1].stock?variants[number-1].stock:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label htmlFor="price">Price</label>
+                        <label style={{color:"black"}} htmlFor="price">Price</label>
                         <input type="text" name="price" value={variants[number-1].price?variants[number-1].price:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label htmlFor="images">Images</label>
+                        <label style={{color:"black"}} htmlFor="images">Images</label>
                         <input type="file" name="images" onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.files[0]]; return prev});handleChange(event, true);}} required/>
                     
                         {number!=1 && <center><button className="backButton" onClick={(e)=>{e.preventDefault();handleClearVariant(number-1);}}>Remove</button></center>}
@@ -149,6 +151,7 @@ const AddProductForm = () =>{
             <button className="backButton" onClick={handleAddVariant} style={{width:"202%", backgroundColor:"#c15b658a"}}>Add variant</button><br/>
             <button className="backButton" type="submit" style={{width:"100vh", transform:"translate(50%, 0)"}}>Add Product</button>
         </form>
+        </>
     );
 } 
 

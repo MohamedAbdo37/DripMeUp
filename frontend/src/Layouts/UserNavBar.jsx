@@ -12,16 +12,16 @@ const UserNavBar = ()=>{
             <div className="navBar">
                 {/* <input type="text" placeholder="Search" /> */}
                 <div className='navBarButtons'>
-                <img src={home} alt='homeIcon' onClick={ ()=>navigate('/userSession') }/>
+                <img src={home} alt='homeIcon' title="Go to home" onClick={ ()=>navigate('/userSession') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={favourite} alt='favouriteIcon' onClick={ ()=>navigate('/userSession/favourites') }/>
+                <img src={favourite} alt='favouriteIcon' title="Go to favourits" onClick={ ()=>navigate('/userSession/favourites') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={cart} alt='cartIcon' onClick={ ()=>navigate('/userSession/cart') }/>
+                <img src={cart} alt='cartIcon' title="Go to cart" onClick={ ()=>navigate('/userSession/cart') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={profile} alt='profileIcon' onClick={ ()=>navigate('/userSession/profile') }/>
+                <img src={profile} alt='profileIcon' title="Go to profile" onClick={ ()=>navigate('/userSession/profile') }/>
                 </div>
             </div>
             <Outlet/>

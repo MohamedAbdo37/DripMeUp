@@ -268,7 +268,7 @@ const AdminPage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.productID} className="product-card" onClick={()=>navigate(`/adminSession/product/admin/${product.productID}`)}>
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`/adminSession/product/admin/${product.productID}/0`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />
               <div className="product-details">
