@@ -223,7 +223,7 @@ const ProductPage = () =>{
             </div>
             <div className="variants">
                 {product.variants.map((variant, index)=>(
-                    <div className={person=="fav"&&variant.variantID == currentSelectedVariantId?"selectedVariantCard":(()=>{if(index==0 && person!="fav") return "selectedVariantCard"; else return "variantCard";})()} key={index} onClick={(event)=>selectVariant(index, event)}>
+                    <div className={person=="other"&&variant.variantID == currentSelectedVariantId?"selectedVariantCard":(()=>{if(index==0 && person!="other") return "selectedVariantCard"; else return "variantCard";})()} key={index} onClick={(event)=>selectVariant(index, event)}>
                         <img className="variantCardChild" src={variant.variantImage || unknownPhoto} alt="variantImage"/>
                         <h5 className="variantCardChild">{variant.color} | {variant.size}</h5>
                     </div>

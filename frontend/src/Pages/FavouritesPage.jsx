@@ -80,7 +80,7 @@ const FavouritesPage = ()=>{
             <div style={{width:"100%"}}>
                 {productsInCart.length!=0 && productsInCart.map((product, key)=>(
                     <div className="productCard" key={key}>
-                        <div style={{width:"90%", marginRight:"1.5rem"}} onClick={()=>{navigate(`/userSession/product/fav/${product.productId}/${product.variantId}`)}}>
+                        <div style={{width:"90%", marginRight:"1.5rem"}} onClick={()=>{navigate(`/userSession/product/other/${product.productId}/${product.variantId}`)}}>
                             <img src={product.images[0]} alt="VariantImage" style={{marginRight:"1rem"}}/>
                             <div style={{fontSize:"1.5rem"}}>
                                 <p style={{margin:"0"}}>{product.description}</p>

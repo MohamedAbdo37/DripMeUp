@@ -107,7 +107,7 @@ const CartPage = ()=>{
         <div style={{width:"100%"}}>
             {productsInCart.length!=0 && productsInCart.map((product, key)=>(
                 <div className="productCard" key={key}>
-                    <div style={{width:"90%", marginRight:"1.5rem"}} onClick={()=>{navigate(`/userSession/product/cart/${product.element.productId}/0`)}}>
+                    <div style={{width:"90%", marginRight:"1.5rem"}} onClick={()=>{navigate(`/userSession/product/other/${product.element.productId}/${product.element.variantId}`)}}>
                         <img src={product.element.images[0]} alt="VariantImage" style={{marginRight:"1rem"}}/>
                         <div style={{fontSize:"1.5rem"}}>
                             <p style={{margin:"0"}}>{product.element.description}</p>
@@ -139,15 +139,20 @@ const CartPage = ()=>{
             right: "auto", 
             bottom: "auto", 
             marginRight: "-50%",
-            transform: "translate(-50%, -50%)"}}}
+            transform: "translate(-50%, -50%)",
+            borderRadius:"20px"
+        }}}
         >
+            <center><h1>How would you like to pay ...?</h1></center>
         <form onSubmit={buy}>
-        <label htmlFor="paymentMethod" style={{marginRight:"0.5rem"}}>Payment Method</label>
+        <label htmlFor="paymentMethod" style={{marginRight:"0.5rem"}}>Payment Method:</label>
         <select name="paymentMethod" onChange={handleChange} required>
             <option value="" disabled selected>Select payment method</option>
             <option value="VISA">VISA Card</option>
             <option value="CASH">Cash</option>
-        </select>
+        </select><br/>
+        <label htmlFor="address" style={{marginRight:"0.5rem"}}>Address:</label>
+        <input type="text" name="address" onChange={handleChange} value={formVariables.address} placeholder="Address" required/>
         {formVariables.paymentMethod && formVariables.paymentMethod == "VISA" && <>
         <input type="text"
         name="cardNumber"
