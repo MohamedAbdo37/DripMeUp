@@ -87,4 +87,20 @@ public class ProductService {
         return productRepository.findByCategories(categoryEntity, pageable);
     }
 
+    public boolean deleteProduct(ProductRepository productRepository, long productID) {
+        ProductEntity product = productRepository.findByProductID(productID);
+        if(product == null)
+            return false;
+        productRepository.delete(product);
+        return true;
+    }
+
+    public boolean deleteVariant(VariantRepository variantRepository, long variantID) {
+        VariantEntity variant = variantRepository.findByVariantID(variantID);
+        if(variant == null)
+            return false;
+        variantRepository.delete(variant);
+        return true;
+    }
+    
 }

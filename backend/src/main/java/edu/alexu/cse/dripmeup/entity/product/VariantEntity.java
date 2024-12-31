@@ -32,7 +32,7 @@ public class VariantEntity implements EntityIF{
     @Column(name = "variantID")
     private Long variantID;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "productID")
     private ProductEntity product ;
 
