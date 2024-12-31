@@ -63,7 +63,16 @@ const AddProductForm = () =>{
                 }
             )
         })
-        .then(response=>response.status==200 || response.status==201?(async()=>{
+        .then(response=>response.status==200 || response.status==201?(()=>{
+            notifySuccess("Product added successfully");
+           response.variants.json().forEach(async (variant, i)=>{
+            await fetch(`http://localhost:8081/api/1000/shop/c/image?variantID=${variant.variantID}`,{
+                method:"POST",
+                body: formVariables.variants[i].images[0]
+            })
+            .then(imageResponse=>imageResponse.status==200 || imageResponse.status==201?console.log("Image added successfully"):console.log("Failed to add image"))
+            .catch(e=>console.log(e));
+           })
            
         })(): (()=>{throw Error("Error adding product")})())
         .catch(e=>{console.log(e); notifyFailier("Failed to add the product")})
@@ -143,7 +152,7 @@ const AddProductForm = () =>{
                         <input type="text" name="price" value={variants[number-1].price?variants[number-1].price:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
                         <label style={{color:"black"}} htmlFor="images">Images</label>
-                        <input type="file" name="images" onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.files[0]]; return prev});handleChange(event, true);}} required/>
+                        <input type="file" name="images" onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = [event.target.files[0]]; return prev});handleChange(event, true);}}/>
                     
                         {number!=1 && <center><button className="backButton" onClick={(e)=>{e.preventDefault();handleClearVariant(number-1);}}>Remove</button></center>}
                     </div>

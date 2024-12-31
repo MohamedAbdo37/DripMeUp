@@ -60,7 +60,11 @@ public class SecurityConfig {
                                 "/api/feedback",
                                 "/api/feedback/user/{UserID}",
                                 "/api/7/categories/{categoryName}",
-                                "/users/{UserID}"
+                                "/users/{UserID}",
+                                "/api/1000/shop/c/product",
+                                "/api/1000/shop/c/image",
+                                "/api/1000/shop/c/variant",
+                                "/api/1000/shop/products"
 
                         ).permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints
