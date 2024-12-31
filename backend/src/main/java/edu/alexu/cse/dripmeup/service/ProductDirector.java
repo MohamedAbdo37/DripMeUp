@@ -49,7 +49,9 @@ public class ProductDirector {
     public ProductEntity getProduct(){
         ProductBuilder productBuilder = (ProductBuilder) this.builder;
         ProductEntity product = productBuilder.getResult();
+        System.out.println("Product created from director 1");
         this.productRepository.save(product);
+        System.out.println("Product created from director 2");
         return product;
     }
 
