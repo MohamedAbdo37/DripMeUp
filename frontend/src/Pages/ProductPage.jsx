@@ -7,6 +7,7 @@ import star from '../assets/star.png';
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import '../style.css';
+import { b, body } from "framer-motion/client";
 import addToCartIcon from "../assets/addToCart.png";
 
 
@@ -17,6 +18,7 @@ const ProductPage = () =>{
     const [currentVariant, setCurrentVariant] = useState(0); 
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState("");
+
 
 
 
@@ -85,11 +87,19 @@ const ProductPage = () =>{
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    feedback: newFeedback,
+                    feedback: newFeedback,                    
                     productId: productID,
                     userId: userId // Use the decoded userId
-                })
+                }),
+                
+                
+                
             });
+   
+
+
+
+
     
             if (response.ok) {
                 const feedbackData = await response.json();
