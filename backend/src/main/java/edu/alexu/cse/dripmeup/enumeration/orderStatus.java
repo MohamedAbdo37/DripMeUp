@@ -1,6 +1,6 @@
 package edu.alexu.cse.dripmeup.enumeration;
 
-public enum Status {
+public enum orderStatus {
     PENDING,
     APPROVED,
     DELIVERY,

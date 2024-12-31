@@ -3,6 +3,7 @@ package edu.alexu.cse.dripmeup.service.notifications;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
@@ -28,9 +29,9 @@ public abstract class NotificationService {
     // email and user_name of admin that we will send the email to
     private String email;
     private String username;
-    private String filePath; // file path of email template
     private String subject; // subject of email
     private String body;
+    ClassPathResource resource ;
 
 
     // shared methods between all classes
@@ -38,8 +39,8 @@ public abstract class NotificationService {
     // Reading file from resource
     // throws exception if there is an error with file
     String readFileFromResources() throws IOException {
-        Resource resource = this.resourceLoader.getResource(this.getFilePath());
-        InputStream inputStream = resource.getInputStream();
+
+        InputStream inputStream = this.getResource().getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -59,7 +60,6 @@ public abstract class NotificationService {
             message.setTo(this.getEmail());
             message.setSubject(this.getSubject());
             message.setText(this.getBody());
-            System.out.println(this.getBody());
             this.mailSender.send(message);
             return true;
         } catch (Exception e) {

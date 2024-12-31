@@ -10,7 +10,8 @@ public class ItemDTO {
     private String ProductName;
     private String ProductVariantSize;
     private String ProductVariantColor;
-    private float ProductVariantPrice;
+    private double ProductVariantPrice;
     private Integer ProductVariantQuantity;
-    private float ItemTotalPrice;
+    private double ItemTotalPrice;
+
 }

@@ -147,7 +147,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         // Mock the behavior of JavaMailSender
@@ -167,7 +167,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -188,7 +188,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -209,7 +209,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -229,7 +229,7 @@ public class NotificationsTest {
     void testShipOrder_Success() throws FailedToSendMailException{
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -250,7 +250,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -271,7 +271,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -292,7 +292,7 @@ public class NotificationsTest {
 
         // Arrange
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -361,7 +361,7 @@ public class NotificationsTest {
         try {
             // Arrange
             orderManagement.setEmail("ni254828@gmail.com");
-            orderManagement.setOrderId(1000);
+            orderManagement.setOrderId(1000L);
             orderManagement.setUsername("Nira Ibrahim");
 
             orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
@@ -383,7 +383,7 @@ public class NotificationsTest {
     void testAccountManagement_FileError() throws IOException {
         // Arrange
         // moving file to different place to give error
-        Path source = Paths.get("src/main/resources/Notifications Body/AccountVerification.txt");
+        Path source = Paths.get("src/main/resources/NotificationsBody/AccountVerification.txt");
         Path target = Paths.get("src/main/resources/AccountVerification.txt");
         try {
             Files.move(source, target);
@@ -408,7 +408,7 @@ public class NotificationsTest {
     void testWelcomeManagement_FileError() throws IOException {
         // Arrange
         // moving file to different place to give error
-        Path source = Paths.get("src/main/resources/Notifications Body/WelcomeMessage.txt") ;
+        Path source = Paths.get("src/main/resources/NotificationsBody/WelcomeMessage.txt") ;
         Path target = Paths.get("src/main/resources/WelcomeMessage.txt") ;
         try {
             Files.move(source, target);
@@ -436,11 +436,11 @@ public class NotificationsTest {
         // Arrange
         // moving file to different place to give error
 
-        Path source = Paths.get("src/main/resources/Notifications Body/MakingOrderByCustomer.txt") ;
+        Path source = Paths.get("src/main/resources/NotificationsBody/MakingOrderByCustomer.txt") ;
         Path target = Paths.get("src/main/resources/MakingOrderByCustomer.txt") ;
         Files.move(source , target) ;
         orderManagement.setEmail("ni254828@gmail.com");
-        orderManagement.setOrderId(1000);
+        orderManagement.setOrderId(1000L);
         orderManagement.setUsername("Nira Ibrahim");
 
         orderManagement.setOrderDTO(new OrderDTO(new LinkedList<>() , new OrderMetaDTO()));
