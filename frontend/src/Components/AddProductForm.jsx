@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const AddProductForm = () =>{
-    const [formVariables, setFormVariables] = useState({state: 'ON_SALE', dateOfCreation: new Date().toISOString(), rate: 0.0, numberOfFeedback: 0});
+    const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE', dateOfCreation: new Date().toISOString(), rate: 0.0, numberOfFeedback: 0});
     const [selectedCatigory, setSelectedCatigory] = useState("");
     const [addedCatigories, setAddedCatigories] = useState([]);
     const [loadedCatigories, setLoadedCatigories] = useState([]);
     const [numberOfVariants, setNumberOfVariants] = useState(1);
-    const [variants, setVariants] = useState([{sold: 0, state: 'ON_SALE', discount: 0.0}]);
+    const [variants, setVariants] = useState([{variantID: 0, sold: 0, state: 'ON_SALE', discount: 0.0}]);
     useEffect(()=>{
         getCategories();
     }, []);
@@ -99,7 +99,7 @@ const AddProductForm = () =>{
     const handleAddVariant = (e)=>{
         e.preventDefault();
         setNumberOfVariants((prev)=>prev+1);
-        setVariants((prev)=>[...prev, {sold: 0, state: 'ON_SALE', discount: 0.0}]);
+        setVariants((prev)=>[...prev, {variantID: 0, sold: 0, state: 'ON_SALE', discount: 0.0}]);
     }
 
     const handleClearVariant = (index)=>{
