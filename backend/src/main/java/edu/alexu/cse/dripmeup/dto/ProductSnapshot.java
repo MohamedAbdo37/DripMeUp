@@ -13,7 +13,9 @@ public class ProductSnapshot {
         this.state = productEntity.getState();
         this.description = productEntity.getDescription();
         this.dateOfCreation = productEntity.getTime().toString();
-        this.productImage = shop.getImageOfProduct(productEntity);
+        String imagePath = shop.getImageOfProduct(productEntity);
+        if(imagePath == null) imagePath = "";
+        this.productImage = imagePath;
         this.discount = shop.getDicountOfProduct(productEntity);
     }
 

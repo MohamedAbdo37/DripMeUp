@@ -52,7 +52,8 @@ public class ProductEntity implements EntityIF {
     }
 
     public void addCategory(CategoryEntity c) {
-        this.categories.add(c);
+        if(this.categories != null)
+            this.categories.add(c);
     }
 
 }

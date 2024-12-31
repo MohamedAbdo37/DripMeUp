@@ -31,7 +31,7 @@ public class ProductBuilderTest {
         product.setState(ProductState.ON_SALE);
 
         // Initialize the ProductBuilder with the Product
-        productBuilder = new ProductBuilder(product);
+        productBuilder = new ProductBuilder(product, null);
     }
 
     @Test
