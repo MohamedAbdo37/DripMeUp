@@ -159,7 +159,7 @@ const ProductPage = () =>{
         .catch(e=>{console.log(e);notifyFailier("Failed to add to cart");});
     }
     const edit = ()=>{
-
+        // to be done
     }
     const deleteProduct = async()=>{
         await fetch(`http://localhost:8081/products/${productID}`,{

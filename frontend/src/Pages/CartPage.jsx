@@ -7,6 +7,7 @@ import binIcon from "../assets/bin.png";
 import emptyCartIcon from "../assets/emptyCart.png";
 import deleteCartIcon from "../assets/deleteCart.png";
 import createOrderIcon from "../assets/createOrder.png";
+import logoIcon from "../assets/logo.png";
 
 const CartPage = ()=>{
     const [productsInCart, setProductsInCart] = useState([
@@ -107,8 +108,8 @@ const CartPage = ()=>{
         <div style={{width:"100%"}}>
             {productsInCart.length!=0 && productsInCart.map((product, key)=>(
                 <div className="productCard" key={key}>
-                    <div style={{width:"90%", marginRight:"1.5rem"}} onClick={()=>{navigate(`/userSession/product/other/${product.element.productId}/${product.element.variantId}`)}}>
-                        <img src={product.element.images[0]} alt="VariantImage" style={{marginRight:"1rem"}}/>
+                    <div style={{width:"90%", marginRight:"1.5rem", display:"flex", alignItems:"center"}} onClick={()=>{navigate(`/userSession/product/other/${product.element.productId}/${product.element.variantId}`)}}>
+                        <img src={product.element.images[0]?product.element.images[0]:logoIcon} alt="VariantImage" style={{marginRight:"1rem", width:"8rem", height:"8rem"}}/>
                         <div style={{fontSize:"1.5rem"}}>
                             <p style={{margin:"0"}}>{product.element.description}</p>
                             <p style={{margin:"0"}}>Color: {product.element.color}</p>
