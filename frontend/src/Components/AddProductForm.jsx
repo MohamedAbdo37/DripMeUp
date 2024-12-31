@@ -63,7 +63,9 @@ const AddProductForm = () =>{
                 }
             )
         })
-        .then(response=>response.status==200 || response.status==201?(()=>{notifySuccess("Product added successfully")})(): (()=>{throw Error("Error adding product")})())
+        .then(response=>response.status==200 || response.status==201?(async()=>{
+           
+        })(): (()=>{throw Error("Error adding product")})())
         .catch(e=>{console.log(e); notifyFailier("Failed to add the product")})
     }
 
@@ -122,22 +124,22 @@ const AddProductForm = () =>{
                 {Array.from({length: numberOfVariants}, (_, i)=>i+1).map((number)=>(
                     <div className="variantContainer" key={number-1}>
                         <center>Variant {number}</center>
-                        <label style={{color:"black"}} htmlFor="color">Color</label>
+                        <label style={{color:"white"}} htmlFor="color">Color</label>
                         <input type="text" name="color" value={variants[number-1].color?variants[number-1].color:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                         
-                        <label style={{color:"black"}} htmlFor="weight">Weight (in gm)</label>
+                        <label style={{color:"white"}} htmlFor="weight">Weight (in gm)</label>
                         <input type="text" name="weight" value={variants[number-1].weight?variants[number-1].weight:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label style={{color:"black"}} htmlFor="length">Length (in cm)</label>
+                        <label style={{color:"white"}} htmlFor="length">Length (in cm)</label>
                         <input type="text" name="length" value={variants[number-1].length?variants[number-1].length:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label style={{color:"black"}} htmlFor="size">Size</label>
+                        <label style={{color:"white"}} htmlFor="size">Size</label>
                         <input type="text" name="size" value={variants[number-1].size?variants[number-1].size:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label style={{color:"black"}} htmlFor="stock">Amount in Stock</label>
+                        <label style={{color:"white"}} htmlFor="stock">Amount in Stock</label>
                         <input type="text" name="stock" value={variants[number-1].stock?variants[number-1].stock:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
-                        <label style={{color:"black"}} htmlFor="price">Price</label>
+                        <label style={{color:"white"}} htmlFor="price">Price</label>
                         <input type="text" name="price" value={variants[number-1].price?variants[number-1].price:""} onChange={(event)=>{setVariants((prev)=>{prev[number-1][event.target.name] = event.target.value; return prev});handleChange(event, true);}} required/>
                     
                         <label style={{color:"black"}} htmlFor="images">Images</label>

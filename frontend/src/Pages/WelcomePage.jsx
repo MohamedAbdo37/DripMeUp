@@ -73,7 +73,7 @@ const WelcomePage = () =>{
         </AnimatePresence>:
         <div className="welcomePage">
             <div className="container">
-                <center><h1>Welcome</h1></center>
+                <center><h1 style={{color:"white", animation:"slide-in 1s easy-in"}}>Welcome</h1></center>
                 <center><img src={googleLogo} alt="" className="logoImage"/></center>
                 <div className="buttons">
                     <button className="shopButton" onClick={handleShopping}>Shop Now</button>
@@ -81,7 +81,10 @@ const WelcomePage = () =>{
                     <Link className="signupButton" to="/admin/login">Login as Admin</Link>
                 </div>
             </div>
+            <div style={{backgroundColor: "#ffffff", height:"100%",
+                backgroundImage: "repeating-radial-gradient(circle at 0 0, transparent 0, rgba(255, 255, 255, 0.5) 14px), repeating-linear-gradient(rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0.5))"}}>
             <LoginBox/>
+            </div>
         </div>
     );
 };

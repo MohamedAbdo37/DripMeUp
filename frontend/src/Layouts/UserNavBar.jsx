@@ -13,19 +13,19 @@ const UserNavBar = ()=>{
             <div className="navBar">
                 {/* <input type="text" placeholder="Search" /> */}
                 <div className='navBarButtons'>
-                <img src={home} alt='homeIcon' title="Go to home" onClick={ ()=>navigate('/userSession') }/>
+                <img src={home} alt='homeIcon' title="Go to home" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/userSession') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={favourite} alt='favouriteIcon' title="Go to favourits" onClick={ ()=>navigate('/userSession/favourites') }/>
+                <img src={favourite} alt='favouriteIcon' title="Go to favourits" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/userSession/favourites') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={cart} alt='cartIcon' title="Go to cart" onClick={ ()=>navigate('/userSession/cart') }/>
+                <img src={cart} alt='cartIcon' title="Go to cart" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/userSession/cart') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/userSession/my-orders') }/>
+                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/userSession/my-orders') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={profile} alt='profileIcon' title="Go to profile" onClick={ ()=>navigate('/userSession/profile') }/>
+                <img src={profile} alt='profileIcon' title="Go to profile" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/userSession/profile') }/>
                 </div>
             </div>
             <Outlet/>

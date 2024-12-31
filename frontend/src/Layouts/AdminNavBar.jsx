@@ -24,26 +24,26 @@ const AdminNavBar = ()=>{
             <div className="navBar">
                 {/* <input type="text" placeholder="Search" /> */}
                 <div className='navBarButtons'>
-                <img src={home} alt='homeIcon' title='Go to home' onClick={ ()=>navigate('/adminSession') }/>
+                <img src={home} alt='homeIcon' title='Go to home' style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/adminSession') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={add} alt='addProductIcon' title='Add product' onClick={ ()=>{setShowAddProductForm(true)}}/>
+                <img src={add} alt='addProductIcon' title='Add product' style={{width:"3rem", height: "3rem"}} onClick={ ()=>{setShowAddProductForm(true)}}/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={addAdmin} alt='profileIcon' title='Add admin' style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>
+                <img src={addAdmin} alt='profileIcon' title='Add admin' style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/adminSession/addAdmin') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"4rem", height: "4rem"}} onClick={ ()=>navigate('/adminSession/orders') }/>
+                <img src={orders} alt='ordersIcon' title="Go to your orders" style={{width:"3rem", height: "3rem"}} onClick={ ()=>navigate('/adminSession/orders') }/>
                 </div>
                 <div className='navBarButtons'>
-                <img src={logout} alt='logoutIcon' title='logout' onClick={ handleLogout }/>
+                <img src={logout} alt='logoutIcon' title='logout' style={{width:"3rem", height: "3rem"}} onClick={ handleLogout }/>
                 </div>
             </div>
             <Outlet/>
             <Modal 
                 isOpen={showAddProductForm}
                 onRequestClose={()=>setShowAddProductForm(false)}
-                style={{content:{background:"linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,221,180,1) 100%)"}}}
+                style={{content:{background:"white"}}}
             >
                 <button className="backButton" onClick={()=>setShowAddProductForm(false)}>X</button>
                 <AddProductForm/>
