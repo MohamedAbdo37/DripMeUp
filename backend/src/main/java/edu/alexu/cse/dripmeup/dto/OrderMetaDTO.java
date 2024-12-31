@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.dto;
 
 import edu.alexu.cse.dripmeup.enumeration.orderStatus;
+import edu.alexu.cse.dripmeup.enumeration.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,9 @@ public class OrderMetaDTO {
     private String address;
     private double totalPrice;
     private String CustomerName;
+    private String cvv;
+    private String cardHolder;
+    private String cardNumber;
+    private String expirationDate;
+    private PaymentMethod paymentMethod;
 }

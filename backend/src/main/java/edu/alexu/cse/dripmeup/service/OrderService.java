@@ -288,6 +288,11 @@ public class OrderService {
         orderMetaDTO.setTotalPrice(order.getTotalPrice());
         orderMetaDTO.setTimeStamp(order.getTimeStamp());
         orderMetaDTO.setCustomerName(order.getUserEntity().getUserName());
+        orderMetaDTO.setCvv(order.getCVV());
+        orderMetaDTO.setCardHolder(order.getCardHolder());
+        orderMetaDTO.setCardNumber(order.getCardNumber());
+        orderMetaDTO.setExpirationDate(order.getExpirationDate());
+        orderMetaDTO.setPaymentMethod(order.getPaymentMethod());
 
         orderDTO.setMeta(orderMetaDTO);
         orderDTO.setItems(itemDTOS);
