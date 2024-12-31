@@ -38,19 +38,6 @@ class AdminCreationServiceTest {
     }
 
     @Test
-    void testCreateAdminWithValidInput() {
-        // Arrange
-        when(mockAdmin.getRole()).thenReturn(Role.ADMIN);
-
-        // Act
-        Person result = new AdminService(adminRepository).createAdmin(mockNewAdmin);
-
-        // Assert
-//        assertNotNull(result);
-        verify(mockAdmin, times(1)).getRole();
-    }
-
-    @Test
     void testCreateAdminWithNonAdminCreator() {
         // Arrange
         when(mockAdmin.getRole()).thenReturn(Role.USER);

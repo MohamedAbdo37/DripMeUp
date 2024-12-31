@@ -2,6 +2,7 @@ package edu.alexu.cse.dripmeup;
 
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.Variant;
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.ProductEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
@@ -139,6 +140,7 @@ public class ProductServiceTest {
     @Test
     public void testCreateProduct() {
         // Arrange
+        CategoryEntity category = new CategoryEntity();
         Product productDto = new Product();
         productDto = new Product();
         productDto.setDescription("Test Product");
@@ -147,7 +149,7 @@ public class ProductServiceTest {
         when(productRepository.save(any(ProductEntity.class))).thenReturn(null);
 
         // Act
-        ProductEntity result = productService.createProduct(productRepository, productDto, null);
+        ProductEntity result = productService.createProduct(productRepository, productDto, List.of(category));
 
         // Assert
         assertNotNull(result);

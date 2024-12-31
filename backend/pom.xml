@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>edu.alexu.cse</groupId>
 	<artifactId>dripmeup</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>DripMeUp</name>
 	<description>an e-commerce platform for a clothing store.It offers online shopping and management features for both customers and admins.</description>
 	<url/>

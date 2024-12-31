@@ -89,6 +89,7 @@ public class CategoryEntity {
     }
 
     public void addProduct(ProductEntity productEntity) {
-        this.products.add(productEntity);
+        if(this.products != null) 
+            this.products.add(productEntity);
     }
 }

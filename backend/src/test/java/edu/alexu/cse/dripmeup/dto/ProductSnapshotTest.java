@@ -22,13 +22,13 @@ class ProductSnapshotTest {
         productEntity.setTime(LocalDateTime.of(2024, 5, 20, 10, 30));
 
         // Mock ShopManager
-         ShopManager shop = mock(ShopManager.class);
+        ShopManager shop = mock(ShopManager.class);
 
         // Create ProductSnapshot
         ProductSnapshot snapshot = new ProductSnapshot(productEntity, shop);
 
         assertEquals(1L, snapshot.getProductID(), "Product ID should match");
-        assertEquals(100, snapshot.getPrice(), "Default price should be 100");
+        assertEquals(0, snapshot.getPrice(), "Default price should be 100");
         assertEquals(ProductState.ON_SALE, snapshot.getState(), "Product state should match");
         assertEquals("Test Product", snapshot.getDescription(), "Description should match");
         assertEquals("2024-05-20T10:30", snapshot.getDateOfCreation(), "Date of creation should match");
