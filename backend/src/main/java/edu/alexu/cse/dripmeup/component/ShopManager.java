@@ -75,7 +75,7 @@ public class ShopManager {
     }
 
     public List<Variant> getVariantsOfProduct(ProductEntity product) {
-        List<VariantEntity> variants = new ProductService().getVariantsOfProduct(product);
+        List<VariantEntity> variants = new ProductService().getVariantsOfProduct(product, this.variantRepository);
         if (variants == null)
             return List.of();
         return variants.stream().map(variant -> this.productMapper.toVariantDTO(variant, this)).toList();
@@ -95,24 +95,24 @@ public class ShopManager {
     }
 
     public Product createProduct(Product product) {
-        List<CategoryEntity> categoryEntities = new ArrayList<>();
 
+        List<CategoryEntity> categoryEntities = new ArrayList<>();
         for(Category c: product.getCategories()){
             CategoryEntity ce = this.categoryManager.getCategoryEntityByName(c.getName());
             if (ce == null)
                 throw new RuntimeException("There is no with name " + c.getName());
             categoryEntities.add(ce);
         }
-        Product newProduct = new Product(new ProductService().createProduct(this.productRepository, product, categoryEntities), this);
+        ProductEntity newProduct =new ProductService().createProduct(this.productRepository, product, categoryEntities);
 
         for(CategoryEntity c: categoryEntities){
             this.categoryRepository.save(c);
         }
-        
+
         for(Variant v: product.getVariants())
             this.crateVariant(v, newProduct.getProductID());
-        
-        return newProduct;
+
+        return new Product(newProduct,this);
     }
 
     public Variant crateVariant(Variant variant, Long productID) throws ProductCreationException {
@@ -153,7 +153,7 @@ public class ShopManager {
     }
 
     private VariantEntity minimumPrice(ProductEntity product){
-        return new ProductService().minimumPrice(product);
+        return new ProductService().minimumPrice(product, this.variantRepository);
     }
 
     public List<Category> getProductCategories(ProductEntity product){

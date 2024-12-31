@@ -2,7 +2,9 @@ package edu.alexu.cse.dripmeup.service.builder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;
@@ -41,10 +43,12 @@ public class ProductBuilder implements ProductBuilderIF{
 
     public void buildCategories() {
         if (this.categories == null) return;
+        Set<CategoryEntity> categoriesSet = new HashSet<>();
         for(CategoryEntity c: this.categories){
-            c.addProduct(this.productEntity);
-            this.productEntity.addCategory(c);
+            // c.addProduct(this.productEntity);
+            categoriesSet.add(c);
         }
+        this.productEntity.setCategories(categoriesSet);
     }
     
     @Override
