@@ -181,4 +181,12 @@ public class ShopManager {
         return variant.getDiscount();
     }
 
+    public boolean deleteProduct(long productID) {
+        return new ProductService().deleteProduct(this.productRepository, productID);
+    }
+
+    public boolean deleteVariant(long variantID) {
+        return new ProductService().deleteVariant(this.variantRepository, variantID);
+    }
+
 }
