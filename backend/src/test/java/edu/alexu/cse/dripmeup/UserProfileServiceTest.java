@@ -8,8 +8,11 @@ import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.service.UserProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -20,17 +23,20 @@ import static org.mockito.Mockito.*;
 class UserProfileServiceTest {
 
     @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
     private UserRepository userRepository;
 
     @Mock
     private ImageUploader imageUploader;
 
+    @InjectMocks
     private UserProfileService userProfileService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        userProfileService = new UserProfileService(userRepository, imageUploader);
     }
 
     @Test
@@ -38,8 +44,6 @@ class UserProfileServiceTest {
         UserEntity user = new UserEntity();
         user.setUserID(1L);
         user.setUserName("oldUsername");
-        user.setEmail("oldEmail@example.com");
-        user.setPassword("oldPassword");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.findByEmail("newEmail@example.com")).thenReturn(null);
@@ -48,15 +52,12 @@ class UserProfileServiceTest {
         body.put("username", "newUsername");
         body.put("email", "newEmail@example.com");
         body.put("gender", "MALE");
-        body.put("oldPassword", "oldPassword");
-        body.put("newPassword", "newPassword");
 
         userProfileService.updateUserInfo(1L, body);
 
         assertEquals("newUsername", user.getUserName());
         assertEquals("newEmail@example.com", user.getEmail());
         assertEquals(Gender.MALE, user.getGender());
-        assertEquals("newPassword", user.getPassword());
         verify(userRepository).save(user);
     }
 
@@ -103,6 +104,39 @@ class UserProfileServiceTest {
 
         assertNull(user.getPhoto());
         verify(userRepository).save(user);
+    }
+
+    @Test
+    void testUpdateUserPassword_correctOldPassword() throws Exception {
+        UserEntity user = new UserEntity();
+        user.setUserID(1L);
+        user.setPassword(passwordEncoder.encode("oldPassword"));
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        HashMap<String, String> body = new HashMap<>();
+        body.put("oldPassword", "oldPassword");
+        body.put("newPassword", "newPassword");
+
+        userProfileService.updateUserPassword(1L, body);
+
+        assertTrue(passwordEncoder.matches("newPassword", user.getPassword()));
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void testUpdateUserPassword_wrongOldPassword() {
+        UserEntity user = new UserEntity();
+        user.setUserID(1L);
+        user.setPassword(passwordEncoder.encode("oldPassword"));
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        HashMap<String, String> body = new HashMap<>();
+        body.put("oldPassword", "wrongPassword");
+        body.put("newPassword", "newPassword");
+
+        assertThrows(BadInputException.class, () -> userProfileService.updateUserPassword(1L, body));
     }
 
 }

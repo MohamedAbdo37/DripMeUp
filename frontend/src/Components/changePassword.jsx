@@ -15,7 +15,7 @@ const ChangePassword = ({ onClose }) => {
   const handleChangePassword = async () => {
     const token = localStorage.getItem('drip_me_up_jwt');
     try {
-      const response = await fetch('http://localhost:8081/users/', {
+      const response = await fetch('http://localhost:8081/users/password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

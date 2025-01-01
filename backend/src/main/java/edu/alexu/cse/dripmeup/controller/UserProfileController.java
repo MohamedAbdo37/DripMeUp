@@ -78,6 +78,22 @@ public class UserProfileController {
         return ResponseEntity.ok(ResponseBodyMessage.message("Photo removed successfully"));
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("/password")
+    public ResponseEntity<?> changeUserPassword(@RequestBody HashMap<String, String> body){
+        try{
+            Long USER_ID = SecurityService.getIdFromSecurityContext();
+            userProfileService.updateUserPassword(USER_ID, body);
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(400).body(ResponseBodyMessage.error(e.getMessage()));
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while updating your password"));
+        }
+        return ResponseEntity.ok(ResponseBodyMessage.message("Password updated successfully"));
+    }
+    
     @GetMapping("/{UserID}")
     public ResponseEntity<?> getUserInfoById(@PathVariable Long UserID){
         try{

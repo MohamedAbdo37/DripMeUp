@@ -76,22 +76,6 @@ public class UserSessionController {
         }
     }
 
-    @GetMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestHeader("NewPassword") String password,
-                                                 @RequestHeader("Email") String email, @RequestHeader("SessionID") String sessionID) {
-
-        if (!this.sessionID.equals(Long.valueOf(sessionID)))
-            return ResponseEntity.status(400).body("Not Authorized");
-
-        try {
-            if (this.sessionManager.changePassword(email, password))
-                return ResponseEntity.status(200).body(null);
-            else
-                return ResponseEntity.status(409).body("Failed to update password");
-        } catch (AuthorizationException e) {
-            return ResponseEntity.status(400).body("Not Authorized");
-        }
-    }
 
     @GetMapping("signup/code")
     public ResponseEntity<String> sendCodeSignUp(@RequestHeader("Email") String email,

@@ -131,22 +131,24 @@ class UserServiceTest {
         assertFalse(result, "Email should not be present");
     }
 
-//    @Test
-//    void testChangePassword_Successful() {
-//        UserEntity mockUser = new UserEntity();
-//        mockUser.setEmail("test@example.com");
-//        String oldPassword = "oldPassword";
-//        String newPassword = "newPassword";
-//        String encodedNewPassword = passwordEncoder.encode(newPassword);
-//        mockUser.setPassword(oldPassword);
-//
-//        when(userRepository.findByEmail("test@example.com")).thenReturn(mockUser);
-//        when(passwordEncoder.encode(newPassword)).thenReturn(encodedNewPassword);
-//
-//        boolean result = userService.changePassword("test@example.com", new UserEntity(newPassword));
-//
-//        verify(userRepository, times(1)).save(mockUser);
-//        assertEquals(encodedNewPassword, mockUser.getPassword());
-//        assertTrue(result, "Password should be changed successfully");
-//    }
+    @Test
+    void testChangePassword_Successful() {
+        UserEntity mockUser = new UserEntity();
+        mockUser.setEmail("test@example.com");
+        String oldPassword = "oldPassword";
+        String newPassword = "newPassword";
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        mockUser.setPassword(passwordEncoder.encode(oldPassword));
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(mockUser);
+
+        UserEntity newPass = new UserEntity();
+        newPass.setPassword(newPassword);
+
+        boolean result = userService.changePassword("test@example.com", newPass);
+
+        verify(userRepository, times(1)).save(mockUser);
+        assertEquals(encodedNewPassword, mockUser.getPassword());
+        assertTrue(result, "Password should be changed successfully");
+    }
 }

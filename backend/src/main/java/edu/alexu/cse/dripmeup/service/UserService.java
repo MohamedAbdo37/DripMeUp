@@ -42,7 +42,7 @@ public class UserService {
     public boolean changePassword(String email, UserEntity newPassword) {
         UserEntity user = userRepository.findByEmail(email);
         // changing password goes here
-        user.setPassword(newPassword.getPassword());
+        user.setPassword(passwordEncoder.encode(newPassword.getPassword()));
         this.userRepository.save(user);
 
         return true;
