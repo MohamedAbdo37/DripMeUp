@@ -78,6 +78,18 @@ public class UserProfileController {
         return ResponseEntity.ok(ResponseBodyMessage.message("Photo removed successfully"));
     }
 
+    @GetMapping("/{UserID}")
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long UserID){
+        try{
+            Profile profile = userProfileService.getUserProfile(UserID);
+            return ResponseEntity.ok(profile);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching user info"));
+        }
+    }
+
+
+
 
 
 }
