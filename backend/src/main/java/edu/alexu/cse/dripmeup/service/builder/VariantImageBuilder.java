@@ -1,5 +1,8 @@
 package edu.alexu.cse.dripmeup.service.builder;
 
+import java.util.HashSet;
+
+import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantImageEntity;
 
@@ -24,7 +27,7 @@ public class VariantImageBuilder implements ProductBuilderIF{
     }
 
     public void buildVariant(){
-        this.variantImage.setVariant(this.variant);
+        this.variant.addVariantImage(this.variantImage);
     }
 
     @Override

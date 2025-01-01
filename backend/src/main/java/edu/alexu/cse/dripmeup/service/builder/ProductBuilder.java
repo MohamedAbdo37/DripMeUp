@@ -45,7 +45,6 @@ public class ProductBuilder implements ProductBuilderIF{
         if (this.categories == null) return;
         Set<CategoryEntity> categoriesSet = new HashSet<>();
         for(CategoryEntity c: this.categories){
-            // c.addProduct(this.productEntity);
             categoriesSet.add(c);
         }
         this.productEntity.setCategories(categoriesSet);

@@ -20,12 +20,8 @@ public class VariantImageEntity implements EntityIF {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ImageID")
-
     private Long imageID;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "variantID")
-    private VariantEntity variant;
 
     @Column(name = "Image")
 

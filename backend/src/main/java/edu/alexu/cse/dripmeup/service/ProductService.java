@@ -30,7 +30,7 @@ public class ProductService {
     }
 
     public String getImageOfProduct(ProductEntity product, VariantRepository variantRepository) {
-        List<VariantEntity> variants = variantRepository.findByProduct(product);
+        List<VariantEntity> variants = product.getVariants();
         if(variants == null || variants.isEmpty())
             throw new EODException("there is no data available");
         return variants.get(0).getVariantImages().get(0).getImagePath();
@@ -64,14 +64,14 @@ public class ProductService {
     }
 
     public List<VariantEntity> getVariantsOfProduct(ProductEntity product, VariantRepository variantRepository) {
-        return variantRepository.findByProduct(product);
+        return product.getVariants();
     }
 
     public VariantEntity minimumPrice(ProductEntity product, VariantRepository variantRepository) {
         VariantEntity variantEntity = null;
         double minimumPrice = Double.MAX_VALUE;
 
-        for(VariantEntity v: variantRepository.findByProduct(product)){
+        for(VariantEntity v: product.getVariants()){
             double value = v.getPrice() * v.getDiscount();
             if(variantEntity == null || value < minimumPrice){
                 variantEntity = v;

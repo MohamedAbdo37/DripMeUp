@@ -33,9 +33,6 @@ public class ShopManager {
     @Autowired
     private VariantRepository variantRepository;
 
-//    @Autowired
-//    private ItemRepository itemRepository;
-
     @Autowired
     private ProductMapper productMapper;
 
@@ -75,7 +72,7 @@ public class ShopManager {
     }
 
     public List<Variant> getVariantsOfProduct(ProductEntity product) {
-        List<VariantEntity> variants = new ProductService().getVariantsOfProduct(product, this.variantRepository);
+        List<VariantEntity> variants = product.getVariants();
         if (variants == null)
             return List.of();
         return variants.stream().map(variant -> this.productMapper.toVariantDTO(variant, this)).toList();
@@ -91,7 +88,10 @@ public class ShopManager {
     }
 
     public Product getProduct(long productID) {
-        return new Product(new ProductService().getProduct(this.productRepository, productID), this);
+        ProductEntity product = new ProductService().getProduct(this.productRepository, productID);
+        if (product == null)
+            return null;
+        return new Product(product, this);
     }
 
     public Product createProduct(Product product) {
@@ -117,6 +117,7 @@ public class ShopManager {
 
     public Variant crateVariant(Variant variant, Long productID) throws ProductCreationException {
         ProductEntity product = this.productRepository.findByProductID(productID);
+        
         if (product == null)
             throw new ProductCreationException("There is no product with id " + productID);
 
@@ -139,7 +140,7 @@ public class ShopManager {
     }
 
     public List<String> getImagesOfVariant(VariantEntity variant) {
-        List<VariantImageEntity> images = new ProductService().getImagesOfVariant(variant);
+        List<VariantImageEntity> images = variant.getVariantImages();
         List<String> paths = new ArrayList<>();
         if (images == null)
             return List.of();

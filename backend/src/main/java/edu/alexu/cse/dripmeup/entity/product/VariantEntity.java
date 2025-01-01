@@ -1,6 +1,7 @@
 package edu.alexu.cse.dripmeup.entity.product;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import edu.alexu.cse.dripmeup.entity.EntityIF;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
@@ -32,11 +33,7 @@ public class VariantEntity implements EntityIF{
     @Column(name = "variantID")
     private Long variantID;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "productID")
-    private ProductEntity product ;
-
-    @OneToMany(mappedBy = "variant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "imageID", cascade = CascadeType.ALL)
     private List<VariantImageEntity> variantImages ;
 
     @Column(name = "Color")
@@ -66,9 +63,14 @@ public class VariantEntity implements EntityIF{
     @Column(name = "Discount")
     private double discount;
     
+    public void addVariantImage(VariantImageEntity i) {
+        if(this.variantImages != null){
+            this.variantImages.add(i);
+        }
+        else{
+            this.variantImages = new ArrayList<>();
+            this.variantImages.add(i);
+        }
 
-    public void addVariantImage(VariantImageEntity variantImageEntity) {
-        variantImageEntity.setVariant(this);
-        this.variantImages.add(variantImageEntity);
     }
 }
