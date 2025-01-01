@@ -9,6 +9,7 @@ import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.enumeration.Gender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,6 +18,9 @@ import java.util.HashMap;
 public class UserProfileService {
     UserRepository userRepository;
     ImageUploader imageUploader;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserProfileService(UserRepository userRepository,
@@ -58,15 +62,6 @@ public class UserProfileService {
             user.setPhone(user.getPhone());
         }
 
-        if (body.containsKey("oldPassword") && body.get("oldPassword") != null) {
-            if (!body.containsKey("newPassword") || body.get("newPassword") == null) {
-                throw new BadInputException("newPassword is required to change password");
-            }
-            if (!user.getPassword().equals(body.get("oldPassword"))) {
-                throw new BadInputException("oldPassword is incorrect");
-            }
-            user.setPassword(body.get("newPassword"));
-        }
         userRepository.save(user);
 
     }
@@ -123,6 +118,23 @@ public class UserProfileService {
             e.printStackTrace();
         }
         user.setPhoto(null);
+        userRepository.save(user);
+    }
+
+    public void updateUserPassword(Long userId, HashMap<String, String> body) throws BadInputException {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null)
+            return;
+        if (!body.containsKey("oldPassword") || body.get("oldPassword") == null) {
+            throw new BadInputException("oldPassword is required");
+        }
+        if (!body.containsKey("newPassword") || body.get("newPassword") == null) {
+            throw new BadInputException("newPassword is required");
+        }
+        if (!passwordEncoder.matches(body.get("oldPassword"), user.getPassword())) {
+            throw new BadInputException("oldPassword is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(body.get("newPassword")));
         userRepository.save(user);
     }
 }

@@ -36,10 +36,6 @@ public class ProductService {
         return variants.get(0).getVariantImages().get(0).getImagePath();
     }
 
-    public List<VariantEntity> getVariantsOfProduct(ProductEntity product) {
-        return product.getVariants();
-    }
-
 
     public ProductEntity getProduct(ProductRepository productRepository,long productID) {
         return productRepository.findByProductID(productID);
@@ -67,11 +63,15 @@ public class ProductService {
         return variant.getVariantImages();
     }
 
-    public VariantEntity minimumPrice(ProductEntity product) {
+    public List<VariantEntity> getVariantsOfProduct(ProductEntity product, VariantRepository variantRepository) {
+        return variantRepository.findByProduct(product);
+    }
+
+    public VariantEntity minimumPrice(ProductEntity product, VariantRepository variantRepository) {
         VariantEntity variantEntity = null;
         double minimumPrice = Double.MAX_VALUE;
 
-        for(VariantEntity v: product.getVariants()){
+        for(VariantEntity v: variantRepository.findByProduct(product)){
             double value = v.getPrice() * v.getDiscount();
             if(variantEntity == null || value < minimumPrice){
                 variantEntity = v;
@@ -87,4 +87,20 @@ public class ProductService {
         return productRepository.findByCategories(categoryEntity, pageable);
     }
 
+    public boolean deleteProduct(ProductRepository productRepository, long productID) {
+        ProductEntity product = productRepository.findByProductID(productID);
+        if(product == null)
+            return false;
+        productRepository.delete(product);
+        return true;
+    }
+
+    public boolean deleteVariant(VariantRepository variantRepository, long variantID) {
+        VariantEntity variant = variantRepository.findByVariantID(variantID);
+        if(variant == null)
+            return false;
+        variantRepository.delete(variant);
+        return true;
+    }
+    
 }

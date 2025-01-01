@@ -29,8 +29,6 @@ public class EmailTestingController {
         accountManagement.setCode(123456);
         try{
             System.out.println(accountManagement.VerifyAccount());
-            // System.out.println(accountManagement.ChangeEmail());
-            // System.out.println(accountManagement.ForgetPassword());
         } catch (IOException | FailedToSendMailException e) {
             System.out.println(e.getMessage());
         }

@@ -2,6 +2,7 @@ package edu.alexu.cse.dripmeup.dto;
 
 import edu.alexu.cse.dripmeup.entity.CategoryEntity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,11 @@ public class Category {
         this.id = categoryEntity.getId();
         this.name = categoryEntity.getName();
         this.description = categoryEntity.getDescription();
-        this.subcategoryNames = categoryEntity.getSubcategories().stream()
-                .map(CategoryEntity::getName)
-                .collect(Collectors.toList());
+        this.subcategoryNames = categoryEntity.getSubcategories() != null ?
+                categoryEntity.getSubcategories().stream()
+                        .map(CategoryEntity::getName)
+                        .collect(Collectors.toList()) :
+                Collections.emptyList();
     }
 
     public String getName() {

@@ -15,27 +15,26 @@ const AddAdminBox = () =>{
       toast.success(`New admin added successfully`);
     };
     const notifyFailAddedAdmin = () => {
-      toast.success(`Failed to add a new admin`);
+      toast.error(`Failed to add a new admin`);
     };
     const add = async (e)=>{
         e.preventDefault()
-        const token = localStorage.getItem('drip_me_up_jwt');
-        const adminAdder = await fetch(`http://localhost:8081/api/6/admin/signup`, {
+        await fetch(`http://localhost:8081/api/6/admin/signup`, {
             method: "POST",
             headers:{
                 'UserName': username,
                 'Password': password,
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             }
         })
-        .then(response=>response.status==200 || response.status==201?(() => { notifyAddedAdmin() })():(() => { throw new Error('Something went wrong'); })())
+        .then(response=>response.status==200 || response.status==201?(() => { notifyAddedAdmin() })():(() => { throw new Error('Failed to add admin'); })())
         .catch(error=>{
             notifyFailAddedAdmin();
-            console.log(e);
+            console.log(error);
         });
     }
     return(
-        <div className="formBox">
+        <div className="formBox" style={{marginTop: "10rem"}}>
             <form id="loginForm" onSubmit={add}>
                 <header>Create Admin </header>
                 <label htmlFor='username'><b>Username</b></label>

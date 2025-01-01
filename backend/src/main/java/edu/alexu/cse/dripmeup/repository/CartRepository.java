@@ -15,6 +15,8 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
     List<CartEntity> findAllByUserOrderByTimeDesc(UserEntity user) ;
 
+    List<CartEntity> findAllByUser(UserEntity user) ;
+
     @Transactional
     Long deleteByUserAndVariant(UserEntity user , VariantEntity variant);
 

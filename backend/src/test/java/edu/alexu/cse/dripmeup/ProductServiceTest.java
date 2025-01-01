@@ -112,15 +112,15 @@ public class ProductServiceTest {
         // Arrange
         ProductEntity product = new ProductEntity();
         VariantEntity variant = new VariantEntity();
-        product.setVariants(Collections.singletonList(variant));
+        variant.setProduct(product);
+        when(variantRepository.findByProduct(product)).thenReturn(List.of(variant));
 
         // Act
-        List<VariantEntity> result = productService.getVariantsOfProduct(product);
+        List<VariantEntity> result = productService.getVariantsOfProduct(product, variantRepository);
 
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
-        verifyNoInteractions(variantRepository, productRepository); // No DB interaction
     }
 
     @Test
@@ -142,8 +142,8 @@ public class ProductServiceTest {
 
     @Test
     public void testCreateProduct() {
-        CategoryEntity category = new CategoryEntity();
         // Arrange
+        CategoryEntity category = new CategoryEntity();
         Product productDto = new Product();
         productDto = new Product();
         productDto.setDescription("Test Product");

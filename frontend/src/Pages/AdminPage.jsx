@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../homepage.css";
 import "../adminpage.css"; // Styling file
-
+import { toast } from "react-toastify";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -20,14 +20,22 @@ const AdminPage = () => {
   const [categories, setCategories] = useState([]);
   const [subcategoryName, setSubcategoryName] = useState("");
   const [subcategoryDescription, setSubcategoryDescription] = useState("");
-  const [parentId, setParentId] = useState(""); // ID of the parent category
+  const [parentId, setParentId] = useState(NaN); // ID of the parent category
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [catigoriesList, setCategoriesList] = useState([]);
 
+  const notifySuccess = (message)=>{
+    toast.success(message);
+  }
+
+  const notifyFailier = (message)=>{
+    toast.error(message);
+  }
 
   // Handle creating a subcategory
   const handleCreateSubcategory = async () => {
-    console.log("add catigory request...")
+
     if (!subcategoryName || !subcategoryDescription || !parentId) {
       setErrorMessage("All fields are required to add a subcategory.");
       return;
@@ -41,8 +49,8 @@ const AdminPage = () => {
 
 
     try {
-      console.log("try add catigory request...")
       const token = localStorage.getItem('drip_me_up_jwt');
+      console.log(params.toString());
       const response = await fetch(`http://localhost:8081/api/7/categories/create?${params.toString()}`, {
         method: "POST",
         headers: {
@@ -52,16 +60,18 @@ const AdminPage = () => {
       });
 
       if (!response.ok) {
+        notifyFailier("Failed to create subcategory.");
         throw new Error("Failed to create subcategory.");
       }
-
+      notifySuccess("Subcategory created successfully!");
       setSuccessMessage("Subcategory created successfully!");
       setErrorMessage("");
       setSubcategoryName("");
       setSubcategoryDescription("");
-      setParentId("");
+      setParentId(NaN);
       fetchCategories(); // Refresh categories
     } catch (error) {
+      notifyFailier("Failed to create subcategory.");
       setErrorMessage(error.message || "Failed to create subcategory.");
       setSuccessMessage("");
     }
@@ -77,7 +87,6 @@ const AdminPage = () => {
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
-      console.log(data.content)
       setProducts(data.content);
       setTotalPages(Math.ceil(data.totalItems / ITEMS_PER_PAGE));
     })
@@ -87,29 +96,45 @@ const AdminPage = () => {
   const fetchCategoryProducts = async (category, page = 1) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/7/categories/${category}?page=${page - 1}&size=${ITEMS_PER_PAGE}`,
+        `http://localhost:8081/api/1000/shop/category?category=${category}&page=${page - 1}&size=${ITEMS_PER_PAGE}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
           },
         }
       );
-      if (!response.ok) throw new Error(`Error fetching products for category ${category}`);
+      if (!response.ok){
+        console.log(`Error fetching products for category ${category}`);
+        setProducts([]);
 
-      const data = await response.json();
+      } 
+      else{
+        const data = await response.json();
 
-      // Extract products and handle subcategories
-      const products = data.products || [];
-      setProducts(products);
+        // Extract products and handle subcategories
+        const products = data.products || [];
+        setProducts(products);
 
-      // Calculate total pages based on total items (assuming `data.totalItems` is provided)
-      setTotalPages(Math.ceil((data.totalItems || products.length) / ITEMS_PER_PAGE));
+        // Calculate total pages based on total items (assuming `data.totalItems` is provided)
+        setTotalPages(Math.ceil((data.totalItems || products.length) / ITEMS_PER_PAGE));
+      }
     } catch (error) {
       console.error(`Error fetching products for category ${category}:`, error);
     }
   };
 
+  const generateCategoryTree = (categoriesData)=>{
+    let tree = {'Male': [], 'Female': []};
+    let maleCatigory = categoriesData.filter((selectedCatigory)=>selectedCatigory.name === 'Male')[0];
+    let femaleCatigory = categoriesData.filter((selectedCatigory)=>selectedCatigory.name === 'Female')[0];
+    setParentId(maleCatigory.id);
+
+    for (let catigory in maleCatigory.subcategoryNames) tree.Male.push(maleCatigory.subcategoryNames[catigory]);
+    for (let catigory in femaleCatigory.subcategoryNames) tree.Female.push(maleCatigory.subcategoryNames[catigory]);
+    return tree;
+  }
 
   // Function to fetch categories from the API
   const fetchCategories = async () => {
@@ -120,9 +145,8 @@ const AdminPage = () => {
 
       const data = await response.json();
 
-      // Extract the category tree from the response
-      const tree = data.tree || {}; // Assuming `tree` is the key containing the category tree
-      setCategoryTree(tree);
+      setCategoriesList(data);
+      setCategoryTree(generateCategoryTree(data));
 
       setActiveCategory("All"); // Default to "All" products
     } catch (error) {
@@ -167,7 +191,7 @@ const AdminPage = () => {
       <div className="sidebar">
            <div className="subcategory-form">
            <h3 style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>Add New Subcategory
-        <div className="addButton" onClick={()=>setShowCategoryFormSwitch(prev=>!prev)}>-</div>
+        <div className="addButton" onClick={()=>setShowCategoryFormSwitch(prev=>!prev)} title="Hide add catigory form">-</div>
         </h3>
          <label htmlFor="subcategoryName">Subcategory Name:</label>
          <input
@@ -187,21 +211,26 @@ const AdminPage = () => {
         />
 
         <label htmlFor="parentId">Parent Category:</label>
-        <input
+        <select
           id="parentId"
+          placeholder="Select parent catigory"
           value={parentId}
-          onChange={(e) => setParentId(e.target.value)}
+          onChange={(e) => setParentId(e.target.value.id)}
+
         >
+          {catigoriesList.map((catigory, key)=>(
+            <option key={key} value={catigory}>{catigory.name}</option>
+          ))}
 
           
-        </input>
+        </select>
 
         <button onClick={handleCreateSubcategory}>+ Add Subcategory</button>
       </div>
       </div>
       :<div className="sidebar">
         <h3 style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>Categories
-        <div className="addButton" onClick={()=>setShowCategoryFormSwitch(prev=>!prev)}>+</div>
+        <div className="addButton" onClick={()=>setShowCategoryFormSwitch(prev=>!prev)} title="Add catigory form">+</div>
         </h3>
         {isLoadingCategories ? (
           <p>Loading categories...</p>
@@ -244,7 +273,7 @@ const AdminPage = () => {
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/admin/${product.productID}`)}>
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`/adminSession/product/admin/${product.productID}/0`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />
               <div className="product-details">
@@ -268,6 +297,7 @@ const AdminPage = () => {
           ))}
         </div>
       </div>
+      
     </div>
   );
 };
