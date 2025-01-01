@@ -92,6 +92,7 @@ const OrderDetailsPage = () => {
       <table className="order-items-table">
         <thead>
           <tr>
+            <th>Photo</th>
             <th>Product Name</th>
             <th>Item Total Price</th>
             <th>Color</th>
@@ -103,6 +104,7 @@ const OrderDetailsPage = () => {
         <tbody>
           {orderDetails.items.map(item => (
             <tr key={item.productName} style={{cursor:"pointer"}}>
+              <td><img src={item.images[0]} style={{}}/></td>
               <td>{item.productName}</td>
               <td>{item.itemTotalPrice}</td>
               <td>{item.productVariantColor}</td>

@@ -48,6 +48,7 @@ const OrderDetailsPage = () => {
       <table className="order-items-table">
         <thead>
           <tr>
+            <th>Photo</th>
             <th>Product Name</th>
             <th>Item Total Price</th>
             <th>Color</th>
@@ -59,6 +60,7 @@ const OrderDetailsPage = () => {
         <tbody>
           {orderDetails.items.map(item => (
             <tr key={item.productName}  style={{cursor:"pointer"}}>
+              <td><img src={item.images[0]} style={{height: "5rem", width:"5rem"}} onClick={()=>window.open(item.images[0], "_blank")}/></td>
               <td>{item.productName}</td>
               <td>{item.itemTotalPrice}</td>
               <td>{item.productVariantColor}</td>
