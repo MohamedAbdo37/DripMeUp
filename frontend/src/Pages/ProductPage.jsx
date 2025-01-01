@@ -15,6 +15,7 @@ const ProductPage = () =>{
     const { productID, person } = useParams();
     const [product, setProduct] = useState({productImage: "", dateOfCreation:"", variants: [{variantID: null, color: "", weight: null, length: null, size: null, stock: null, sold: null, state: null, price: null, discount: null, variantImage: ""}]});
     const [currentVariant, setCurrentVariant] = useState(0); 
+
     const [feedbacks, setFeedbacks] = useState([]);
     const [newFeedback, setNewFeedback] = useState("");
 
@@ -42,6 +43,7 @@ const ProductPage = () =>{
         .then(data=>{setProduct(()=>data);console.log(data)})
         .catch(e=>console.log(e));
     }
+
 
     const fetchFeedbackForProduct = async (productID) => {
         try {
@@ -116,10 +118,11 @@ const ProductPage = () =>{
       
     const notifyAddToCart = () => {
         toast.success(`Product added to cart successfully`);
+
     };
 
-    const notifyFailAddToCart = () => {
-        toast.error(`Error adding to cart`);
+    const notifyFailier = (message) => {
+        toast.error(message);
     };
     const selectVariant = (index, event)=>{
         let target = event.target;
@@ -165,6 +168,9 @@ const ProductPage = () =>{
     }
     const addToFavourites = ()=>{
 
+    }
+    const addFeedback = ()=>{
+        
     }
     return (
         <div style={{fontSize: "1.5rem"}}>

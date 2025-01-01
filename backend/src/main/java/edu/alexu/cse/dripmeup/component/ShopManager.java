@@ -107,6 +107,7 @@ public class ShopManager {
             categoryEntities.add(ce);
         }
         Product newProduct = new Product(new ProductService().createProduct(this.productRepository, product, categoryEntities), this);
+//        System.out.println("product description: " + newProduct.getDescription());
 
         for(CategoryEntity c: categoryEntities){
             this.categoryRepository.save(c);
