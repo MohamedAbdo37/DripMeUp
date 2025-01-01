@@ -67,6 +67,7 @@ public class SecurityConfig {
                                 "/api/1000/shop/products",
                                 "/orders/create-order"
 
+
                         ).permitAll()
                         .anyRequest().authenticated() // Protect all other endpoints
                 )

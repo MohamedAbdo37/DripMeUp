@@ -1,5 +1,7 @@
 package edu.alexu.cse.dripmeup.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.alexu.cse.dripmeup.entity.AdminEntity;
@@ -10,17 +12,16 @@ import edu.alexu.cse.dripmeup.service.handler.ValidAdminUserNameHandler;
 import edu.alexu.cse.dripmeup.service.builder.AdminPersonBuilder;
 
 @Service
+@RequiredArgsConstructor
 public class AdminService {
 
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AdminService(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
-    }
 
     public boolean adminLogin(String userName, String password) {
         AdminEntity admin = adminRepository.findByUserName(userName);
-        return admin != null && admin.getPassword().equals(password);
+        return admin != null && passwordEncoder.matches(password, admin.getPassword());
     }
 
     public Person createAdmin(AdminEntity newAdmin) {
@@ -32,6 +33,7 @@ public class AdminService {
         }
 
         // create new person
+        newAdmin.setPassword(passwordEncoder.encode(newAdmin.getPassword()));
         return new PersonDirector().construct(new AdminPersonBuilder(newAdmin, this.adminRepository));
     }
 }

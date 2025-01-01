@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
     const [formVariables, setFormVariables] = useState({productID: 0, state: 'ON_SALE',  rate: 0.0, numberOfFeedback: 0, dateOfCreation:""});
+
     const [selectedCatigory, setSelectedCatigory] = useState("");
     const [addedCatigories, setAddedCatigories] = useState([]);
     const [loadedCatigories, setLoadedCatigories] = useState([]);
@@ -29,6 +30,7 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
         .catch(e=>console.log(e));
     }
 
+
     const notifySuccess= (message) =>{
         toast.success(message);
     }
@@ -45,6 +47,7 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
         });
         setFormVariables(loadedProduct);
     }
+
 
     const getCategories = async()=>{
         await fetch("http://localhost:8081/api/7/categories/", {
@@ -75,12 +78,14 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
         //adding final catigories
         // console.log(console.log({...formVariables, categories: getListOfCatigories(addedCatigories), dateOfCreation: getFormattedDateTime()}));
 
+
         await fetch(`http://localhost:8081/api/1000/shop/c/product`, {
             method:"POST",
             headers:{
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             },
+
             body:(()=>{
                 if (loadedProductId){
                     return JSON.stringify(
@@ -155,7 +160,9 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
     const handleAddVariant = (e)=>{
         e.preventDefault();
         setNumberOfVariants((prev)=>prev+1);
+
         setVariants((prev)=>[...prev, {variantID: 0, sold: 0, state: 'ON_SALE', discount: 0.0}]);
+
     }
 
     const handleClearVariant = (index)=>{
@@ -169,6 +176,7 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
         <form onSubmit={addProduct} style={{justifyItems:"left"}}>
             <h2 style={{margin:"0"}}>Description</h2>
             <textarea name="description" placeholder="Enter description" style={{margin:"1rem", fontSize:"2rem"}} rows="5" cols="80" onChange={handleChange} required/>
+
             <h2 style={{margin:"0"}}> Select Catigories</h2>
             <div className="selectedCatigoriesContainer">
                 {addedCatigories.map((catigory, key)=>(
@@ -209,6 +217,7 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
                     
                         <label style={{color:"black"}} htmlFor="images">Images</label>
                         <input type="file" name="images" onChange={(event)=>{setVariantsPhotos([...variantsPhotos, event.target.files[0]])}}/>
+
                     
                         {number!=1 && <center><button className="backButton" onClick={(e)=>{e.preventDefault();handleClearVariant(number-1);}}>Remove</button></center>}
                     </div>
@@ -219,6 +228,7 @@ const AddProductForm = ({ loadedProductId, deleteFunction }) =>{
             <button className="backButton" type="submit" style={{width:"100vh", transform:"translate(50%, 0)"}}>{loadedProductId? "Update Product": "Add Product"}</button>
         </form>
         </>
+
     );
 } 
 

@@ -1,8 +1,7 @@
 package edu.alexu.cse.dripmeup;
 import edu.alexu.cse.dripmeup.enumeration.Role;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ class AdminCreationServiceTest {
     @Mock
     private AdminEntity mockNewAdmin;
 
-    @Autowired
-    private AdminRepository adminRepository;
+    @InjectMocks
+    private AdminService adminService;
 
     @BeforeEach
     void setUp() {
@@ -38,21 +38,34 @@ class AdminCreationServiceTest {
     }
 
     @Test
+    void testCreateAdminWithValidInput() {
+        // Arrange
+        when(mockAdmin.getRole()).thenReturn(Role.ADMIN);
+
+        // Act
+        Person result = adminService.createAdmin(mockNewAdmin);
+
+        // Assert
+        assertNotNull(result);
+    }
+
+    @Test
     void testCreateAdminWithNonAdminCreator() {
         // Arrange
         when(mockAdmin.getRole()).thenReturn(Role.USER);
 
-        // Act & Assert
-        assertThrows(HandlerException.class, () ->
-                new CreatorIsAdminHandler(mockAdmin, mockNewAdmin, adminRepository).handle()
-        );
+        // Act
+        Person result = adminService.createAdmin(mockNewAdmin);
+
+        // Assert
+        assertNull(result);
     }
 
     @Test
     void testCreateAdminWithNullCreator() {
         // Act & Assert
 
-        Person person = new AdminService(adminRepository).createAdmin(mockNewAdmin);
+        Person person = adminService.createAdmin(mockNewAdmin);
 
         assertNull(person);
     }
@@ -64,7 +77,7 @@ class AdminCreationServiceTest {
                 .when(mockAdmin).getRole();
 
         // Act
-        Person result = new AdminService(adminRepository).createAdmin(mockNewAdmin);
+        Person result = adminService.createAdmin(mockNewAdmin);
 
         // Assert
         assertNull(result);

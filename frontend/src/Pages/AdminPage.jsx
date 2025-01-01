@@ -35,6 +35,7 @@ const AdminPage = () => {
 
   // Handle creating a subcategory
   const handleCreateSubcategory = async () => {
+
     if (!subcategoryName || !subcategoryDescription || !parentId) {
       setErrorMessage("All fields are required to add a subcategory.");
       return;
@@ -49,6 +50,7 @@ const AdminPage = () => {
 
     try {
       const token = localStorage.getItem('drip_me_up_jwt');
+      console.log(params.toString());
       const response = await fetch(`http://localhost:8081/api/7/categories/create?${params.toString()}`, {
         method: "POST",
         headers: {
@@ -56,6 +58,7 @@ const AdminPage = () => {
          'Authorization': `Bearer ${token}`
         },
       });
+
       if (!response.ok) {
         notifyFailier("Failed to create subcategory.");
         throw new Error("Failed to create subcategory.");
@@ -127,6 +130,7 @@ const AdminPage = () => {
     let maleCatigory = categoriesData.filter((selectedCatigory)=>selectedCatigory.name === 'Male')[0];
     let femaleCatigory = categoriesData.filter((selectedCatigory)=>selectedCatigory.name === 'Female')[0];
     setParentId(maleCatigory.id);
+
     for (let catigory in maleCatigory.subcategoryNames) tree.Male.push(maleCatigory.subcategoryNames[catigory]);
     for (let catigory in femaleCatigory.subcategoryNames) tree.Female.push(maleCatigory.subcategoryNames[catigory]);
     return tree;
@@ -140,6 +144,7 @@ const AdminPage = () => {
       if (!response.ok) throw new Error("Failed to fetch categories");
 
       const data = await response.json();
+
       setCategoriesList(data);
       setCategoryTree(generateCategoryTree(data));
 
@@ -211,6 +216,7 @@ const AdminPage = () => {
           placeholder="Select parent catigory"
           value={parentId}
           onChange={(e) => setParentId(e.target.value.id)}
+
         >
           {catigoriesList.map((catigory, key)=>(
             <option key={key} value={catigory}>{catigory.name}</option>

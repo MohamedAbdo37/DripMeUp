@@ -31,6 +31,7 @@ public class FeedbackService {
         Feedback feedback = new Feedback();
         feedback.setFeedback_id(feedbackDTO.getFeedbackId());
         feedback.setProduct(new ProductEntity(feedbackDTO.getProductId(), null, null, null, null));
+
         feedback.setUser(new UserEntity(feedbackDTO.getUserId(), null, null, null, null, null, null, null, null));
         feedback.setFeedback(feedbackDTO.getFeedback());
         return feedback;
@@ -67,7 +68,9 @@ public class FeedbackService {
                 .orElseThrow(() -> new RuntimeException("Feedback not found with ID: " + feedbackId));
 
         existingFeedback.setFeedback(updatedFeedbackDTO.getFeedback());
+
         existingFeedback.setProduct(new ProductEntity(updatedFeedbackDTO.getProductId(), null, null, null, null));
+
         existingFeedback.setUser(new UserEntity(updatedFeedbackDTO.getUserId(), null, null, null, null, null, null, null, null)); 
 
         Feedback savedFeedback = feedbackRepository.save(existingFeedback);  

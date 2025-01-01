@@ -37,6 +37,7 @@ const AdminNavBar = ()=>{
                 </div>
                 <div className='navBarButtons'>
                 <img src={logout} alt='logoutIcon' title='logout' style={{width:"3rem", height: "3rem"}} onClick={ handleLogout }/>
+
                 </div>
             </div>
             <Outlet/>
@@ -44,6 +45,7 @@ const AdminNavBar = ()=>{
                 isOpen={showAddProductForm}
                 onRequestClose={()=>setShowAddProductForm(false)}
                 style={{content:{background:"white"}}}
+
             >
                 <button className="backButton" onClick={()=>setShowAddProductForm(false)}>X</button>
                 <AddProductForm/>

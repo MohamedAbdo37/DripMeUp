@@ -517,6 +517,7 @@ center{
     cursor: pointer;
     border-radius: 20px;
     background-color:black;
+
     margin: 1rem;
     padding: 0.5rem;
     min-width: 20rem;
@@ -533,4 +534,5 @@ center{
     border-radius: 20px;
     background-color: rgba(245, 245, 245, 0.671);
     cursor: pointer;
+
 }

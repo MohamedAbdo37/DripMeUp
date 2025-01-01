@@ -13,6 +13,7 @@ import AddProductForm from "../Components/AddProductForm";
 import Modal from 'react-modal';
 
 
+
 const ProductPage = () =>{
     const { productID, person, currentSelectedVariantId } = useParams();
     const navigate = useNavigate();
@@ -24,6 +25,7 @@ const ProductPage = () =>{
 
 
 
+
     useEffect(()=>{
         if (!productID) {
             console.error("Product ID is undefined");
@@ -31,6 +33,7 @@ const ProductPage = () =>{
         }
         fetchFeedbackForProduct(productID);
         getProdect();
+
 
     },[productID]);
 
@@ -61,6 +64,7 @@ const ProductPage = () =>{
       
           const data = await response.json();
           setFeedbacks(data); // Assuming the response is a list of feedback
+
         } catch (error) {
           console.error("Error fetching feedback:", error);
         }
@@ -113,6 +117,7 @@ const ProductPage = () =>{
       
     const notifySuccess = (message) => {
         toast.success(message);
+
     };
 
     const notifyFailier = (message) => {
@@ -189,6 +194,9 @@ const ProductPage = () =>{
         })
         .then(response=>response.status == 200 || response.status == 201? notifySuccess("Product added to favourits successfully"): notifyFailier("Failed to add to favourits"))
         .catch(e=>{console.log(e);notifyFailier("Failed to add to favourits")});
+    }
+    const addFeedback = ()=>{
+        
     }
     return (
         <div style={{fontSize: "1.5rem"}}>
@@ -278,6 +286,7 @@ const ProductPage = () =>{
                         style={{width: "100%", marginBottom: "10px", fontSize:"2rem"}} 
                     />
                     <button className="backButton" onClick={handleAddFeedback}>
+
                         Add Feedback
                     </button>
                 </div>
@@ -291,6 +300,7 @@ const ProductPage = () =>{
                 <button className="backButton" onClick={()=>setIsEditing(false)}>X</button>
                 <AddProductForm loadedProductId={productID} deleteFunction={deleteProduct}/>
             </Modal>
+
             
         </div>
         
