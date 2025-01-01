@@ -1,26 +1,22 @@
 package edu.alexu.cse.dripmeup.repository;
-
-import edu.alexu.cse.dripmeup.entity.CartEntity;
+import edu.alexu.cse.dripmeup.entity.FavoriteEntity;
 import edu.alexu.cse.dripmeup.entity.UserEntity;
 import edu.alexu.cse.dripmeup.entity.product.VariantEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
-public interface CartRepository extends JpaRepository<CartEntity, Long> {
+public interface FavoriteRepository  extends JpaRepository<FavoriteEntity, Long> {
+    FavoriteEntity save(FavoriteEntity favorite) ;
 
-    CartEntity save(CartEntity cart) ;
+    FavoriteEntity findByUserAndVariant(UserEntity user , VariantEntity variant) ;
 
-    CartEntity findByUserAndVariant(UserEntity user , VariantEntity variant) ;
-
-    List<CartEntity> findAllByUserOrderByTimeDesc(UserEntity user) ;
-
-    List<CartEntity> findAllByUser(UserEntity user) ;
+    List<FavoriteEntity> findAllByUserOrderByTimeDesc(UserEntity user) ;
 
     @Transactional
     Long deleteByUserAndVariant(UserEntity user , VariantEntity variant);
 
     @Transactional
     Long deleteAllByUser(UserEntity user) ;
-
 }

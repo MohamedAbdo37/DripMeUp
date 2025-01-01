@@ -1,6 +1,6 @@
 package edu.alexu.cse.dripmeup.controller;
 
-import edu.alexu.cse.dripmeup.enumeration.Status;
+import edu.alexu.cse.dripmeup.enumeration.orderStatus;
 import edu.alexu.cse.dripmeup.exception.AuthorizationException;
 import edu.alexu.cse.dripmeup.exception.BadInputException;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+
+import java.util.LinkedList;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -21,11 +23,34 @@ public class OrderController {
 @Autowired
 private OrderService orderService;
 
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PostMapping("/create-order")
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequestBody orderBody){
+        Long USER_ID = SecurityService.getIdFromSecurityContext();
+
+        try {
+            LinkedList<Long> outOfStock = new LinkedList<>() ;
+            String response = orderService.convertCartToOrder(USER_ID, orderBody , outOfStock);
+
+            if(response.equals("Order was added successfully"))
+                return ResponseEntity.status(200).body(response) ;
+
+            return ResponseEntity.status(409).body(outOfStock) ;
+        }
+        catch (BadInputException e){
+            return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseBodyMessage.error(e.getMessage())) ;
+        }
+    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/my-orders")
     public ResponseEntity<?> getMyOrders(@RequestParam(required=false) Integer page,
                                          @RequestParam(required=false) Integer size,
-                                         @RequestParam(required=false) Status status) {
+                                         @RequestParam(required=false) orderStatus status) {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
         try {
             return ResponseEntity.ok(orderService.getOrders(USER_ID, page, size, status));
@@ -55,7 +80,7 @@ private OrderService orderService;
     @GetMapping("")
     public ResponseEntity<?> getOrders(@RequestParam(required=false) Integer page,
                                          @RequestParam(required=false) Integer size,
-                                         @RequestParam(required=false) Status status) {
+                                         @RequestParam(required=false) orderStatus status) {
         try {
             return ResponseEntity.ok(orderService.getOrders(page, size, status));
         } catch (Exception e) {

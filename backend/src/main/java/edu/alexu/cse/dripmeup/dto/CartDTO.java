@@ -1,27 +1,14 @@
 package edu.alexu.cse.dripmeup.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+@AllArgsConstructor
+
 public class CartDTO {
-    private CartProductDTO element;
+    private CartFavoriteProductDTO element;
     private int amount ;
-
-    public CartDTO(CartProductDTO element, int amount) {
-        this.element = element;
-        this.amount = amount;
-    }
-
-    public CartProductDTO getElement() {
-        return this.element;
-    }
-
-    public void setElement(CartProductDTO element) {
-        this.element = element;
-    }
-
-    public int getAmount() {
-        return this.amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 }
