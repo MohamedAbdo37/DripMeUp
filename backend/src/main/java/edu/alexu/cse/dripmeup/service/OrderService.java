@@ -10,7 +10,6 @@ import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import edu.alexu.cse.dripmeup.enumeration.orderStatus;
 import edu.alexu.cse.dripmeup.exception.AuthorizationException;
 import edu.alexu.cse.dripmeup.exception.BadInputException;
-import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
 import edu.alexu.cse.dripmeup.repository.*;
 import edu.alexu.cse.dripmeup.service.notifications.OrderManagement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.io.IOException;
 import java.util.Optional;
 import static edu.alexu.cse.dripmeup.specification.OrderSpecification.status;
 import static edu.alexu.cse.dripmeup.specification.OrderSpecification.user;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,16 +96,13 @@ public class OrderService {
         cartRepository.deleteAllByUser(user) ;
 
         try{
-            System.out.println("hi");
             orderManagement.setEmail(user.getEmail());
             orderManagement.setUsername(user.getUserName());
             orderManagement.setOrderId(order.getId());
             orderManagement.setOrderDTO(mapToOrderDTO(order));
-            System.out.println("hi");
             System.out.println(orderManagement.SendOrder());
-            System.out.println("hi");
         }
-        catch (FailedToSendMailException e){
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
 
@@ -126,7 +119,7 @@ public class OrderService {
             VariantEntity variant = cartElement.getVariant() ;
             // copying item
             OrderItem item = new OrderItem() ;
-            this.createItem(variant , cartElement.getAmount() , item , order );
+            this.createItem(variant , cartElement.getAmount() , item);
             orderItems.add(item) ;
 
             // decreasing stock
@@ -148,7 +141,7 @@ public class OrderService {
         order.setTotalPrice(totalPrice);
     }
 
-    public void createItem(VariantEntity variant , int amount , OrderItem item , Order order){
+    private void createItem(VariantEntity variant , int amount , OrderItem item){
 
         item.setVariantId(variant.getVariantID()) ;
         item.setProductId(variant.getProduct().getProductID()) ;
@@ -166,6 +159,7 @@ public class OrderService {
             itemImage.setItem(item);
             itemImage.setImagePath(image.getImagePath());
             itemImageRepository.save(itemImage) ;
+            item.getImages().add(itemImage) ;
         }
 
     }
@@ -173,11 +167,11 @@ public class OrderService {
     private void setOrderInformation(Order order , OrderRequestBody orderBody) throws BadInputException {
 
         if(this.notValid(orderBody.getAddress()))
-            throw new BadInputException("Variant does not exist");
+            throw new BadInputException("order information isn't valid");
         order.setAddress(orderBody.getAddress());
 
         if(orderBody.getPaymentMethod() !=  PaymentMethod.CASH && orderBody.getPaymentMethod() !=  PaymentMethod.VISA)
-            throw new BadInputException("Variant does not exist");
+            throw new BadInputException("order information isn't valid");
         order.setPaymentMethod(orderBody.getPaymentMethod());
 
         if(orderBody.getPaymentMethod() ==  PaymentMethod.CASH){
@@ -188,9 +182,9 @@ public class OrderService {
         }
 
         else {
-            if(this.notValid(orderBody.getCardNumber()) | this.notValid(orderBody.getCardHolder()) |
-                    this.notValid(orderBody.getExpirationDate()) | this.notValid(orderBody.getCvv()))
-                throw new BadInputException("Variant does not exist");
+            if(this.notValid(orderBody.getCardNumber()) || this.notValid(orderBody.getCardHolder()) ||
+                    this.notValid(orderBody.getExpirationDate()) || this.notValid(orderBody.getCvv()))
+                throw new BadInputException("order information isn't valid");
 
             order.setCardNumber(orderBody.getCardNumber());
             order.setCardHolder(orderBody.getCardHolder());
@@ -215,14 +209,15 @@ public class OrderService {
             orderManagement.setUsername(order.getUserEntity().getUserName());
             orderManagement.setOrderId(order.getId());
             orderManagement.setOrderDTO(mapToOrderDTO(order));
-            orderManagement.ConfirmOrder();
+            System.out.println(orderManagement.ConfirmOrder());
         }
         catch (Exception e){
-            throw new FailedToSendMailException("Failed to send email, email might not be valid");
+            System.out.println(e.getMessage());
         }
         orderRepository.save(order);
         return "Order Approved";
     }
+
     public String deliverOrder(Long orderId) throws Exception{
         Order order = orderRepository.findById(orderId).orElse(null);
         if(order == null) throw new BadInputException("Order does not exist");
@@ -234,10 +229,10 @@ public class OrderService {
             orderManagement.setUsername(order.getUserEntity().getUserName());
             orderManagement.setOrderId(order.getId());
             orderManagement.setOrderDTO(mapToOrderDTO(order));
-            orderManagement.ShipOrder();
+            System.out.println(orderManagement.ShipOrder());
         }
         catch (Exception e){
-            throw new FailedToSendMailException("Failed to send email, email might not be valid");
+            System.out.println(e.getMessage());
         }
         orderRepository.save(order);
         return "Order in delivery";
@@ -253,16 +248,16 @@ public class OrderService {
             orderManagement.setUsername(order.getUserEntity().getUserName());
             orderManagement.setOrderId(order.getId());
             orderManagement.setOrderDTO(mapToOrderDTO(order));
-            orderManagement.ReceiveOrder();
+            System.out.println(orderManagement.ReceiveOrder());
         }
         catch (Exception e){
-            throw new FailedToSendMailException("Failed to send email, email might not be valid");
+            System.out.println(e.getMessage());
         }
         orderRepository.save(order);
         return "Order is received";
     }
 
-    private static OrdersListDTO mapToOrdersListDTO(Page<Order> orders) {
+    private OrdersListDTO mapToOrdersListDTO(Page<Order> orders) {
         OrdersListDTO ordersListDTO = new OrdersListDTO();
         List<OrderMetaDTO> ordersList = new ArrayList<OrderMetaDTO>();
         PageMetaDTO pageMetaDTO = new PageMetaDTO();
@@ -270,54 +265,63 @@ public class OrderService {
         pageMetaDTO.setPageSize(orders.getSize());
         pageMetaDTO.setTotalPages(orders.getTotalPages());
         for (Order order : orders.getContent()) {
-            OrderMetaDTO orderMetaDTO = new OrderMetaDTO();
-            orderMetaDTO.setId(order.getId());
-            orderMetaDTO.setAddress(order.getAddress());
-            orderMetaDTO.setCustomerName(order.getUserEntity().getUserName());
-            orderMetaDTO.setStatus(order.getStatus());
-            orderMetaDTO.setTimeStamp(order.getTimeStamp());
-            orderMetaDTO.setTotalPrice(order.getTotalPrice());
-            orderMetaDTO.setCvv(order.getCVV());
-            orderMetaDTO.setCardHolder(order.getCardHolder());
-            orderMetaDTO.setCardNumber(order.getCardNumber());
-            orderMetaDTO.setExpirationDate(order.getExpirationDate());
-            orderMetaDTO.setPaymentMethod(order.getPaymentMethod());
+            OrderMetaDTO orderMetaDTO = getOrderMetaDTO(order);
             ordersList.add(orderMetaDTO);
         }
         ordersListDTO.setMeta(pageMetaDTO);
         ordersListDTO.setData(ordersList);
         return ordersListDTO;
     }
-    private static OrderDTO mapToOrderDTO(Order order) {
-        OrderDTO orderDTO = new OrderDTO();
+    private OrderMetaDTO getOrderMetaDTO(Order order) {
         OrderMetaDTO orderMetaDTO = new OrderMetaDTO();
-        List<ItemDTO> itemDTOS = new ArrayList<>();
-        for(OrderItem orderItem : order.getOrderItemList()){
-            ItemDTO itemDTO = new ItemDTO();
-            itemDTO.setItemTotalPrice(orderItem.getProductVariantPrice() * orderItem.getProductVariantQuantity());
-            itemDTO.setProductName(orderItem.getProductDescription());
-            itemDTO.setProductVariantColor(orderItem.getProductVariantColor());
-            itemDTO.setProductVariantSize(orderItem.getProductVariantSize());
-            itemDTO.setProductVariantPrice(orderItem.getProductVariantPrice());
-            itemDTO.setProductVariantQuantity(orderItem.getProductVariantQuantity());
-            itemDTOS.add(itemDTO);
-        }
         orderMetaDTO.setId(order.getId());
         orderMetaDTO.setAddress(order.getAddress());
-        orderMetaDTO.setStatus(order.getStatus());
-        orderMetaDTO.setTotalPrice(order.getTotalPrice());
-        orderMetaDTO.setTimeStamp(order.getTimeStamp());
         orderMetaDTO.setCustomerName(order.getUserEntity().getUserName());
+        orderMetaDTO.setStatus(order.getStatus());
+        orderMetaDTO.setTimeStamp(order.getTimeStamp());
+        orderMetaDTO.setTotalPrice(order.getTotalPrice());
         orderMetaDTO.setCvv(order.getCVV());
         orderMetaDTO.setCardHolder(order.getCardHolder());
         orderMetaDTO.setCardNumber(order.getCardNumber());
         orderMetaDTO.setExpirationDate(order.getExpirationDate());
         orderMetaDTO.setPaymentMethod(order.getPaymentMethod());
+        return orderMetaDTO;
+    }
+
+    private OrderDTO mapToOrderDTO(Order order) {
+        OrderDTO orderDTO = new OrderDTO();
+        OrderMetaDTO orderMetaDTO = getOrderMetaDTO(order);
+        List<ItemDTO> itemDTOS = new ArrayList<>();
+
+        for(OrderItem orderItem : order.getOrderItemList()){
+
+            ItemDTO itemDTO = getItemDTO(orderItem);
+            itemDTOS.add(itemDTO);
+        }
 
         orderDTO.setMeta(orderMetaDTO);
         orderDTO.setItems(itemDTOS);
         return orderDTO;
     }
+
+    private ItemDTO getItemDTO(OrderItem orderItem) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setItemTotalPrice(orderItem.getProductVariantPrice() * orderItem.getProductVariantQuantity());
+        itemDTO.setProductName(orderItem.getProductDescription());
+        itemDTO.setProductVariantColor(orderItem.getProductVariantColor());
+        itemDTO.setProductVariantSize(orderItem.getProductVariantSize());
+        itemDTO.setProductVariantPrice(orderItem.getProductVariantPrice());
+        itemDTO.setProductVariantQuantity(orderItem.getProductVariantQuantity());
+
+
+        for(ItemImage image : orderItem.getImages()) {
+            System.out.println("hi");
+            itemDTO.getImages().add(image.getImagePath());
+        }
+
+        return itemDTO;
+    }
+
     public OrdersListDTO getOrders(Long userId, Integer pageNumber, Integer pageSize, orderStatus status) {
         Sort sort = Sort.by(Sort.Direction.DESC, "timeStamp");
         Pageable pageable = PageRequest.of(Optional.ofNullable(pageNumber).orElse(0),
