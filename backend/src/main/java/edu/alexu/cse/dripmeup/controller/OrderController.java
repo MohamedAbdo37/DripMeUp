@@ -72,6 +72,7 @@ private OrderService orderService;
             return ResponseEntity.status(400).body(ResponseBodyMessage.error("Order does not exist"));
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching order details"));
         }
     }
@@ -83,6 +84,7 @@ private OrderService orderService;
         try {
             return ResponseEntity.ok(orderService.getOrders(page, size, status));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(500).body(ResponseBodyMessage.error("An error occurred while fetching orders"));
         }
     }
@@ -100,7 +102,7 @@ private OrderService orderService;
         }
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
-    @GetMapping("/approve/{orderId}")
+    @PutMapping("/approve/{orderId}")
     public ResponseEntity<?> approveOrder(@PathVariable Long orderId) {
         try {
             return ResponseEntity.ok(orderService.approveOrder(orderId));
@@ -116,7 +118,7 @@ private OrderService orderService;
         }
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
-    @GetMapping("/deliver/{orderId}")
+    @PutMapping("/deliver/{orderId}")
     public ResponseEntity<?> deliverOrder(@PathVariable Long orderId) {
         try {
             return ResponseEntity.ok(orderService.deliverOrder(orderId));
@@ -132,7 +134,7 @@ private OrderService orderService;
         }
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
-    @GetMapping("/confirm/{orderId}")
+    @PutMapping("/confirm/{orderId}")
     public ResponseEntity<?> confirmOrder(@PathVariable Long orderId) {
         try {
             return ResponseEntity.ok(orderService.confirmOrder(orderId));
