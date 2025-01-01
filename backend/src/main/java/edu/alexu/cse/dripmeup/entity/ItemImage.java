@@ -18,15 +18,14 @@ public class ItemImage {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ImageID")
-
     private Long imageID;
 
     @ManyToOne
-    @JoinColumn(name = "itemID")
+    @JoinColumn(name = "ItemId")
     private OrderItem item;
 
-    @Column(name = "Image")
 
+    @Column(name = "Image")
     private String imagePath;
 
-    }
+}

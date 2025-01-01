@@ -2,6 +2,9 @@ package edu.alexu.cse.dripmeup.dto;
 
 import lombok.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,5 +16,6 @@ public class ItemDTO {
     private double ProductVariantPrice;
     private Integer ProductVariantQuantity;
     private double ItemTotalPrice;
+    private List<String> images = new LinkedList<>();
 
 }

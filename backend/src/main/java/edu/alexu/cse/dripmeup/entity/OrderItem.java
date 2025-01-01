@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -56,9 +57,8 @@ public class OrderItem {
     @Column(name = "ProductVariantQuantity")
     private Integer productVariantQuantity;
 
-    @OneToMany
-    @Column(name = "images")
-    private List<ItemImage> images ;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<ItemImage> images = new LinkedList<>();
 
 
     @ManyToOne
