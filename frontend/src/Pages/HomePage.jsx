@@ -389,3 +389,71 @@ const HomePage = () => {
 };
 
 export default HomePage;
+              {category.subcategories.map((subcategory) => renderCategoryTree(subcategory, level + 1))}
+            </ul>
+          )}
+        </li>
+      </ul>
+    );
+  };
+
+  const handleRenderStaticTree = () => {
+    const treee = mapCategoryTree(backendCategories);
+    console.log(treee);
+    setCategoryTree(treee);
+    //expandAllCategories(staticTree);
+  };
+  return (
+    <div className="homepage">
+      {/* Sidebar for Categories */}
+      <div className="sidebar">
+        <h3>Categories</h3>
+        {/* <button onClick={handleRenderStaticTree}>Render Static Tree</button> */}
+        <li
+          className={`category ${activeCategory === "All" ? "active" : ""}`}
+          onClick={() => {
+            handleCategoryClick("All");
+            expandAllCategories(categoryTree);
+          }}
+        >
+          Show All
+        </li>
+        {isLoadingCategories ? (
+          <p>Loading categories...</p>
+        ) : (
+          categoryTree && renderCategoryTree(categoryTree)
+        )}
+      </div>
+      {/* Product Grid */}
+      <div className="content">
+        <div className="product-grid">
+          {products.map((product) => (
+            <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/user/${product.productID}/0`)}>
+                {/* Display image */}
+                <img src={product.productImage} alt="productImage" className="product-image" />
+              <div className="product-details">
+                <p className="price">{product.price}</p>
+                <p>{product.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
