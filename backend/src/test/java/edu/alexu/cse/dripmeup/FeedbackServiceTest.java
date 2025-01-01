@@ -1,5 +1,6 @@
 package edu.alexu.cse.dripmeup;
 
+
 import edu.alexu.cse.dripmeup.dto.FeedbackDTO;
 import edu.alexu.cse.dripmeup.entity.Feedback;
 import edu.alexu.cse.dripmeup.entity.UserEntity;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,6 +60,7 @@ class FeedbackServiceTest {
         assertEquals("Great product!", feedbacks.get(0).getFeedback());
         assertEquals("Loved it!", feedbacks.get(1).getFeedback());
 
+
         verify(feedbackRepository, times(1)).findByProduct_ProductID(1L);
     }
 
@@ -70,6 +73,7 @@ class FeedbackServiceTest {
 
         assertNotNull(feedbacks);
         assertTrue(feedbacks.isEmpty());
+
 
         verify(feedbackRepository, times(1)).findByUser_UserID(1L);
     }
@@ -129,7 +133,6 @@ class FeedbackServiceTest {
         verify(feedbackRepository, times(1)).deleteById(feedbackId);
     }
 
-
     @Test
     void testDeleteFeedbackByIdNotExists() {
         Long feedbackId = 1L;
@@ -142,6 +145,7 @@ class FeedbackServiceTest {
 
         verify(feedbackRepository, times(1)).deleteById(feedbackId);
     }
+
 
     @Test
     void testUpdateFeedback() {
@@ -172,4 +176,5 @@ class FeedbackServiceTest {
         verify(feedbackRepository, times(1)).findById(feedbackId);
         verify(feedbackRepository, times(1)).save(any(Feedback.class));
     }
+
 }

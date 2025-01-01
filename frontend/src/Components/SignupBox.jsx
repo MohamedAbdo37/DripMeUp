@@ -198,7 +198,7 @@ const SignupBox = () =>{
     return(
         shouldShowObject ?
         <AnimatePresence>
-            <ObjectToAppear />
+            <ObjectToAppear size={100}/>
         </AnimatePresence>:
         <div className="formBox">
             {phase==1 &&(

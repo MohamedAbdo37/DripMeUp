@@ -1,9 +1,14 @@
 package edu.alexu.cse.dripmeup.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,20 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.alexu.cse.dripmeup.component.CategoryManager;
 import edu.alexu.cse.dripmeup.component.ShopManager;
-import edu.alexu.cse.dripmeup.dto.Category;
 import edu.alexu.cse.dripmeup.dto.Product;
 import edu.alexu.cse.dripmeup.dto.ProductSnapshot;
 import edu.alexu.cse.dripmeup.dto.Variant;
 import edu.alexu.cse.dripmeup.enumeration.ProductState;
 import edu.alexu.cse.dripmeup.exception.ProductCreationException;
-import edu.alexu.cse.dripmeup.service.ResponseBodyMessage;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.alexu.cse.dripmeup.component.CategoryManager;
 
 
 @RestController
@@ -70,6 +68,7 @@ public class ShopController {
         try{
             productSaved = shopManager.createProduct(product);
         } catch(RuntimeException e){
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(productSaved);
@@ -86,6 +85,28 @@ public class ShopController {
         return ResponseEntity.ok(variantSaved);
     }
 
+    @DeleteMapping("/d/product")
+    public ResponseEntity<?> deleteProduct(@RequestParam("productID") long productID) {
+        try{
+            if (!shopManager.deleteProduct(productID))
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok("Product deleted successfully");
+    }
+
+    @DeleteMapping("/d/variant")
+    public ResponseEntity<?> deleteVariant(@RequestParam("variantID") long variantID) {
+        try{
+            if (!shopManager.deleteVariant(variantID))
+                return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok("Variant deleted successfully");
+    }
+    
     @PostMapping("/c/image")
     public ResponseEntity<Void> addImageToVariant(@RequestParam("variantID") long variantID ,@RequestBody byte[] image) {
 

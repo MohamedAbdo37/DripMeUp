@@ -1,7 +1,7 @@
 import { ClipLoader } from "react-spinners";
-const ObjectToAppear = () => {
+const ObjectToAppear = ({ size }) => {
   return (
-    <ClipLoader size={100} color="white" />
+    <ClipLoader size={size} color="black" />
   );
 };
 export default ObjectToAppear;

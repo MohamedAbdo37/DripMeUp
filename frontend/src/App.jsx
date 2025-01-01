@@ -35,7 +35,7 @@ function App() {
         <Route path='userSession' element={<UserNavBar />} errorElement={<EmptyPage />}>
           <Route index element={<HomePage />} errorElement={<EmptyPage />} />
           <Route path='profile' element={<UserProfilePage />} errorElement={<EmptyPage />} />
-          <Route path='product/:person/:productID' element={<ProductPage />} errorElement={<EmptyPage />} />
+          <Route path='product/:person/:productID/:currentSelectedVariantId' element={<ProductPage />} errorElement={<EmptyPage />} />
           <Route path='settings' element={<SettingsPage />} errorElement={<EmptyPage />} />
           <Route path='cart' element={<CartPage />} errorElement={<EmptyPage />} />
           <Route path='favourites' element={<FavouritesPage />} errorElement={<EmptyPage />} />
@@ -46,7 +46,7 @@ function App() {
           <Route index element={<AdminPage />} errorElement={<EmptyPage />} />
           <Route path='orders' element={<OrdersPage />} errorElement={<EmptyPage />} />
           <Route path='orders/:orderId' element={<OrderDetailsPage />} errorElement={<EmptyPage />} />
-          <Route path='product/:person/:productID' element={<ProductPage />} errorElement={<EmptyPage />} />
+          <Route path='product/:person/:productID/:currentSelectedVariantId' element={<ProductPage />} errorElement={<EmptyPage />} />
           <Route path='addAdmin' element={<AddAdminPage />} errorElement={<EmptyPage />} />
           <Route path='settings' element={<SettingsPage />} errorElement={<EmptyPage />} />
         </Route>

@@ -108,7 +108,7 @@ public class CartService {
 
     public String deleteElement(Long userID , Long variantID ) throws CartException{
 
-        // validate parameters and throw exception if it isn't valid
+// validate parameters and throw exception if it isn't valid
         UserEntity user = validateUser(userID) ;
         VariantEntity variant = validateVariant(variantID) ;
 
