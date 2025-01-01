@@ -2,37 +2,30 @@ package edu.alexu.cse.dripmeup.service.notifications;
 import edu.alexu.cse.dripmeup.dto.ItemDTO;
 import edu.alexu.cse.dripmeup.dto.OrderDTO;
 import edu.alexu.cse.dripmeup.exception.FailedToSendMailException;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@Setter
+@Getter
 public class OrderManagement extends NotificationService{
 
     // specific attribute for this class
-    private int orderId ;
+    private Long orderId ;
     private OrderDTO orderDTO ;
-    public int getOrderId() {
-        return this.orderId;
-    }
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-    public OrderDTO getOrderDTO() {
-        return this.orderDTO;
-    }
-    public void setOrderDTO(OrderDTO orderDTO) {
-        this.orderDTO = orderDTO;
-    }
 
     private static String itemsListToString(List<ItemDTO> items) {
         StringBuilder itemsString = new StringBuilder();
         itemsString.append("\n");
         for (ItemDTO item : items) {
             itemsString.append(item.getProductVariantQuantity())
-                       .append("x ").append(item.getProductName())
-                       .append(" (").append(item.getProductVariantSize()).append(")")
-                       .append(", ").append(item.getProductVariantColor())
+                       .append(" from ").append(item.getProductName())
+                       .append(" with size (").append(item.getProductVariantSize()).append(")")
+                       .append(", and color ").append(item.getProductVariantColor())
                        .append("\n");
         }
         return itemsString.toString();
@@ -59,6 +52,7 @@ public class OrderManagement extends NotificationService{
         make queries to get order data
          */
 
+
         if (this.sendMessage())
             return "email was sent" ;
         throw new FailedToSendMailException("Failed to send email") ;
@@ -68,50 +62,50 @@ public class OrderManagement extends NotificationService{
     // set body and subject of each message type
 
     public String SendOrder() {
+        this.setResource(new ClassPathResource("NotificationsBody/MakingOrderByCustomer.txt"));
         this.setSubject("Thank You for Your Order!") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/MakingOrderByCustomer.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String CancelOrder() {
+        this.setResource(new ClassPathResource("NotificationsBody/DeletingOrder.txt"));
         this.setSubject ("Confirmation of Your Order Cancellation") ;
-        this.setFilePath ("file:src/main/resources/Notifications Body/DeletingOrder.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String ConfirmOrder(){
+        this.setResource(new ClassPathResource("NotificationsBody/ConfirmingOrder.txt"));
         this.setSubject("Your Order Has Been Confirmed!") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/ConfirmingOrder.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String InformOrderError() {
+        this.setResource(new ClassPathResource("NotificationsBody/OrderPreparingProblem.txt"));
         this.setSubject("Issue with Your Order – Apologies for the Inconvenience") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/OrderPreparingProblem.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String ShipOrder() {
+        this.setResource(new ClassPathResource("NotificationsBody/ShippingOrder.txt"));
         this.setSubject ("Your Order Is On Its Way!") ;
-        this.setFilePath ("file:src/main/resources/Notifications Body/ShippingOrder.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String InformShippingProblem(){
+        this.setResource(new ClassPathResource("NotificationsBody/ShippingProblem.txt"));
         this.setSubject("Update on Your Order – Shipping Issue") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/ShippingProblem.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String ReceiveOrder() {
+        this.setResource(new ClassPathResource("NotificationsBody/ReceivingOrder.txt"));
         this.setSubject("We'd love your feedback on your recent purchase!") ;
-        this.setFilePath("file:src/main/resources/Notifications Body/ReceivingOrder.txt") ;
         return this.OrderManagementMessage() ;
     }
 
     public String InformReceivingProblem() {
+        this.setResource(new ClassPathResource("NotificationsBody/ReceivingProblem.txt"));
         this.setSubject ("Your Order Has Been Returned to Us") ;
-        this.setFilePath ("file:src/main/resources/Notifications Body/ReceivingProblem.txt") ;
         return this.OrderManagementMessage() ;
     }
 }

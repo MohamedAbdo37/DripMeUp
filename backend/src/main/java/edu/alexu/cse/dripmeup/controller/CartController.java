@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/9")
+@RequestMapping("/api")
 
 public class CartController {
 
@@ -51,8 +51,8 @@ public class CartController {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
 
         try{
-            cartservice.addElement(USER_ID , variantId , amount) ;
-            return ResponseEntity.status(200).body(ResponseBodyMessage.message("Success , product is added to cart.")) ;
+            return ResponseEntity.status(200).body(ResponseBodyMessage
+                            .message(cartservice.addElement(USER_ID , variantId , amount)));
         }
         catch (CartNotFoundException e){
             return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;
@@ -73,8 +73,8 @@ public class CartController {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
 
         try{
-            cartservice.updateElement(USER_ID , variantId , amount) ;
-            return ResponseEntity.status(200).body(ResponseBodyMessage.message("Success , cart element information is updated.")) ;
+            return ResponseEntity.status(200).body(ResponseBodyMessage
+                    .message(cartservice.updateElement(USER_ID , variantId , amount)));
         }
         catch (CartNotFoundException e){
             return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;
@@ -95,8 +95,8 @@ public class CartController {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
 
         try{
-            cartservice.deleteElement(USER_ID , variantId) ;
-            return ResponseEntity.status(200).body(ResponseBodyMessage.message("Success , cart element is deleted."));
+            return ResponseEntity.status(200).body(ResponseBodyMessage
+                    .message(cartservice.deleteElement(USER_ID , variantId)));
         }
         catch (CartNotFoundException e){
             return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;
@@ -115,8 +115,8 @@ public class CartController {
         Long USER_ID = SecurityService.getIdFromSecurityContext();
 
         try{
-            Long countOfDeletedRecords = cartservice.emptyCart(USER_ID) ;
-            return ResponseEntity.status(200).body(ResponseBodyMessage.message("Success , " + countOfDeletedRecords + " element are deleted from cart."));
+            return ResponseEntity.status(200).body(ResponseBodyMessage
+                    .message(cartservice.emptyCart(USER_ID)));
         }
         catch (CartNotFoundException e){
             return ResponseEntity.status(404).body(ResponseBodyMessage.error(e.getMessage())) ;

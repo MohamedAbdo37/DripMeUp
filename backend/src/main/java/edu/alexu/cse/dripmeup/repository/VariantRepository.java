@@ -14,4 +14,5 @@ public interface VariantRepository extends JpaRepository<VariantEntity, Long> {
     List<VariantEntity> findByProduct(ProductEntity product);
 
     VariantEntity findByVariantID(Long variantID);
+
 }
