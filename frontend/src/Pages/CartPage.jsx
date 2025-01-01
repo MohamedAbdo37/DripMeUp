@@ -8,6 +8,8 @@ import emptyCartIcon from "../assets/emptyCart.png";
 import deleteCartIcon from "../assets/deleteCart.png";
 import createOrderIcon from "../assets/createOrder.png";
 import logoIcon from "../assets/logo.png";
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 
 const CartPage = ()=>{
     const [productsInCart, setProductsInCart] = useState([
@@ -29,8 +31,9 @@ const CartPage = ()=>{
         //   }
     ]);
     const navigate = useNavigate();
-    const [formVariables, setFormVariables] = useState({});
+    const [formVariables, setFormVariables] = useState({cardNumber:"", cardHolder:"", expirationDate:"", cvv:""});
     const [isOrdering, setIsOrdering] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(()=>{
         getProductsInCart();
@@ -59,19 +62,26 @@ const CartPage = ()=>{
 
     const buy = async(e)=>{
         e.preventDefault();
-        await fetch(`http://localhost:8081/addOrder`, {
+        setIsLoading(()=>true);
+        console.log("order: ", formVariables);
+        await fetch(`http://localhost:8081/orders/create-order`, {
             method:"POST",
             headers:{
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
             },
-            body:{
-                products: JSON.stringify(productsInCart),
-                ...formVariables
-            }
+            body:JSON.stringify(formVariables)
         })
-        .then (response=>response.status==200||response.status==201?(()=>{return response.json()})(): (()=>{throw Error("Error creating an order")})())
-        .then(cartProductsData=>{setProductsInCart(cartProductsData);notifySuccess("Order created succeffully")})
+        .then (response=>response.status==200||response.status==201?(()=>{setIsLoading(()=>false);notifySuccess("Order created succeffully");location.reload();})(): (()=>{
+            setIsLoading(()=>false);
+            if (response.status == 409){
+                (()=>response.json())().then(conflictData=>{
+                    notifyFailier(`These products out of stock [${conflictData.forEach((id)=>{id})}]`);
+                })
+            }
+            else  
+                throw Error("Error creating an order")
+        })())
         .catch(e=>{console.error(e); notifyFailier("Failed to create your order")});
     }
 
@@ -144,6 +154,11 @@ const CartPage = ()=>{
             borderRadius:"20px"
         }}}
         >
+        {isLoading?
+        <center>
+        <AnimatePresence>
+          <ObjectToAppear size={100}/>
+        </AnimatePresence></center>:<>
             <center><h1>How would you like to pay ...?</h1></center>
         <form onSubmit={buy}>
         <label htmlFor="paymentMethod" style={{marginRight:"0.5rem"}}>Payment Method:</label>
@@ -184,11 +199,11 @@ const CartPage = ()=>{
         required
       />
       <input type="text"
-        name="CVV"
+        name="cvv"
         maxLength="3"
         value={formVariables.CVV}
         onChange={handleChange}
-        placeholder="CVV"
+        placeholder="cvv"
         pattern="\d{3}$"
         title="Write the CVV three numbers on your credit card"
         required
@@ -198,7 +213,7 @@ const CartPage = ()=>{
             <button type="submit" className="backButton">Buy</button>
             <button onClick={()=>setIsOrdering(false)} style={{marginLeft:"1rem"}} className="backButton">Cancel</button>
         </center>
-        </form>
+        </form></>}
         </Modal>
     </>
     );

@@ -192,7 +192,6 @@ const HomePage = () => {
     })
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
-      console.log(data.content)
       setProducts(data.content);
       setTotalPages(Math.ceil(data.totalItems / ITEMS_PER_PAGE));
     })
@@ -202,24 +201,30 @@ const HomePage = () => {
   const fetchCategoryProducts = async (category, page = 1) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/api/7/categories/${category}?page=${page - 1}&size=${ITEMS_PER_PAGE}`,
+        `http://localhost:8081/api/1000/shop/category?category=${category}&page=${page - 1}&size=${ITEMS_PER_PAGE}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('drip_me_up_jwt')}`
           },
         }
       );
-      if (!response.ok) throw new Error(`Error fetching products for category ${category}`);
+      if (!response.ok) {
+        console.log(`Error fetching products for category ${category}`);
+        setProducts([]);
+      }
+      else{
+        const data = await response.json();
 
-      const data = await response.json();
+        // Extract products and handle subcategories
+        const products = data.content;
+        setProducts(products);
 
-      // Extract products and handle subcategories
-      const products = data.products || [];
-      setProducts(products);
+        // Calculate total pages based on total items (assuming `data.totalItems` is provided)
+        setTotalPages(Math.ceil((data.totalItems || products.length) / ITEMS_PER_PAGE));
+      }
 
-      // Calculate total pages based on total items (assuming `data.totalItems` is provided)
-      setTotalPages(Math.ceil((data.totalItems || products.length) / ITEMS_PER_PAGE));
     } catch (error) {
       console.error(`Error fetching products for category ${category}:`, error);
     }
@@ -259,8 +264,8 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    // Fetch categories on initial render
+
+  useEffect(()=>{
     fetchCategories();
   }, []);
 
