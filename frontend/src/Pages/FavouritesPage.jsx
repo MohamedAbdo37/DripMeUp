@@ -47,7 +47,7 @@ const FavouritesPage = ()=>{
                 }
             })
             .then (response=>response.status==200||response.status==201?(()=>{return response.json()})(): (()=>{throw Error("Error fetching cart products")})())
-            .then(cartProductsData=>{console.log(cartProductsData);setProductsInCart(cartProductsData)})
+            .then(cartProductsData=>{console.log("elements in fav:" ,cartProductsData);setProductsInCart(cartProductsData)})
             .catch(e=>console.error(e));
         }
     
@@ -92,7 +92,7 @@ const FavouritesPage = ()=>{
                                 <p style={{margin:"0"}}>{product.state}</p>
                             </div>
                         </div>
-                        <img src={binIcon} className="backButton" alt="binImage" onClick={()=>deleteFromFav(product.element.variantId)}/>
+                        <img src={binIcon} className="backButton" alt="binImage" onClick={()=>{console.log(product.variantId);deleteFromFav(product.variantId)}}/>
                     </div>
                 ))}
             </div>

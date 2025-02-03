@@ -212,17 +212,17 @@ const ProductPage = () =>{
                 <div className="controllerLeft">
                     <div>
                         <h6 style={{margin: "0"}}>{(product.dateOfCreation).split("T")[0]}</h6>
-                        <p style={{fontSize: "3rem", margin: "0"}}>{product.description}</p>
+                        <p style={{fontSize: "3rem", margin: "0"}}>{product.description}</p><br/>
                         <p style={{fontSize: "2rem", margin: "0"}}>{product.variants[currentVariant].price-(product.variants[currentVariant].price * product.variants[currentVariant].discount)} LE</p>
                     </div>
-                    {product.variants[currentVariant].state == 'ON_SALE' &&
+                    {/* {product.variants[currentVariant].state == 'ON_SALE' &&
                     <div className="saleData">
                         <p style={{color: 'green', margin: "0", marginRight:"1rem"}}>Available</p>
                         <p style={{textDecoration: 'line-through', margin: "0", marginRight:"1rem"}}>old: {product.variants[currentVariant].price} LE</p>
                         <div className="sale">
                             SALE {product.variants[currentVariant].discount * 100} %
                         </div>
-                    </div>}
+                    </div>} */}
                     {product.variants[currentVariant].state == 'OUT_OF_STOCK' &&
                     <p style={{color:'#f2e6e8', margin: '0'}}>Out of stock at the moment</p>
                     }
@@ -234,12 +234,12 @@ const ProductPage = () =>{
                     <div className="controllerButtons">
                         {person!="admin"&&<img src={addToCartIcon} onClick={addToCart} style={{cursor:"pointer", width:"3.5rem", height:"3.5rem"}}/>}
                     </div>
-                    {person == 'admin' &&
+                    {/* {person == 'admin' &&
                         <div className="controllerButtons">
                             <button onClick={()=>setIsEditing(true)}>Edit</button>
                             <button onClick={()=>deleteProduct(true)}>Delete</button>
                         </div>
-                    }
+                    } */}
                     <div className="controllerRightDescription">
                         {/* <p>Category: {product.category}</p> */}
                         <p>No. of remaining items: {product.variants[currentVariant].stock}</p>

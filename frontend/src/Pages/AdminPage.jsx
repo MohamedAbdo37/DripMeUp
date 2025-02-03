@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import "../homepage.css";
 import "../adminpage.css"; // Styling file
 import { toast } from "react-toastify";
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 
 const ITEMS_PER_PAGE = 10;
 
 const AdminPage = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -75,7 +78,9 @@ const AdminPage = () => {
   };
   // Function to fetch all products
   const fetchAllProducts = async (page = 1) => {
-    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=20`, {
+    setIsLoading(true);
+
+    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=10`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
@@ -85,8 +90,9 @@ const AdminPage = () => {
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
       setProducts(data.content);
-      setTotalPages(Math.ceil(data.totalItems / ITEMS_PER_PAGE));
+      setTotalPages(data.totalPages);
     })
+    setIsLoading(false);
   };
 
   // Function to fetch products for a specific category
@@ -273,7 +279,9 @@ const AdminPage = () => {
       {/* Product Grid */}
       <div className="content">
         <div className="product-grid">
-          {products.map((product) => (
+          {isLoading?<center><AnimatePresence>
+            <ObjectToAppear size={100}/>
+        </AnimatePresence></center>:products.map((product) => (
             <div key={product.productID} className="product-card" onClick={()=>navigate(`/adminSession/product/admin/${product.productID}/0`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />

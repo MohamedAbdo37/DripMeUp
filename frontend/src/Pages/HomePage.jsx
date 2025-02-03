@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../homepage.css";
+import { AnimatePresence } from "framer-motion";
+import ObjectToAppear from "../Components/ObjectToAppear";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -10,75 +12,13 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [openCategories, setOpenCategories] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([
-    {
-      "productID": 1,
-      "productImage": "https://example.com/image1.jpg",
-      "price": "$19.99",
-      "description": "Product 1 description"
-    },
-    {
-      "productID": 2,
-      "productImage": "https://example.com/image2.jpg",
-      "price": "$29.99",
-      "description": "Product 2 description"
-    },
+    
     // More products...
   ]);
   const [categoryTree, setCategoryTree] = useState({
-    "id": 1,
-    "name": "All Categories",
-    "subcategories": [
-      {
-        "id": 2,
-        "name": "Men",
-        "subcategories": [
-          {
-            "id": 3,
-            "name": "Shirts",
-            "subcategories": []
-          },
-          {
-            "id": 4,
-            "name": "Pants",
-            "subcategories": [
-              {
-                "id": 5,
-                "name": "Jeans",
-                "subcategories": []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": 6,
-        "name": "Women",
-        "subcategories": [
-          {
-            "id": 7,
-            "name": "Dresses",
-            "subcategories": []
-          },
-          {
-            "id": 8,
-            "name": "Skirts",
-            "subcategories": [
-              {
-                "id": 9,
-                "name": "Mini Skirts",
-                "subcategories": []
-              },
-              {
-                "id": 10,
-                "name": "Long Skirts",
-                "subcategories": []
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    
   }); // Category structure from API
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const mapCategoryTree = (categories) => {
@@ -121,69 +61,13 @@ const HomePage = () => {
   
   // Example usage
   const backendCategories = [
-    {
-      "id": 1,
-      "name": "Men",
-      "description": "Men's clothing",
-      "subcategoryNames": [
-        "pants",
-        "cravats"
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Women",
-      "description": "Women's clothing",
-      "subcategoryNames": [
-        "dress"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Children",
-      "description": "Children's clothing",
-      "subcategoryNames": [
-        "glasses"
-      ]
-    },
-    {
-      "id": 4,
-      "name": "pants",
-      "description": "description",
-      "subcategoryNames": [
-        "jeans"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "cravats",
-      "description": "description",
-      "subcategoryNames": []
-    },
-    {
-      "id": 6,
-      "name": "dress",
-      "description": "description",
-      "subcategoryNames": []
-    },
-    {
-      "id": 7,
-      "name": "glasses",
-      "description": "description",
-      "subcategoryNames": []
-    },
-    {
-      "id": 8,
-      "name": "jeans",
-      "description": "description",
-      "subcategoryNames": []
-    }
   ];
   
   console.log(categoryTree);
   // Function to fetch all products
   const fetchAllProducts = async (page = 1) => {
-    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=20`, {
+    setIsLoading(true);
+    const productsFetched = await fetch(`http://localhost:8081/api/1000/shop/products?page=${page-1}&size=${10}`, {
       method:'GET',
       headers:{
         'Content-Type': 'application/json',
@@ -193,8 +77,9 @@ const HomePage = () => {
     .then(response=>response.status==200 || response.status==201?(()=>{return response.json()})():(()=>{throw Error("Error fetching all products")})())
     .then(data=>{
       setProducts(data.content);
-      setTotalPages(Math.ceil(data.totalItems / ITEMS_PER_PAGE));
+      setTotalPages(Math.ceil(data.totalPages));
     })
+    setIsLoading(false);
   };
 
   // Function to fetch products for a specific category
@@ -359,7 +244,9 @@ const HomePage = () => {
       {/* Product Grid */}
       <div className="content">
         <div className="product-grid">
-          {products.map((product) => (
+          {isLoading?<center><AnimatePresence>
+            <ObjectToAppear size={100}/>
+        </AnimatePresence></center>:products.map((product) => (
             <div key={product.productID} className="product-card" onClick={()=>navigate(`/userSession/product/user/${product.productID}/0`)}>
                 {/* Display image */}
                 <img src={product.productImage} alt="productImage" className="product-image" />

@@ -304,6 +304,10 @@
   padding-left: 60px;
 }
 
+.level-0 .category-item:hover{
+  background-color: rgb(207, 121, 200);
+}
+
 /* Style the pagination buttons */
 .pagination .page-btn {
   background-color: #f0f0f0;
